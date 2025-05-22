@@ -138,6 +138,7 @@ export const PublicHomepage = () => {
         <Typography variant="h2">Typography - H2</Typography>
         <Typography variant="h3">Typography - H3</Typography>
         <Typography variant="h4">Typography - H4</Typography>
+        <Typography variant="h5">Typography - H5</Typography>
         <Typography variant="subtitle1">Typography - subtitle 1</Typography>
         <Typography variant="subtitle2">Typography - subtitle 2</Typography>
         <Typography variant="body1">Typography - Body 1</Typography>

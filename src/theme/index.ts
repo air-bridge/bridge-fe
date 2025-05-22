@@ -131,25 +131,22 @@ const theme = createTheme({
       },
     },
     subtitle1: {
-      fontSize: "0.875rem",
+      fontSize: "1.125rem",
       fontWeight: 500,
       lineHeight: "1.25rem",
       color: "#1C1C1C",
       "@media (min-width: 1200px)": {
-        fontSize: "1rem",
+        fontSize: "1.25rem",
       },
     },
     subtitle2: {
-      fontSize: "0.75rem",
+      fontSize: "1rem",
       fontWeight: 500,
       lineHeight: "1rem",
       color: "#1C1C1C",
-      "@media (min-width: 1200px)": {
-        fontSize: "0.875rem",
-      },
     },
     body1: {
-      fontSize: "1",
+      fontSize: "1rem",
       fontWeight: 500,
       lineHeight: "1.5rem",
       color: "#000000",
@@ -163,16 +160,13 @@ const theme = createTheme({
       fontWeight: 400,
       lineHeight: "1.25rem",
       color: "#000000",
-      "@media (min-width: 1200px)": {
-        fontSize: "0.875rem",
-        fontWeight: 400,
-      },
     },
     caption: {
       fontSize: "0.75rem",
       lineHeight: "1rem",
       textTransform: "none",
       fontWeight: 400,
+      color: "#424242",
     },
     overline: {
       fontSize: "0.75rem",

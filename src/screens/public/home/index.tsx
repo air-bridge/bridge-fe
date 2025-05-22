@@ -146,10 +146,10 @@ export const PublicHomepage = () => {
       </Box>
 
       <Stack direction="row" gap={1}>
-        <Button variant="contained" color="primary">
+        <Button variant="contained" color="primary" size="large">
           Primary button
         </Button>
-        <Button variant="contained" color="info">
+        <Button variant="contained" color="info" size="small">
           Info button
         </Button>
         <Button variant="contained" color="secondary">
@@ -164,10 +164,15 @@ export const PublicHomepage = () => {
       </Stack>
 
       <Stack direction="row" gap={1}>
-        <Button variant="outlined" color="primary">
+        <Button variant="outlined" color="primary" size="large">
           Primary button
         </Button>
-        <Button startIcon={<SwapHoriz />} variant="outlined" color="info">
+        <Button
+          startIcon={<SwapHoriz />}
+          variant="outlined"
+          color="info"
+          size="small"
+        >
           Info button
         </Button>
         <Button variant="outlined" color="secondary">
@@ -260,8 +265,20 @@ export const PublicHomepage = () => {
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose}>Disagree</Button>
-              <Button onClick={handleClose} autoFocus>
+              <Button
+                onClick={handleClose}
+                variant="contained"
+                color="primary"
+                size="large"
+              >
+                Disagree
+              </Button>
+              <Button
+                onClick={handleClose}
+                variant="contained"
+                color="error"
+                size="large"
+              >
                 Agree
               </Button>
             </DialogActions>

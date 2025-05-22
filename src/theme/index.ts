@@ -38,9 +38,36 @@ const theme = createTheme({
   shape: {
     borderRadius: 4, // sx={borderRadius: 3} => theme.shape.borderRadius * 3 = 4px * 3 = 12px
   },
+  shadows: [
+    "none",
+    "0px 0.5px 1px #E0E0E0", // Custom shadow for level 1
+    "0px 1px 1.5px #E0E0E0", // Custom shadow for level 2
+    "0px 2px 2px #E0E0E0", // Custom shadow for level 3
+    // Add additional elements to ensure 25 total
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+  ],
   typography: {
     fontFamily: "Inter, sans-serif",
-    // fontFamily: "Roboto Condensed, sans-serif",
     h1: {
       fontSize: "1.5rem",
       fontWeight: 700,
@@ -243,6 +270,9 @@ const theme = createTheme({
     MuiInputBase: Components.InputBase,
     MuiInputLabel: Components.InputLabel,
     MuiTextField: Components.TextField,
+    MuiButton: Components.Button,
+    MuiCard: Components.Card,
+    MuiDialogActions: Components.DialogActions,
   },
 });
 

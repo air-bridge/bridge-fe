@@ -1,4 +1,5 @@
 import { createTheme } from "@mui/material/styles";
+import * as Components from "./overrides";
 
 declare module "@mui/material/styles" {
   export interface BreakpointOverrides {
@@ -38,12 +39,14 @@ const theme = createTheme({
     borderRadius: 4, // sx={borderRadius: 3} => theme.shape.borderRadius * 3 = 4px * 3 = 12px
   },
   typography: {
-    fontFamily: "Figtree Variable, sans-serif",
+    fontFamily: "Inter, sans-serif",
+    // fontFamily: "Roboto Condensed, sans-serif",
     h1: {
       fontSize: "1.5rem",
       fontWeight: 700,
       letterSpacing: "-0.03375rem",
       lineHeight: "2rem",
+      color: "#1C1C1C",
       "@media (min-width: 1200px)": {
         fontSize: "2rem",
         lineHeight: "2.5rem",
@@ -54,6 +57,7 @@ const theme = createTheme({
       fontWeight: 700,
       letterSpacing: "-0.03375rem",
       lineHeight: "1.75rem",
+      color: "#1C1C1C",
       "@media (min-width: 1200px)": {
         fontSize: "1.75rem",
         lineHeight: "2.25rem",
@@ -64,6 +68,7 @@ const theme = createTheme({
       fontWeight: 700,
       letterSpacing: "-0.03375rem",
       lineHeight: "1.5rem",
+      color: "#1C1C1C",
       "@media (min-width: 1200px)": {
         fontSize: "1.5rem",
         lineHeight: "2rem",
@@ -74,6 +79,7 @@ const theme = createTheme({
       fontWeight: 700,
       letterSpacing: "-0.0125rem",
       lineHeight: "1.5rem",
+      color: "#1C1C1C",
       "@media (min-width: 1200px)": {
         fontSize: "1.25rem",
       },
@@ -83,6 +89,7 @@ const theme = createTheme({
       fontWeight: 700,
       letterSpacing: "-0.0125rem",
       lineHeight: "1.25rem",
+      color: "#1C1C1C",
       "@media (min-width: 1200px)": {
         fontSize: "1.125rem",
       },
@@ -91,6 +98,7 @@ const theme = createTheme({
       fontSize: "0.875rem",
       fontWeight: 700,
       lineHeight: "1.25rem",
+      color: "#1C1C1C",
       "@media (min-width: 1200px)": {
         fontSize: "1rem",
       },
@@ -99,6 +107,7 @@ const theme = createTheme({
       fontSize: "0.875rem",
       fontWeight: 500,
       lineHeight: "1.25rem",
+      color: "#1C1C1C",
       "@media (min-width: 1200px)": {
         fontSize: "1rem",
       },
@@ -107,6 +116,7 @@ const theme = createTheme({
       fontSize: "0.75rem",
       fontWeight: 500,
       lineHeight: "1rem",
+      color: "#1C1C1C",
       "@media (min-width: 1200px)": {
         fontSize: "0.875rem",
       },
@@ -115,6 +125,7 @@ const theme = createTheme({
       fontSize: "1",
       fontWeight: 500,
       lineHeight: "1.5rem",
+      color: "#000000",
       "@media (min-width: 1200px)": {
         fontSize: "1rem",
         fontWeight: 400,
@@ -124,6 +135,7 @@ const theme = createTheme({
       fontSize: "0.875rem",
       fontWeight: 400,
       lineHeight: "1.25rem",
+      color: "#000000",
       "@media (min-width: 1200px)": {
         fontSize: "0.875rem",
         fontWeight: 400,
@@ -165,27 +177,35 @@ const theme = createTheme({
     iconBackground: "#D3FFF8",
     divider: "rgba(0, 0, 0, 0.12)",
     primary: {
-      main: "#38A694",
-      light: "#47COAC",
-      dark: "#1D8776",
-      contrastText: "#FFFFFF",
+      main: "#6544C5",
+      light: "#8C73D9",
+      dark: "#3C2580",
+      contrastText: "#FFF",
     },
     error: {
-      main: "#E96868",
-      light: "#FBEEEE",
-      dark: "#5F2120",
+      main: "#DD2D27",
+      light: "#F28A87",
+      dark: "#7C1A17",
+      contrastText: "#FFF",
       background: "#FDEDED",
     },
     success: {
-      main: "#38A694",
-      light: "#e9ffee",
-      dark: "#1B5E20",
-      contrastText: "#edfaf8",
+      main: "#0F7409",
+      light: "#42BD3B",
+      dark: "#0B4707",
+      contrastText: "#FFF",
     },
     info: {
-      main: "#125bde",
+      main: "#1294F2",
       light: "#F1F6FE",
       dark: "#01579B",
+      contrastText: "#FFF",
+    },
+    warning: {
+      main: "#C79E0B",
+      light: "#EACB4F",
+      dark: "#6E5805",
+      contrastText: "#FFF",
     },
     common: {
       black: "#000000",
@@ -195,9 +215,9 @@ const theme = createTheme({
       },
     },
     text: {
-      primary: "rgba(0, 0, 0, 0.87)",
-      secondary: "rgba(0, 0, 0, 0.6)",
-      disabled: "rgba(0, 0, 0, 0.38)",
+      primary: "rgba(0, 0, 0, 1)",
+      secondary: "#999999",
+      disabled: "rgba(153, 153, 153, 0.18)",
     },
     action: {
       active: "rgba(0, 0, 0, 0.56)",
@@ -219,7 +239,11 @@ const theme = createTheme({
       900: "#212121",
     },
   },
-  components: {},
+  components: {
+    MuiInputBase: Components.InputBase,
+    MuiInputLabel: Components.InputLabel,
+    MuiTextField: Components.TextField,
+  },
 });
 
 export default theme;

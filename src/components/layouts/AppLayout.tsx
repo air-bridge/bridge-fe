@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
 
-const PublicLayout = () => {
+const AppLayout = () => {
   return (
     <Box>
       <Outlet />
@@ -9,4 +9,4 @@ const PublicLayout = () => {
   );
 };
 
-export default PublicLayout;
+export default AppLayout;

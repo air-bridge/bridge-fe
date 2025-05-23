@@ -3,10 +3,11 @@ import * as ROUTES from "./routes";
 import AuthLayout from "../../components/layouts/AuthLayout.tsx";
 import InternalError from "../../components/internal-error";
 import Login from "../../screens/auth/login";
-import PublicLayout from "../../components/layouts/PublicLayout.tsx";
-import { PublicHomepage } from "../../screens/public/home";
+import AppLayout from "../../components/layouts/AppLayout.tsx";
+import { PublicHomepage } from "../../screens/app/home";
 import NotFoundScreen from "../../screens/auth/not-found";
 import Register from "../../screens/auth/register";
+import ComponentsScreen from "../../screens/app/start";
 
 export const Router = () => {
   return (
@@ -24,11 +25,13 @@ export const Router = () => {
 
         <Route
           path="/"
-          element={<PublicLayout />}
+          element={<AppLayout />}
           errorElement={<InternalError />}
         >
           <Route index element={<PublicHomepage />} />
         </Route>
+
+        <Route path={ROUTES.COMPONENTS_ROUTE} element={<ComponentsScreen />} />
         <Route path="*" element={<NotFoundScreen />} />
       </Routes>
     </BrowserRouter>

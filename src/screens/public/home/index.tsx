@@ -114,6 +114,7 @@ const Transition = React.forwardRef(function Transition(
 ) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+
 export const PublicHomepage = () => {
   const [open, setOpen] = useState(false);
   const [openFullDialog, setOpenFullDialog] = useState(false);

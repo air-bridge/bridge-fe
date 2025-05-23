@@ -3,6 +3,7 @@ import { vi } from "vitest";
 import * as ReactRouterDom from "react-router-dom";
 
 const mockedUseNavigate = vi.fn();
+const mockedUseLocation = vi.fn();
 
 vi.mock("react-router-dom", async () => {
   const actual: typeof ReactRouterDom =
@@ -10,6 +11,7 @@ vi.mock("react-router-dom", async () => {
   return {
     ...actual,
     useNavigate: () => mockedUseNavigate,
+    useLocation: () => mockedUseLocation,
     useSearchParams: () => [new URLSearchParams(), vi.fn()],
   };
 });

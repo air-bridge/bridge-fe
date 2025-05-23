@@ -115,7 +115,7 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export const PublicHomepage = () => {
+export const ComponentsScreen = () => {
   const [open, setOpen] = useState(false);
   const [openFullDialog, setOpenFullDialog] = useState(false);
 
@@ -387,3 +387,5 @@ export const PublicHomepage = () => {
     </Stack>
   );
 };
+
+export default ComponentsScreen;

@@ -11,7 +11,10 @@ npm run dev
 ``
 npm run test
 ``
-
+### Test Coverage
+``
+npm run test:coverage
+``
 
 ### Linting 
 ``

@@ -193,7 +193,7 @@ const theme = createTheme({
   },
   palette: {
     background: {
-      default: "#F4F4F4",
+      default: "#F8F9FB",
     },
     iconBackground: "#D3FFF8",
     divider: "rgba(0, 0, 0, 0.12)",
@@ -249,7 +249,7 @@ const theme = createTheme({
       disabledBackground: "rgba(0, 0, 0, 0.12)",
     },
     grey: {
-      100: "#F7F7F7",
+      100: "#F8F9FB",
       200: "#EEEEEE",
       300: "#E0E0E0",
       400: "#BDBDBD",

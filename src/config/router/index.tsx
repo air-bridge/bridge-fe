@@ -8,6 +8,7 @@ import { PublicHomepage } from "../../screens/app/home";
 import NotFoundScreen from "../../screens/auth/not-found";
 import Register from "../../screens/auth/register";
 import ComponentsScreen from "../../screens/app/start";
+import ForgotPasswordScreen from "../../screens/auth/forgot-password";
 
 export const Router = () => {
   return (
@@ -21,6 +22,10 @@ export const Router = () => {
           <Route index element={<Navigate to={ROUTES.LOGIN_ROUTE} />} />
           <Route path={ROUTES.LOGIN_ROUTE} element={<Login />} />
           <Route path={ROUTES.SIGNUP_ROUTE} element={<Register />} />
+          <Route
+            path={ROUTES.FORGOT_PASSWORD_ROUTE}
+            element={<ForgotPasswordScreen />}
+          />
         </Route>
 
         <Route

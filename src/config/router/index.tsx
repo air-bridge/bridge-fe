@@ -4,11 +4,11 @@ import AuthLayout from "../../components/layouts/AuthLayout.tsx";
 import InternalError from "../../components/internal-error";
 import Login from "../../screens/auth/login";
 import AppLayout from "../../components/layouts/AppLayout.tsx";
-import { PublicHomepage } from "../../screens/app/home";
 import NotFoundScreen from "../../screens/auth/not-found";
 import Register from "../../screens/auth/register";
 import ComponentsScreen from "../../screens/app/start";
 import ForgotPasswordScreen from "../../screens/auth/forgot-password";
+import HomeScreen from "../../screens/app/home";
 
 export const Router = () => {
   return (
@@ -33,7 +33,7 @@ export const Router = () => {
           element={<AppLayout />}
           errorElement={<InternalError />}
         >
-          <Route index element={<PublicHomepage />} />
+          <Route index element={<HomeScreen />} />
         </Route>
 
         <Route path={ROUTES.COMPONENTS_ROUTE} element={<ComponentsScreen />} />

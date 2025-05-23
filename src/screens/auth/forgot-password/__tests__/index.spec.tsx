@@ -8,6 +8,6 @@ describe("ForgotPasswordScreen Component", () => {
   });
 
   it("renders the ForgotPasswordScreen component", () => {
-    expect(screen.getByText("ForgotPasswordScreen")).toBeInTheDocument();
+    expect(screen.getByText("Forgot Password Screen")).toBeInTheDocument();
   });
 });

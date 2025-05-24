@@ -3,13 +3,13 @@ import type { Components, Theme } from "@mui/material/styles";
 const Button: Components<Theme>["MuiButton"] = {
   defaultProps: {
     size: "medium",
-    disableElevation: false,
   },
   variants: [
     {
       props: { size: "large" },
       style: {
         borderRadius: "16px",
+        padding: "15px 35px",
       },
     },
     {
@@ -24,10 +24,20 @@ const Button: Components<Theme>["MuiButton"] = {
         borderRadius: "14px",
       },
     },
+    {
+      props: { variant: "outlined" },
+      style: {
+        border: "solid 1px #0000001a",
+        color: "#1C1C1C",
+        "&:hover": {
+          background: "#fff",
+        },
+      },
+    },
   ],
   styleOverrides: {
     root: {
-      fontWeight: 400,
+      fontWeight: 300,
     },
   },
 };

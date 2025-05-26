@@ -10,7 +10,7 @@ const Account = () => {
     <Box
       sx={{
         height: {
-          xs: "auto",
+          xs: activeTab === AccountTabState.LOGIN ? 470 : 730,
           lg: activeTab === AccountTabState.LOGIN ? 470 : 650,
         },
         overflowY: "hidden",

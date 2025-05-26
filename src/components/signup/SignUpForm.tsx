@@ -15,6 +15,7 @@ import { CheckBox, Visibility, VisibilityOff } from "@mui/icons-material";
 import { Formik } from "formik";
 import { RegistrationFormValues } from "../../types/auth.ts";
 import useTheme from "@mui/material/styles/useTheme";
+import { validationSchema } from "./validation.ts";
 
 export const SignUpForm = () => {
   const theme = useTheme();
@@ -38,6 +39,7 @@ export const SignUpForm = () => {
       onSubmit={(values: RegistrationFormValues) => {
         console.log(values);
       }}
+      validationSchema={validationSchema}
       validateOnBlur
       validateOnChange={false}
     >

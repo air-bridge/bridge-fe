@@ -1,20 +1,20 @@
 import { Box, Divider, Stack, Typography } from "@mui/material";
 import { SocialMediaAuth } from "./SocialMediaAuth.tsx";
-import { SignUpForm } from "./SignUpForm.tsx";
+import { SignInForm } from "./SignInForm.tsx";
 import { Link } from "react-router-dom";
 
 type Props = {
   onChange: () => void;
 };
-export const Signup = ({ onChange }: Props) => {
+export const SignIn = ({ onChange }: Props) => {
   return (
     <Stack gap={2}>
       <Stack gap={1}>
         <Typography variant="h2" color="primary" textAlign="center">
-          Sign Up
+          Sign In
         </Typography>
         <Typography color="text.secondary" textAlign="center">
-          Please provide your correct details to create your account
+          Please provide your correct details to login to your account
         </Typography>
       </Stack>
 
@@ -28,10 +28,10 @@ export const Signup = ({ onChange }: Props) => {
         <Divider sx={{ flex: 1, borderColor: "divider" }} />
       </Box>
 
-      <SignUpForm />
+      <SignInForm />
 
       <Typography variant="body1" color="text.secondary" textAlign="center">
-        Already have an Account?&nbsp;
+        Not a member yet?&nbsp;
         <Link
           to="/"
           onClick={(e) => {
@@ -39,7 +39,7 @@ export const Signup = ({ onChange }: Props) => {
             onChange();
           }}
         >
-          Sign in
+          Sign Up
         </Link>
       </Typography>
     </Stack>

@@ -8,3 +8,6 @@ html, body {
 a, a:hover {
     text-decoration: none;
 }
+a:active {
+    color: unset;
+}

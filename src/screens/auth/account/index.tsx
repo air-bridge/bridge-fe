@@ -1,10 +1,19 @@
+import { useState } from "react";
 import { Stack } from "@mui/material";
 import { Signup } from "../../../components/signup";
+import { SignIn } from "../../../components/signin";
+import { AccountTabState } from "../../../components/signin/constant.ts";
 
 const Account = () => {
+  const [activeTab, setActiveTab] = useState(AccountTabState.LOGIN);
   return (
     <Stack>
-      <Signup />
+      {activeTab === AccountTabState.LOGIN && (
+        <SignIn onChange={() => setActiveTab(AccountTabState.REGISTER)} />
+      )}
+      {activeTab === AccountTabState.REGISTER && (
+        <Signup onChange={() => setActiveTab(AccountTabState.LOGIN)} />
+      )}
     </Stack>
   );
 };

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import PasswordStrengthBar from "react-password-strength-bar";
 import Grid from "@mui/material/Grid2";
 import {
   Button,
@@ -11,8 +12,12 @@ import {
   Typography,
 } from "@mui/material";
 import { CheckBox, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Formik } from "formik";
+import { RegistrationFormValues } from "../../types/auth.ts";
+import useTheme from "@mui/material/styles/useTheme";
 
 export const SignUpForm = () => {
+  const theme = useTheme();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
@@ -21,95 +26,140 @@ export const SignUpForm = () => {
   const handleShowConfirmPassword = () =>
     setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
 
+  const initialValues = {
+    email: "test@mail.com",
+    password: "",
+    confirmPassword: "",
+  };
+
   return (
-    <Grid container spacing={3}>
-      <Grid size={{ xs: 12 }}>
-        <TextField fullWidth name="email" placeholder="Email" />
-      </Grid>
-      <Grid size={{ xs: 12 }}>
-        <Stack gap={1}>
-          <TextField
-            type={isPasswordVisible ? "text" : "password"}
-            fullWidth
-            name="password"
-            placeholder="Password"
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label={
-                        isPasswordVisible
-                          ? "hide the password"
-                          : "display the password"
-                      }
-                      onClick={handleShowPassword}
-                      edge="end"
-                    >
-                      {isPasswordVisible ? (
-                        <Visibility />
-                      ) : (
-                        <VisibilityOff color="disabled" />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              },
-            }}
-          />
-          <Typography color="text.secondary" variant="body2">
-            Use 8 or more characters with a mix of letters, numbers & symbols.
-          </Typography>
-        </Stack>
-      </Grid>
-      <Grid size={{ xs: 12 }}>
-        <TextField
-          fullWidth
-          type={isConfirmPasswordVisible ? "text" : "password"}
-          name="confirmPassword"
-          placeholder="Repeat Password"
-          slotProps={{
-            input: {
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label={
-                      isConfirmPasswordVisible
-                        ? "hide the password"
-                        : "display the password"
-                    }
-                    onClick={handleShowConfirmPassword}
-                    edge="end"
-                  >
-                    {isPasswordVisible ? (
-                      <Visibility />
-                    ) : (
-                      <VisibilityOff color="disabled" />
-                    )}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            },
-          }}
-        />
-      </Grid>
-      <Grid size={{ xs: 12 }} sx={{ pl: 1 }}>
-        <FormControlLabel
-          control={<CheckBox color="info" />}
-          name="terms"
-          label={
-            <Typography variant="body2">
-              By clicking signup, you agree to Airbridge{" "}
-              <Link to="/">terms & condition Policy</Link>
-            </Typography>
-          }
-        />
-      </Grid>
-      <Grid size={{ xs: 12 }}>
-        <Button fullWidth variant="contained" color="primary" size="large">
-          Sign Up
-        </Button>
-      </Grid>
-    </Grid>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={(values: RegistrationFormValues) => {
+        console.log(values);
+      }}
+      validateOnBlur
+      validateOnChange={false}
+    >
+      {({ handleChange, handleSubmit, values }) => (
+        <form onSubmit={handleSubmit} autoComplete="off">
+          <Grid container spacing={3}>
+            <Grid size={{ xs: 12 }}>
+              <TextField
+                fullWidth
+                name="email"
+                placeholder="Email"
+                value={values.email}
+                onChange={handleChange}
+                autoComplete="off"
+              />
+            </Grid>
+            <Grid size={{ xs: 12 }}>
+              <Stack gap={1}>
+                <TextField
+                  type={isPasswordVisible ? "text" : "password"}
+                  fullWidth
+                  name="password"
+                  placeholder="Password"
+                  value={values.password}
+                  onChange={handleChange}
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label={
+                              isPasswordVisible
+                                ? "hide the password"
+                                : "display the password"
+                            }
+                            onClick={handleShowPassword}
+                            edge="end"
+                          >
+                            {isPasswordVisible ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff color="disabled" />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
+                />
+                <PasswordStrengthBar
+                  password={values.password}
+                  minLength={1}
+                  shortScoreWord=""
+                  scoreWordStyle={{
+                    textTransform: "capitalize",
+                    fontSize: theme.typography.caption.fontSize,
+                  }}
+                />
+                <Typography color="text.secondary" variant="body2">
+                  Use 8 or more characters with a mix of letters, numbers &
+                  symbols.
+                </Typography>
+              </Stack>
+            </Grid>
+            <Grid size={{ xs: 12 }}>
+              <TextField
+                fullWidth
+                type={isConfirmPasswordVisible ? "text" : "password"}
+                name="confirmPassword"
+                placeholder="Repeat Password"
+                value={values.confirmPassword}
+                onChange={handleChange}
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label={
+                            isConfirmPasswordVisible
+                              ? "hide the password"
+                              : "display the password"
+                          }
+                          onClick={handleShowConfirmPassword}
+                          edge="end"
+                        >
+                          {isPasswordVisible ? (
+                            <Visibility />
+                          ) : (
+                            <VisibilityOff color="disabled" />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+              />
+            </Grid>
+            <Grid size={{ xs: 12 }} sx={{ pl: 1 }}>
+              <FormControlLabel
+                control={<CheckBox color="info" />}
+                name="terms"
+                label={
+                  <Typography variant="body2">
+                    By clicking signup, you agree to Airbridge{" "}
+                    <Link to="/">terms & condition Policy</Link>
+                  </Typography>
+                }
+              />
+            </Grid>
+            <Grid size={{ xs: 12 }}>
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                size="large"
+              >
+                Sign Up
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
+      )}
+    </Formik>
   );
 };

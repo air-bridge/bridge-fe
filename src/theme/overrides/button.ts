@@ -37,7 +37,7 @@ const Button: Components<Theme>["MuiButton"] = {
   ],
   styleOverrides: {
     root: {
-      fontWeight: 300,
+      fontWeight: 400,
     },
   },
 };

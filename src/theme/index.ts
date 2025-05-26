@@ -264,6 +264,7 @@ const theme = createTheme({
     MuiButton: Components.Button,
     MuiCard: Components.Card,
     MuiDialogActions: Components.DialogActions,
+    MuiLink: Components.Link,
   },
 });
 

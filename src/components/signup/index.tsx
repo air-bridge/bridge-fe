@@ -1,7 +1,7 @@
 import { Box, Divider, Stack, Typography } from "@mui/material";
 import { SocialMediaAuth } from "./SocialMediaAuth.tsx";
 import { SignUpForm } from "./SignUpForm.tsx";
-import { Link } from "react-router-dom";
+import Link from "@mui/material/Link";
 
 type Props = {
   onChange: () => void;
@@ -33,7 +33,7 @@ export const Signup = ({ onChange }: Props) => {
       <Typography variant="body1" color="text.secondary" textAlign="center">
         Already have an Account?&nbsp;
         <Link
-          to="/"
+          href="/"
           onClick={(e) => {
             e.preventDefault();
             onChange();

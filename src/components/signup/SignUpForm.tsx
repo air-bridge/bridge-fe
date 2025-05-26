@@ -97,6 +97,7 @@ export const SignUpForm = () => {
                     textTransform: "capitalize",
                     fontSize: theme.typography.caption.fontSize,
                   }}
+                  scoreWords={["Weak", "Fair", "Good", "Strong", "Very Strong"]}
                 />
                 <Typography color="text.secondary" variant="body2">
                   Use 8 or more characters with a mix of letters, numbers &

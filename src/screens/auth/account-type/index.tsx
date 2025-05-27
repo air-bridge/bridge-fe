@@ -3,8 +3,13 @@ import { Link } from "react-router-dom";
 import WestIcon from "@mui/icons-material/West";
 import { AccountTypesInfo } from "../../../components/account-types-info";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { AccountType } from "../../../types/auth.ts";
+import { useState } from "react";
 
 const AccountTypeScreen = () => {
+  const [userAccountType, setUserAccountType] = useState<AccountType | null>(
+    null,
+  );
   return (
     <Stack gap={{ xs: 4, lg: 10 }}>
       <Stack
@@ -28,10 +33,18 @@ const AccountTypeScreen = () => {
           </Typography>
         </Box>
 
-        <AccountTypesInfo />
+        <AccountTypesInfo
+          accountType={userAccountType}
+          onSelect={setUserAccountType}
+        />
 
         <Box sx={{ width: { xs: "100%", lg: "60%" }, m: "auto" }}>
-          <Button fullWidth variant="contained" endIcon={<ChevronRightIcon />}>
+          <Button
+            disabled={!userAccountType}
+            fullWidth
+            variant="contained"
+            endIcon={<ChevronRightIcon />}
+          >
             Continue
           </Button>
         </Box>

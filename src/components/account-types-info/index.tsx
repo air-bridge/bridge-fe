@@ -12,10 +12,12 @@ import {
   RadioButtonChecked,
   BusinessCenter,
 } from "@mui/icons-material";
+import { AccountType } from "../../types/auth.ts";
 
 const data = [
   {
     title: "Sender",
+    value: AccountType.Sender,
     Icon: People,
     description: "A sender is a person that want to send goods out.",
     features: [
@@ -29,6 +31,7 @@ const data = [
   },
   {
     title: "Passenger",
+    value: AccountType.Passenger,
     Icon: BusinessCenter,
     description: "These are people that have space to help carry goods ",
     features: [
@@ -41,21 +44,28 @@ const data = [
     ],
   },
 ];
-export const AccountTypesInfo = () => {
+
+type Props = {
+  accountType: AccountType | null;
+  onSelect: (rg: AccountType) => void;
+};
+export const AccountTypesInfo = ({ accountType, onSelect }: Props) => {
   return (
     <Stack gap={2} direction={{ xs: "column", lg: "row" }}>
-      {data.map(({ title, description, Icon, features }, index) => (
+      {data.map(({ title, description, value, Icon, features }, index) => (
         <Box
           key={index}
           sx={{
             borderRadius: 3,
             px: 1.5,
             py: 2,
+            cursor: "pointer",
             bgcolor: "grey.100",
             border: "solid 2px",
-            borderColor: "transparent",
+            borderColor: accountType === value ? "grey.900" : "transparent",
             "&:hover": { borderColor: "grey.900" },
           }}
+          onClick={() => onSelect(value)}
         >
           <Stack gap={1} direction="row">
             <Icon />

@@ -144,8 +144,8 @@ export const SignUpForm = () => {
                 name="terms"
                 label={
                   <Typography variant="body2">
-                    By clicking signup, you agree to Airbridge{" "}
-                    <Link to="/">terms & condition Policy</Link>
+                    By clicking signup, you agree to Airbridge&nbsp;
+                    <Link to="/">terms & condition policy</Link>
                   </Typography>
                 }
               />

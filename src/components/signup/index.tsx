@@ -31,7 +31,7 @@ export const Signup = ({ onChange }: Props) => {
       <SignUpForm />
 
       <Typography variant="body1" color="text.secondary" textAlign="center">
-        Already have an Account?&nbsp;
+        Already have an account?&nbsp;
         <Link
           href="/"
           onClick={(e) => {

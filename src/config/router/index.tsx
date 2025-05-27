@@ -9,6 +9,7 @@ import ForgotPasswordScreen from "../../screens/auth/forgot-password";
 import HomeScreen from "../../screens/app/home";
 import Account from "../../screens/auth/account";
 import OTPVerificationScreen from "../../screens/auth/otp-verification";
+import AccountTypeScreen from "../../screens/auth/account-type";
 
 export const Router = () => {
   return (
@@ -31,6 +32,10 @@ export const Router = () => {
           <Route
             path={ROUTES.OTP_VERIFICATION_ROUTE}
             element={<OTPVerificationScreen />}
+          />
+          <Route
+            path={ROUTES.ACCOUNT_TYPE_ROUTE}
+            element={<AccountTypeScreen />}
           />
         </Route>
 

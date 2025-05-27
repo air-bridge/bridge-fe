@@ -200,6 +200,12 @@ const theme = createTheme({
       dark: "#3C2580",
       contrastText: "#FFF",
     },
+    secondary: {
+      main: "#999999",
+      light: "#BDBDBD",
+      dark: "#212121",
+      contrastText: "#FFF",
+    },
     error: {
       main: "#DD2D27",
       light: "#F28A87",

@@ -1,7 +1,8 @@
 import { Box, Divider, Stack, Typography } from "@mui/material";
 import { SocialMediaAuth } from "./SocialMediaAuth.tsx";
 import { SignInForm } from "./SignInForm.tsx";
-import Link from "@mui/material/Link";
+import MUILink from "@mui/material/Link";
+import { Link } from "react-router-dom";
 
 type Props = {
   onChange: () => void;
@@ -30,9 +31,17 @@ export const SignIn = ({ onChange }: Props) => {
 
       <SignInForm />
 
+      <Box
+        component={Link}
+        to="/auth/forgot-password"
+        sx={{ textAlign: "right" }}
+      >
+        Forgot password?
+      </Box>
+
       <Typography variant="body1" color="text.secondary" textAlign="center">
         Not a member yet?&nbsp;
-        <Link
+        <MUILink
           href="/"
           onClick={(e) => {
             e.preventDefault();
@@ -40,7 +49,7 @@ export const SignIn = ({ onChange }: Props) => {
           }}
         >
           Sign Up
-        </Link>
+        </MUILink>
       </Typography>
     </Stack>
   );

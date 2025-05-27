@@ -73,12 +73,7 @@ export const SignInForm = () => {
               />
             </Grid>
             <Grid size={{ xs: 12 }}>
-              <Button
-                fullWidth
-                variant="contained"
-                color="primary"
-                size="large"
-              >
+              <Button fullWidth variant="contained" color="primary">
                 Sign In
               </Button>
             </Grid>

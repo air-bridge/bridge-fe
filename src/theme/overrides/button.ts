@@ -22,6 +22,7 @@ const Button: Components<Theme>["MuiButton"] = {
       props: { size: "medium" },
       style: {
         borderRadius: "14px",
+        padding: "10px 16px",
       },
     },
     {

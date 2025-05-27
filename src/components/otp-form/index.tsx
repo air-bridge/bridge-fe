@@ -61,6 +61,11 @@ export const OTPForm = () => {
               inputRef={(el) => (inputRefs.current[index] = el)}
               variant="outlined"
               size="medium"
+              sx={{
+                fieldset: {
+                  borderRadius: 2,
+                },
+              }}
             />
           ))}
         </Box>

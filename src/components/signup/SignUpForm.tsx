@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PasswordStrengthBar from "react-password-strength-bar";
 import Grid from "@mui/material/Grid2";
 import {
@@ -19,6 +19,7 @@ import { validationSchema } from "./validation.ts";
 
 export const SignUpForm = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
@@ -38,12 +39,13 @@ export const SignUpForm = () => {
       initialValues={initialValues}
       onSubmit={(values: RegistrationFormValues) => {
         console.log(values);
+        navigate("/auth/otp-verification");
       }}
       validationSchema={validationSchema}
       validateOnBlur
       validateOnChange={false}
     >
-      {({ handleChange, handleSubmit, values }) => (
+      {({ handleChange, handleSubmit, validateField, values, errors }) => (
         <form onSubmit={handleSubmit} autoComplete="off">
           <Grid container spacing={3}>
             <Grid size={{ xs: 12 }}>
@@ -53,7 +55,10 @@ export const SignUpForm = () => {
                 placeholder="Email"
                 value={values.email}
                 onChange={handleChange}
+                error={Boolean(errors.email)}
+                helperText={errors.email}
                 autoComplete="off"
+                onBlur={() => void validateField("email")}
               />
             </Grid>
             <Grid size={{ xs: 12 }}>
@@ -65,6 +70,9 @@ export const SignUpForm = () => {
                   placeholder="Password"
                   value={values.password}
                   onChange={handleChange}
+                  error={Boolean(errors.password)}
+                  helperText={errors.password}
+                  onBlur={() => void validateField("password")}
                   slotProps={{
                     input: {
                       endAdornment: (
@@ -112,7 +120,10 @@ export const SignUpForm = () => {
                 name="confirmPassword"
                 placeholder="Repeat Password"
                 value={values.confirmPassword}
+                error={Boolean(errors.confirmPassword)}
+                helperText={errors.confirmPassword}
                 onChange={handleChange}
+                onBlur={() => void validateField("confirmPassword")}
                 slotProps={{
                   input: {
                     endAdornment: (
@@ -151,7 +162,12 @@ export const SignUpForm = () => {
               />
             </Grid>
             <Grid size={{ xs: 12 }}>
-              <Button fullWidth variant="contained" color="primary">
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                type="submit"
+              >
                 Sign Up
               </Button>
             </Grid>

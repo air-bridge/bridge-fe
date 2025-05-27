@@ -19,7 +19,7 @@ export const validationSchema = () =>
         schema
           .required("Confirm Password is required")
           .test("passwordsMatch", "Password does not match", function (value) {
-            return value === this.parent.newPassword;
+            return value === this.parent.password;
           }),
       otherwise: (schema) => schema.required("Confirm Password is required"),
     }),

@@ -10,6 +10,7 @@ import HomeScreen from "../../screens/app/home";
 import Account from "../../screens/auth/account";
 import OTPVerificationScreen from "../../screens/auth/otp-verification";
 import AccountTypeScreen from "../../screens/auth/account-type";
+import ProfileSetupScreen from "../../screens/auth/profile-setup";
 
 export const Router = () => {
   return (
@@ -36,6 +37,10 @@ export const Router = () => {
           <Route
             path={ROUTES.ACCOUNT_TYPE_ROUTE}
             element={<AccountTypeScreen />}
+          />
+          <Route
+            path={ROUTES.PROFILE_DATA_ROUTE}
+            element={<ProfileSetupScreen />}
           />
         </Route>
 

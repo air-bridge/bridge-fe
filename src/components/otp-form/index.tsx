@@ -2,6 +2,7 @@ import { useRef, useState, ChangeEvent, KeyboardEvent } from "react";
 import Grid from "@mui/material/Grid2";
 import { Box, Button, TextField, Theme } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useNavigate } from "react-router-dom";
 
 export const OTPForm = () => {
   const isMobile = useMediaQuery<Theme>((theme) =>
@@ -9,6 +10,11 @@ export const OTPForm = () => {
   );
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [otp, setOtp] = useState(new Array(6).fill(""));
+
+  const navigate = useNavigate();
+  const handleOtp = () => {
+    navigate("/auth/profile-data");
+  };
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -71,7 +77,12 @@ export const OTPForm = () => {
         </Box>
       </Grid>
       <Grid size={{ xs: 12 }}>
-        <Button fullWidth variant="contained" color="primary">
+        <Button
+          fullWidth
+          variant="contained"
+          color="primary"
+          onClick={handleOtp}
+        >
           Submit
         </Button>
       </Grid>

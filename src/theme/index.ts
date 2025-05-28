@@ -147,17 +147,14 @@ const theme = createTheme({
     },
     body1: {
       fontSize: "1rem",
-      fontWeight: 500,
       lineHeight: "1.5rem",
       color: "#000000",
       "@media (min-width: 1200px)": {
         fontSize: "1rem",
-        fontWeight: 400,
       },
     },
     body2: {
       fontSize: "0.875rem",
-      fontWeight: 400,
       lineHeight: "1.25rem",
       color: "#000000",
     },
@@ -201,6 +198,12 @@ const theme = createTheme({
       main: "#6544C5",
       light: "#8C73D9",
       dark: "#3C2580",
+      contrastText: "#FFF",
+    },
+    secondary: {
+      main: "#999999",
+      light: "#BDBDBD",
+      dark: "#212121",
       contrastText: "#FFF",
     },
     error: {
@@ -267,6 +270,7 @@ const theme = createTheme({
     MuiButton: Components.Button,
     MuiCard: Components.Card,
     MuiDialogActions: Components.DialogActions,
+    MuiLink: Components.Link,
   },
 });
 

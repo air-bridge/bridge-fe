@@ -1,20 +1,51 @@
-import { Stack, Typography } from "@mui/material";
+import { useState, useLayoutEffect, useRef, useCallback } from "react";
+import { Box } from "@mui/material";
+import { Signup } from "../../../components/signup";
+import { SignIn } from "../../../components/signin";
+import { AccountTabState } from "../../../components/signin/constant.ts";
 
 const Account = () => {
+  const [activeTab, setActiveTab] = useState(AccountTabState.LOGIN);
+  const [contentHeight, setContentHeight] = useState("auto");
+  const contentRef = useRef<HTMLDivElement | null>(null);
+
+  const updateHeight = useCallback(() => {
+    if (contentRef.current) {
+      setContentHeight(`${contentRef.current.scrollHeight}px`);
+    }
+  }, []);
+
+  useLayoutEffect(() => {
+    updateHeight();
+
+    const resizeObserver = new ResizeObserver(updateHeight);
+
+    if (contentRef.current) {
+      resizeObserver.observe(contentRef.current);
+    }
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [activeTab, updateHeight]);
+
   return (
-    <Stack>
-      <Typography variant="h3" color="primary">
-        Registration & Login
-      </Typography>
-      <Typography>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi error
-        libero mollitia quis totam? A ad amet commodi corporis cupiditate
-        dolorum est eum explicabo facere, iste, iure modi molestias nesciunt
-        repellendus unde veniam, veritatis vero vitae voluptate voluptatibus.
-        Beatae delectus deserunt dolorum neque? Aliquam distinctio enim ipsam
-        itaque odit quidem?
-      </Typography>
-    </Stack>
+    <Box
+      sx={{
+        height: contentHeight,
+        overflowY: "hidden",
+        transition: "height 0.5s ease",
+      }}
+    >
+      <Box ref={contentRef}>
+        {activeTab === AccountTabState.LOGIN && (
+          <SignIn onChange={() => setActiveTab(AccountTabState.REGISTER)} />
+        )}
+        {activeTab === AccountTabState.REGISTER && (
+          <Signup onChange={() => setActiveTab(AccountTabState.LOGIN)} />
+        )}
+      </Box>
+    </Box>
   );
 };
 

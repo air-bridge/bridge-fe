@@ -1,9 +1,9 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
-import { ForgotPasswordForm } from "../../../components/forgot-password-form";
+import { Box, Stack, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import WestIcon from "@mui/icons-material/West";
+import { ProfileForm } from "../../../components/profile-form";
 
-const ForgotPasswordScreen = () => {
+const ProfileSetupScreen = () => {
   return (
     <Stack gap={{ xs: 4, lg: 10 }}>
       <Stack
@@ -23,29 +23,17 @@ const ForgotPasswordScreen = () => {
       >
         <Box>
           <Typography variant="h3" textAlign="center">
-            Forgot Password ?
+            Profile Registration
           </Typography>
           <Typography variant="body2" textAlign="center" color="text.secondary">
-            Enter your email to reset your password
+            We require your details to complete your account creation
           </Typography>
         </Box>
 
-        <Stack gap={{ xs: 1, lg: 2 }}>
-          <ForgotPasswordForm />
-
-          <Button
-            fullWidth
-            component={Link}
-            to="/auth"
-            variant="text"
-            color="secondary"
-          >
-            Back
-          </Button>
-        </Stack>
+        <ProfileForm />
       </Stack>
     </Stack>
   );
 };
 
-export default ForgotPasswordScreen;
+export default ProfileSetupScreen;

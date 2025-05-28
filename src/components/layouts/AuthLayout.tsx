@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { Box, Stack } from "@mui/material";
 import logo from "../../assets/images/logo.png";
 import logoWhite from "../../assets/images/logo-white.png";
@@ -31,6 +31,7 @@ const AuthLayout = () => {
         alt="logo"
         sx={{ width: { xs: 200, lg: 250 } }}
       />
+
       <Box
         sx={{
           bgcolor: "white",
@@ -64,7 +65,9 @@ const AuthLayout = () => {
           bgcolor: "grey.100",
         }}
       >
-        <img src={logo} alt="logo" width={160} />
+        <Link to="/">
+          <img src={logo} alt="logo" width={160} />
+        </Link>
       </Box>
       <Box
         sx={{

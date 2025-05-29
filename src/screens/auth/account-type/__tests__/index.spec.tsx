@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import Account from "../index.tsx";
+import AccountTypeScreen from "../index.tsx";
 
-describe("Account Component", () => {
+describe("Account Type Screen", () => {
   it("renders the Account text", () => {
-    render(<Account />);
+    render(<AccountTypeScreen />);
     expect(screen.getByText("Registration & Login")).toBeInTheDocument();
   });
 });

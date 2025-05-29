@@ -8,9 +8,9 @@ import {
   Typography,
 } from "@mui/material";
 import {
+  BusinessCenter,
   People,
   RadioButtonChecked,
-  BusinessCenter,
 } from "@mui/icons-material";
 import { AccountType } from "../../types/auth.ts";
 
@@ -49,12 +49,14 @@ type Props = {
   accountType: AccountType | null;
   onSelect: (rg: AccountType) => void;
 };
+
 export const AccountTypesInfo = ({ accountType, onSelect }: Props) => {
   return (
     <Stack gap={2} direction={{ xs: "column", lg: "row" }}>
       {data.map(({ title, description, value, Icon, features }, index) => (
         <Box
           key={index}
+          data-testid={title}
           sx={{
             borderRadius: 3,
             px: 1.5,

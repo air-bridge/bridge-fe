@@ -1,10 +1,18 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import Account from "../index.tsx";
+import { ComponentTestWrapper } from "../../../../config/tests/utils.tsx";
 
 describe("Account Component", () => {
-  it("renders the Account text", () => {
-    render(<Account />);
-    expect(screen.getByText("Registration & Login")).toBeInTheDocument();
+  beforeEach(() => {
+    render(
+      <ComponentTestWrapper>
+        <Account />,
+      </ComponentTestWrapper>,
+    );
+  });
+
+  it("renders the login form when activeTab is LOGIN", () => {
+    expect(screen.getByRole("button", { name: "Sign In" })).toBeInTheDocument();
   });
 });

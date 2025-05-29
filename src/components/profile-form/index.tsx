@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid2";
-import { Button, TextField, MenuItem } from "@mui/material";
+import { Button, TextField, MenuItem, InputLabel } from "@mui/material";
 import { Formik } from "formik";
 import { validationSchema } from "./validation.ts";
 import { ProfileFormValues } from "../../types/user.ts";
@@ -34,7 +34,7 @@ const stateOptions = [
   },
   {
     label: "Hamburg",
-    value: "de",
+    value: "hg",
   },
   {
     label: "Washington",
@@ -104,11 +104,14 @@ export const ProfileForm = () => {
             </Grid>
 
             <Grid size={{ xs: 12 }}>
+              <InputLabel id="country">Country</InputLabel>
               <TextField
                 select
                 fullWidth
                 name="country"
+                label="Country of Residence"
                 placeholder="Country of Residence"
+                data-testid="country-select"
                 error={Boolean(errors.country)}
                 helperText={errors.country}
                 value={values.country}
@@ -128,6 +131,7 @@ export const ProfileForm = () => {
                 select
                 fullWidth
                 name="state"
+                label="State of Residence"
                 placeholder="State of Residence"
                 error={Boolean(errors.state)}
                 helperText={errors.state}

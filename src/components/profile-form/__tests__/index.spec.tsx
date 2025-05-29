@@ -24,14 +24,32 @@ describe("Profile form component", () => {
       target: { value: "Berlin" },
     });
 
+    const countrySelect = screen.getByRole("combobox", {
+      name: "Country of Residence",
+    });
+    fireEvent.mouseDown(countrySelect);
+    const countryOption = screen.getByRole("option", { name: "Nigeria" });
+    fireEvent.click(countryOption);
+
+    const stateSelect = screen.getByRole("combobox", {
+      name: "State of Residence",
+    });
+    fireEvent.mouseDown(stateSelect);
+    const stateOption = screen.getByRole("option", { name: "Hamburg" });
+    fireEvent.click(stateOption);
+
     expect(screen.getByPlaceholderText("First Name")).toHaveValue("Alex");
     expect(screen.getByPlaceholderText("Last Name")).toHaveValue("Max");
     expect(screen.getByPlaceholderText("Phone Number")).toHaveValue(
       "1234567890",
     );
+    expect(screen.getByPlaceholderText("Country of Residence")).toHaveValue(
+      "ng",
+    );
+    expect(screen.getByPlaceholderText("State of Residence")).toHaveValue("hg");
   });
 
-  it("should submit form", () => {
+  it("should submit form", async () => {
     fireEvent.change(screen.getByPlaceholderText("First Name"), {
       target: { value: "Alex" },
     });
@@ -41,12 +59,21 @@ describe("Profile form component", () => {
     fireEvent.change(screen.getByPlaceholderText("Phone Number"), {
       target: { value: "1234567890" },
     });
-    fireEvent.change(screen.getByPlaceholderText("Country of Residence"), {
-      target: { value: "Germany" },
+
+    const countrySelect = screen.getByRole("combobox", {
+      name: "Country of Residence",
     });
-    fireEvent.change(screen.getByPlaceholderText("State of Residence"), {
-      target: { value: "Berlin" },
+
+    fireEvent.mouseDown(countrySelect);
+    const countryOption = screen.getByRole("option", { name: "Germany" });
+    fireEvent.click(countryOption);
+
+    const stateSelect = screen.getByRole("combobox", {
+      name: "State of Residence",
     });
+    fireEvent.mouseDown(stateSelect);
+    const stateOption = screen.getByRole("option", { name: "Lagos" });
+    fireEvent.click(stateOption);
 
     fireEvent.click(screen.getByRole("button", { name: "Continue" }));
   });

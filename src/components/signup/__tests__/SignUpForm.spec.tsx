@@ -29,9 +29,40 @@ describe("Signup form component", () => {
       target: { value: "test@mail.com" },
     });
     fireEvent.change(screen.getByPlaceholderText("Password"), {
-      target: { value: "password" },
+      target: { value: "Password@1" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Repeat Password"), {
+      target: { value: "Password@1" },
     });
 
     fireEvent.click(screen.getByRole("button", { name: "Sign Up" }));
+  });
+
+  it("should toggle password text visibility", () => {
+    expect(screen.getByPlaceholderText("Password")).toHaveAttribute(
+      "type",
+      "password",
+    );
+
+    fireEvent.click(screen.getByTestId("toggle-password-visibility"));
+
+    expect(screen.getByPlaceholderText("Password")).toHaveAttribute(
+      "type",
+      "text",
+    );
+  });
+
+  it("should toggle confirm password text visibility", () => {
+    expect(screen.getByPlaceholderText("Repeat Password")).toHaveAttribute(
+      "type",
+      "password",
+    );
+
+    fireEvent.click(screen.getByTestId("toggle-confirm-password-visibility"));
+
+    expect(screen.getByPlaceholderText("Repeat Password")).toHaveAttribute(
+      "type",
+      "text",
+    );
   });
 });

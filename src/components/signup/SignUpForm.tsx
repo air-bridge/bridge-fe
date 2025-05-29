@@ -78,6 +78,7 @@ export const SignUpForm = () => {
                       endAdornment: (
                         <InputAdornment position="end">
                           <IconButton
+                            data-testid="toggle-password-visibility"
                             aria-label={
                               isPasswordVisible
                                 ? "hide the password"
@@ -129,6 +130,7 @@ export const SignUpForm = () => {
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton
+                          data-testid="toggle-confirm-password-visibility"
                           aria-label={
                             isConfirmPasswordVisible
                               ? "hide the password"

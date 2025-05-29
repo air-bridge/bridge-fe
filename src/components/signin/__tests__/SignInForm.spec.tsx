@@ -7,15 +7,15 @@ describe("Sign-In form component", () => {
     render(<SignInForm />);
   });
 
-  it("should update input fields correctly", () => {
+  it("should update sign-in input fields correctly", () => {
     fireEvent.change(screen.getByPlaceholderText("Email"), {
-      target: { value: "test@mail.com" },
+      target: { value: "test1@mail.com" },
     });
     fireEvent.change(screen.getByPlaceholderText("Password"), {
       target: { value: "password" },
     });
 
-    expect(screen.getByPlaceholderText("Email")).toHaveValue("test@mail.com");
+    expect(screen.getByPlaceholderText("Email")).toHaveValue("test1@mail.com");
     expect(screen.getByPlaceholderText("Password")).toHaveValue("password");
   });
 
@@ -28,5 +28,25 @@ describe("Sign-In form component", () => {
     });
 
     fireEvent.click(screen.getByRole("button", { name: "Sign In" }));
+  });
+
+  it("should toggle password text visibility", () => {
+    fireEvent.change(screen.getByPlaceholderText("Password"), {
+      target: { value: "password" },
+    });
+
+    expect(screen.getByPlaceholderText("Password")).toHaveAttribute(
+      "type",
+      "password",
+    );
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "display the password" }),
+    );
+
+    expect(screen.getByPlaceholderText("Password")).toHaveAttribute(
+      "type",
+      "text",
+    );
   });
 });

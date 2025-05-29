@@ -29,12 +29,6 @@ describe("Profile form component", () => {
     expect(screen.getByPlaceholderText("Phone Number")).toHaveValue(
       "1234567890",
     );
-    // expect(screen.getByPlaceholderText("Country of Residence")).toHaveValue(
-    //   "Germany",
-    // );
-    // expect(screen.getByPlaceholderText("State of Residence")).toHaveValue(
-    //   "Berlin",
-    // );
   });
 
   it("should submit form", () => {

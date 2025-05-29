@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import Account from "../index.tsx";
 import { ComponentTestWrapper } from "../../../../config/tests/utils.tsx";
 
@@ -13,6 +13,28 @@ describe("Account Component", () => {
   });
 
   it("renders the login form when activeTab is LOGIN", () => {
+    expect(
+      screen.getByText(
+        "Please provide your correct details to login to your account",
+      ),
+    ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Sign In" })).toBeInTheDocument();
+  });
+
+  it("renders the signup form when activeTab is REGISTER", () => {
+    expect(
+      screen.queryByText(
+        "Please provide your correct details to create your account",
+      ),
+    ).toBeNull();
+
+    const signupButton = screen.getByRole("link", { name: "Sign Up" });
+    fireEvent.click(signupButton);
+
+    expect(
+      screen.getByText(
+        "Please provide your correct details to create your account",
+      ),
+    ).toBeInTheDocument();
   });
 });

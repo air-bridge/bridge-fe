@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "lint": "eslint src/ --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:check": "eslint 'src/**/*.{ts,tsx}'",
-    "test": "vitest src/components/signup",
+    "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "type:check": "tsc --noEmit",
     "format:check": "prettier --check 'src/**/*.{ts,tsx}'",

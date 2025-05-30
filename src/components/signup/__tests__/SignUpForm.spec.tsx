@@ -1,4 +1,4 @@
-import {describe, expect, it, beforeEach, vi} from "vitest";
+import { describe, expect, it, beforeEach, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { SignUpForm } from "../SignUpForm.tsx";
 import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";

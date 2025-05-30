@@ -1,5 +1,4 @@
-import { Box, Stack, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import WestIcon from "@mui/icons-material/West";
 import { ProfileForm } from "../profile-form";
 import { AccountTabState } from "../signin/constant.ts";
@@ -11,16 +10,16 @@ type Props = {
 export const ProfileSetup = ({ onNext }: Props) => {
   return (
     <Stack gap={{ xs: 4, lg: 10 }}>
-      <Stack
-        gap={0.5}
-        direction="row"
-        alignItems="center"
-        component={Link}
-        to="/auth"
-        sx={{ color: "text.primary", "&:hover": { color: "text.primary" } }}
-      >
-        <WestIcon fontSize="small" />
-        <Typography variant="body2">Back</Typography>
+      <Stack gap={0.5} direction="row" alignItems="center">
+        <Button
+          size="small"
+          variant="text"
+          color="inherit"
+          startIcon={<WestIcon fontSize="small" />}
+          onClick={() => onNext(AccountTabState.ACCOUNT_TYPE)}
+        >
+          Back
+        </Button>
       </Stack>
       <Stack
         gap={{ xs: 2, lg: 3 }}

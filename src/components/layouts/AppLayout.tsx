@@ -7,7 +7,7 @@ const AppLayout = () => {
 
   useEffect(() => {
     // TODO: check if user is logged in
-    navigate("/auth/account");
+    navigate("/account");
   }, []);
 
   return (

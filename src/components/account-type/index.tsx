@@ -16,15 +16,16 @@ export const SelectAccountType = ({ onNext }: Props) => {
   );
   return (
     <Stack gap={{ xs: 4, lg: 10 }}>
-      <Stack
-        gap={0.5}
-        direction="row"
-        alignItems="center"
-        onClick={() => onNext(AccountTabState.REGISTER)}
-        sx={{ color: "text.primary", "&:hover": { color: "text.primary" } }}
-      >
-        <WestIcon fontSize="small" />
-        <Typography variant="body2">Back</Typography>
+      <Stack gap={0.5} direction="row" alignItems="center">
+        <Button
+          size="small"
+          variant="text"
+          color="inherit"
+          startIcon={<WestIcon fontSize="small" />}
+          onClick={() => onNext(AccountTabState.REGISTER)}
+        >
+          Back
+        </Button>
       </Stack>
       <Stack gap={{ xs: 2, lg: 3 }}>
         <Box>

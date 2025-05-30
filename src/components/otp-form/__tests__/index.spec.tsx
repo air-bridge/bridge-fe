@@ -6,6 +6,7 @@ const mockedNavigate = vi.fn();
 vi.mock("react-router-dom", () => ({
   useNavigate: () => mockedNavigate,
 }));
+
 describe("OTP Form Component", () => {
   beforeEach(() => {
     render(<OTPForm />);
@@ -49,5 +50,17 @@ describe("OTP Form Component", () => {
     fireEvent.click(screen.getByRole("button", { name: "Submit" }));
 
     expect(mockedNavigate).toHaveBeenCalledWith("/auth/profile-data");
+  });
+});
+
+describe("OTP Form Component - Mobile", () => {
+  it("should update input fields correctly", () => {
+    render(<OTPForm mobile />);
+    const inputs = screen.getAllByRole("textbox");
+    fireEvent.change(inputs[0], { target: { value: "4" } });
+    fireEvent.change(inputs[1], { target: { value: "5" } });
+
+    expect(inputs[0]).toHaveValue("4");
+    expect(inputs[1]).toHaveValue("5");
   });
 });

@@ -19,3 +19,21 @@ describe("Social Media Auth Signup", () => {
     expect(appleButton).toBeInTheDocument();
   });
 });
+
+describe("Social Media Auth Signup (mobile)", () => {
+  beforeEach(() => {
+    render(<SocialMediaAuth mobile />);
+  });
+
+  it("should render buttons", () => {
+    const googleButton = screen.getByRole("button", {
+      name: "Sign up with Google",
+    });
+    const appleButton = screen.getByRole("button", {
+      name: "Sign up with Apple",
+    });
+
+    expect(googleButton).toBeInTheDocument();
+    expect(appleButton).toBeInTheDocument();
+  });
+});

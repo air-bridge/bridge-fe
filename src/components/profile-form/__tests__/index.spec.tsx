@@ -8,21 +8,23 @@ describe("Profile form component", () => {
   });
 
   it("should update input fields correctly", () => {
-    fireEvent.change(screen.getByPlaceholderText("First Name"), {
+    const firstNameInput = screen.getByPlaceholderText("First Name");
+    fireEvent.change(firstNameInput, {
       target: { value: "Alex" },
     });
-    fireEvent.change(screen.getByPlaceholderText("Last Name"), {
+    fireEvent.blur(firstNameInput);
+
+    const lastNameInput = screen.getByPlaceholderText("Last Name");
+    fireEvent.change(lastNameInput, {
       target: { value: "Max" },
     });
-    fireEvent.change(screen.getByPlaceholderText("Phone Number"), {
+    fireEvent.blur(lastNameInput);
+
+    const phoneInput = screen.getByPlaceholderText("Phone Number");
+    fireEvent.change(phoneInput, {
       target: { value: "1234567890" },
     });
-    fireEvent.change(screen.getByPlaceholderText("Country of Residence"), {
-      target: { value: "Germany" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("State of Residence"), {
-      target: { value: "Berlin" },
-    });
+    fireEvent.blur(phoneInput);
 
     const countrySelect = screen.getByRole("combobox", {
       name: "Country of Residence",
@@ -30,6 +32,7 @@ describe("Profile form component", () => {
     fireEvent.mouseDown(countrySelect);
     const countryOption = screen.getByRole("option", { name: "Nigeria" });
     fireEvent.click(countryOption);
+    fireEvent.blur(countrySelect);
 
     const stateSelect = screen.getByRole("combobox", {
       name: "State of Residence",
@@ -37,6 +40,7 @@ describe("Profile form component", () => {
     fireEvent.mouseDown(stateSelect);
     const stateOption = screen.getByRole("option", { name: "Hamburg" });
     fireEvent.click(stateOption);
+    fireEvent.blur(stateSelect);
 
     expect(screen.getByPlaceholderText("First Name")).toHaveValue("Alex");
     expect(screen.getByPlaceholderText("Last Name")).toHaveValue("Max");

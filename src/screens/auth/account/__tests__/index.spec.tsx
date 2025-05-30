@@ -13,6 +13,7 @@ describe("Account Component", () => {
   });
 
   it("renders the login form when activeTab is LOGIN", () => {
+    expect(screen.getByRole("heading", { name: "Sign In" }));
     expect(
       screen.getByText(
         "Please provide your correct details to login to your account",
@@ -31,10 +32,28 @@ describe("Account Component", () => {
     const signupButton = screen.getByRole("link", { name: "Sign Up" });
     fireEvent.click(signupButton);
 
+    expect(screen.getByRole("heading", { name: "Sign Up" }));
     expect(
       screen.getByText(
         "Please provide your correct details to create your account",
       ),
     ).toBeInTheDocument();
+  });
+
+  it("should toggle signin / register tab", async () => {
+    expect(screen.getByRole("heading", { name: "Sign In" }));
+    const signupButton = screen.getByRole("link", { name: "Sign Up" });
+    fireEvent.click(signupButton);
+
+    expect(screen.getByRole("heading", { name: "Sign Up" }));
+    expect(
+      screen.getByText(
+        "Please provide your correct details to create your account",
+      ),
+    ).toBeInTheDocument();
+
+    const signInButton = screen.getByRole("link", { name: "Sign in" });
+    fireEvent.click(signInButton);
+    expect(screen.getByRole("heading", { name: "Sign In" }));
   });
 });

@@ -24,8 +24,8 @@ describe("Signup Component", () => {
   });
 
   it("should render link to sign-in", () => {
-    const signupButton = screen.getByRole("link", { name: "Sign in" });
-    fireEvent.click(signupButton);
+    const signInButton = screen.getByRole("link", { name: "Sign in" });
+    fireEvent.click(signInButton);
     expect(mockOnChange).toHaveBeenCalledOnce();
   });
 });

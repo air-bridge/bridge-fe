@@ -13,7 +13,11 @@ export const Signup = ({ onChange }: Props) => {
         <Typography variant="h2" color="primary" textAlign="center">
           Sign Up
         </Typography>
-        <Typography color="text.secondary" textAlign="center">
+        <Typography
+          color="text.secondary"
+          textAlign="center"
+          data-testid="signin-link"
+        >
           Please provide your correct details to create your account
         </Typography>
       </Stack>
@@ -34,6 +38,7 @@ export const Signup = ({ onChange }: Props) => {
         Already have an account?&nbsp;
         <Link
           href="/"
+          data-testid="signin-link"
           onClick={(e) => {
             e.preventDefault();
             onChange();

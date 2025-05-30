@@ -13,15 +13,29 @@ describe("Signup form component", () => {
   });
 
   it("should update input fields correctly", () => {
-    fireEvent.change(screen.getByPlaceholderText("Email"), {
+    const emailInput = screen.getByPlaceholderText("Email");
+    fireEvent.change(emailInput, {
       target: { value: "test@mail.com" },
     });
-    fireEvent.change(screen.getByPlaceholderText("Password"), {
+    fireEvent.blur(emailInput);
+
+    const passwordInput = screen.getByPlaceholderText("Password");
+    fireEvent.change(passwordInput, {
       target: { value: "password" },
     });
+    fireEvent.blur(passwordInput);
+
+    const confirmPasswordInput = screen.getByPlaceholderText("Repeat Password");
+    fireEvent.change(confirmPasswordInput, {
+      target: { value: "password" },
+    });
+    fireEvent.blur(confirmPasswordInput);
 
     expect(screen.getByPlaceholderText("Email")).toHaveValue("test@mail.com");
     expect(screen.getByPlaceholderText("Password")).toHaveValue("password");
+    expect(screen.getByPlaceholderText("Repeat Password")).toHaveValue(
+      "password",
+    );
   });
 
   it("should submit form", () => {

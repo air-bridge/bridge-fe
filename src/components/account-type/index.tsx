@@ -1,12 +1,16 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
 import WestIcon from "@mui/icons-material/West";
-import { AccountTypesInfo } from "../../../components/account-types-info";
+import { AccountTypesInfo } from "../account-types-info";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { AccountType } from "../../../types/auth.ts";
 import { useState } from "react";
+import { AccountTabState } from "../signin/constant.ts";
+import { AccountType } from "../../types/auth.ts";
 
-const AccountTypeScreen = () => {
+type Props = {
+  onNext: (arg: AccountTabState) => void;
+};
+
+export const SelectAccountType = ({ onNext }: Props) => {
   const [userAccountType, setUserAccountType] = useState<AccountType | null>(
     null,
   );
@@ -16,8 +20,7 @@ const AccountTypeScreen = () => {
         gap={0.5}
         direction="row"
         alignItems="center"
-        component={Link}
-        to="/auth"
+        onClick={() => onNext(AccountTabState.REGISTER)}
         sx={{ color: "text.primary", "&:hover": { color: "text.primary" } }}
       >
         <WestIcon fontSize="small" />
@@ -44,6 +47,7 @@ const AccountTypeScreen = () => {
             fullWidth
             variant="contained"
             endIcon={<ChevronRightIcon />}
+            onClick={() => onNext(AccountTabState.PROFILE_DATA)}
           >
             Continue
           </Button>
@@ -52,5 +56,3 @@ const AccountTypeScreen = () => {
     </Stack>
   );
 };
-
-export default AccountTypeScreen;

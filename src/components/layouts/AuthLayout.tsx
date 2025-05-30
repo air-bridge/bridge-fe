@@ -1,51 +1,9 @@
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { Box, Stack } from "@mui/material";
 import logo from "../../assets/images/logo.png";
-import logoWhite from "../../assets/images/logo-white.png";
-
-const pathWithBackground = ["/auth/account"];
 
 const AuthLayout = () => {
-  const { pathname } = useLocation();
-  const showBackgroundImage = pathWithBackground.includes(pathname);
-
-  return showBackgroundImage ? (
-    <Stack
-      direction={{ xs: "column", lg: "row" }}
-      justifyContent={{ xs: "center", lg: "flex-end" }}
-      alignItems={{ xs: "center", lg: "center" }}
-      gap={{ xs: 2, lg: 15 }}
-      sx={{
-        height: "100vh",
-        position: "relative",
-        backgroundImage: 'url("/authBg.png")',
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        px: { xs: 5, lg: 3 },
-      }}
-    >
-      <Box
-        component="img"
-        src={logoWhite}
-        alt="logo"
-        sx={{ width: { xs: 200, lg: 250 } }}
-      />
-
-      <Box
-        sx={{
-          bgcolor: "white",
-          boxShadow: 1,
-          borderRadius: { xs: 2, lg: 3 },
-          width: { xs: "100%", lg: 580 },
-          px: { xs: 3, lg: 7 },
-          py: { xs: 3, lg: 5 },
-        }}
-      >
-        <Outlet />
-      </Box>
-    </Stack>
-  ) : (
+  return (
     <Stack
       alignItems={"center"}
       justifyContent="center"

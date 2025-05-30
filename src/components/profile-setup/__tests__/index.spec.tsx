@@ -1,13 +1,14 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, vi, expect, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
-import Account from "../index.tsx";
-import { ComponentTestWrapper } from "../../../../config/tests/utils.tsx";
+import { ProfileSetup } from "../index.tsx";
+import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
 
 describe("Account Component", () => {
+  const mockOnNext = vi.fn();
   beforeEach(() => {
     render(
       <ComponentTestWrapper>
-        <Account />
+        <ProfileSetup onNext={mockOnNext} />
       </ComponentTestWrapper>,
     );
   });

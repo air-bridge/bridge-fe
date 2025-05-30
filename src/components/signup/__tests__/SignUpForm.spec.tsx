@@ -1,13 +1,15 @@
-import { describe, expect, it, beforeEach } from "vitest";
+import {describe, expect, it, beforeEach, vi} from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { SignUpForm } from "../SignUpForm.tsx";
 import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
 
 describe("Signup form component", () => {
+  const mockOnNext = vi.fn();
+
   beforeEach(() => {
     render(
       <ComponentTestWrapper>
-        <SignUpForm />
+        <SignUpForm onNext={mockOnNext} />
       </ComponentTestWrapper>,
     );
   });

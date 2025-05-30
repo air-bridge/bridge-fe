@@ -42,7 +42,11 @@ const stateOptions = [
   },
 ];
 
-export const ProfileForm = () => {
+type Props = {
+  onNext: () => void;
+};
+
+export const ProfileForm = ({ onNext }: Props) => {
   const initialValues = {
     firstName: "",
     lastName: "",
@@ -56,6 +60,7 @@ export const ProfileForm = () => {
       initialValues={initialValues}
       onSubmit={(values: ProfileFormValues) => {
         console.log(values);
+        onNext();
       }}
       validationSchema={validationSchema}
       validateOnBlur

@@ -1,9 +1,14 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import WestIcon from "@mui/icons-material/West";
-import { ProfileForm } from "../../../components/profile-form";
+import { ProfileForm } from "../profile-form";
+import { AccountTabState } from "../signin/constant.ts";
 
-const ProfileSetupScreen = () => {
+type Props = {
+  onNext: (arg: AccountTabState) => void;
+};
+
+export const ProfileSetup = ({ onNext }: Props) => {
   return (
     <Stack gap={{ xs: 4, lg: 10 }}>
       <Stack
@@ -30,10 +35,8 @@ const ProfileSetupScreen = () => {
           </Typography>
         </Box>
 
-        <ProfileForm />
+        <ProfileForm onNext={() => onNext(AccountTabState.COMPLETED)} />
       </Stack>
     </Stack>
   );
 };
-
-export default ProfileSetupScreen;

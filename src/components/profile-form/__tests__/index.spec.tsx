@@ -1,10 +1,12 @@
-import { describe, expect, it, beforeEach } from "vitest";
+import {describe, expect, it, beforeEach, vi} from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { ProfileForm } from "../index.tsx";
 
 describe("Profile form component", () => {
+  const mockOnNext = vi.fn();
+
   beforeEach(() => {
-    render(<ProfileForm />);
+    render(<ProfileForm onNext={mockOnNext} />);
   });
 
   it("should update input fields correctly", () => {

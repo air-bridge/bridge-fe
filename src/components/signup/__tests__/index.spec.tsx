@@ -4,12 +4,12 @@ import { Signup } from "../index.tsx";
 import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
 
 describe("Signup Component", () => {
-  const mockOnChange = vi.fn();
+  const mockOnNext = vi.fn();
 
   beforeEach(() => {
     render(
       <ComponentTestWrapper>
-        <Signup onChange={mockOnChange} />
+        <Signup onNext={mockOnNext} />
       </ComponentTestWrapper>,
     );
   });
@@ -26,6 +26,6 @@ describe("Signup Component", () => {
   it("should render link to sign-in", () => {
     const signInButton = screen.getByRole("link", { name: "Sign in" });
     fireEvent.click(signInButton);
-    expect(mockOnChange).toHaveBeenCalledOnce();
+    expect(mockOnNext).toHaveBeenCalledOnce();
   });
 });

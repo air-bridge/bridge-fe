@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PasswordStrengthBar from "react-password-strength-bar";
 import Grid from "@mui/material/Grid2";
 import {
@@ -17,9 +17,11 @@ import { RegistrationFormValues } from "../../types/auth.ts";
 import useTheme from "@mui/material/styles/useTheme";
 import { validationSchema } from "./validation.ts";
 
-export const SignUpForm = () => {
+type Props = {
+  onNext: () => void;
+};
+export const SignUpForm = ({ onNext }: Props) => {
   const theme = useTheme();
-  const navigate = useNavigate();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
@@ -39,7 +41,7 @@ export const SignUpForm = () => {
       initialValues={initialValues}
       onSubmit={(values: RegistrationFormValues) => {
         console.log(values);
-        navigate("/auth/otp-verification");
+        onNext();
       }}
       validationSchema={validationSchema}
       validateOnBlur

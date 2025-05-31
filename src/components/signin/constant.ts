@@ -1,4 +1,7 @@
 export enum AccountTabState {
   LOGIN = "LOGIN",
   REGISTER = "REGISTER",
+  ACCOUNT_TYPE = "ACCOUNT_TYPE",
+  PROFILE_DATA = "PROFILE_DATA",
+  COMPLETED = "COMPLETED",
 }

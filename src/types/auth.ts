@@ -13,7 +13,12 @@ export type ForgotPasswordFormValues = {
   email: string;
 };
 
-export enum AccountType {
-  Sender = "sender",
-  Passenger = "passenger",
-}
+export type UserAuth = {
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: string;
+  userName: string;
+  fullName: string;
+  roleName: string;
+  phoneNumber: string;
+};

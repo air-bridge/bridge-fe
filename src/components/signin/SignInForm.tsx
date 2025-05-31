@@ -12,7 +12,7 @@ export const SignInForm = () => {
   const handleShowPassword = () => setIsPasswordVisible(!isPasswordVisible);
 
   const initialValues = {
-    email: "test@mail.com",
+    email: "",
     password: "",
   };
 
@@ -73,7 +73,12 @@ export const SignInForm = () => {
               />
             </Grid>
             <Grid size={{ xs: 12 }}>
-              <Button fullWidth variant="contained" color="primary">
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                type="submit"
+              >
                 Sign In
               </Button>
             </Grid>

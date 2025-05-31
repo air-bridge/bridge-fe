@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import * as ROUTES from "./routes";
 import AuthLayout from "../../components/layouts/AuthLayout.tsx";
 import InternalError from "../../components/internal-error";
@@ -9,23 +9,19 @@ import ForgotPasswordScreen from "../../screens/auth/forgot-password";
 import HomeScreen from "../../screens/app/home";
 import Account from "../../screens/auth/account";
 import OTPVerificationScreen from "../../screens/auth/otp-verification";
-import AccountTypeScreen from "../../screens/auth/account-type";
-import ProfileSetupScreen from "../../screens/auth/profile-setup";
 
 export const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Registration & Login */}
+        <Route path="/account" element={<Account />} />
+
         <Route
           path="/auth"
           element={<AuthLayout />}
           errorElement={<InternalError />}
         >
-          <Route
-            index
-            element={<Navigate to={ROUTES.LOGIN_REGISTER_ROUTE} />}
-          />
-          <Route path={ROUTES.LOGIN_REGISTER_ROUTE} element={<Account />} />
           <Route
             path={ROUTES.FORGOT_PASSWORD_ROUTE}
             element={<ForgotPasswordScreen />}
@@ -33,14 +29,6 @@ export const Router = () => {
           <Route
             path={ROUTES.OTP_VERIFICATION_ROUTE}
             element={<OTPVerificationScreen />}
-          />
-          <Route
-            path={ROUTES.ACCOUNT_TYPE_ROUTE}
-            element={<AccountTypeScreen />}
-          />
-          <Route
-            path={ROUTES.PROFILE_DATA_ROUTE}
-            element={<ProfileSetupScreen />}
           />
         </Route>
 

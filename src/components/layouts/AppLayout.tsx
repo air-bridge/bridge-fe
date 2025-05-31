@@ -1,13 +1,17 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useEffect } from "react";
+import { getAuthUser } from "../../utils/userAuth.ts";
 
 const AppLayout = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // TODO: check if user is logged in
-    navigate("/auth/account");
+    const authUser = getAuthUser();
+    if (!authUser) {
+      void navigate("/account");
+      return;
+    }
   }, []);
 
   return (

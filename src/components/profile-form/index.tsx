@@ -3,6 +3,7 @@ import { Button, TextField, MenuItem, InputLabel } from "@mui/material";
 import { Formik } from "formik";
 import { validationSchema } from "./validation.ts";
 import { ProfileFormValues } from "../../types/user.ts";
+import { useRegistrationContext } from "../../context/registration/util.ts";
 
 // TODO: populate options
 const countryOptions = [
@@ -47,19 +48,21 @@ type Props = {
 };
 
 export const ProfileForm = ({ onNext }: Props) => {
+  const { payload, setRegistrationInfo } = useRegistrationContext();
+
   const initialValues = {
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
-    country: "",
-    state: "",
+    firstName: payload.firstName,
+    lastName: payload.lastName,
+    phoneNumber: payload.phoneNumber,
+    country: payload.country,
+    state: payload.state,
   };
 
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={(values: ProfileFormValues) => {
-        console.log(values);
+        setRegistrationInfo(values);
         onNext();
       }}
       validationSchema={validationSchema}
@@ -70,6 +73,7 @@ export const ProfileForm = ({ onNext }: Props) => {
         <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid size={{ xs: 12 }}>
+              <InputLabel id="firstName">First Name</InputLabel>
               <TextField
                 fullWidth
                 name="firstName"
@@ -83,6 +87,7 @@ export const ProfileForm = ({ onNext }: Props) => {
             </Grid>
 
             <Grid size={{ xs: 12 }}>
+              <InputLabel id="lastName">Last Name</InputLabel>
               <TextField
                 fullWidth
                 name="lastName"
@@ -96,6 +101,7 @@ export const ProfileForm = ({ onNext }: Props) => {
             </Grid>
 
             <Grid size={{ xs: 12 }}>
+              <InputLabel id="phoneNumber">Phone Number</InputLabel>
               <TextField
                 fullWidth
                 name="phoneNumber"
@@ -114,7 +120,6 @@ export const ProfileForm = ({ onNext }: Props) => {
                 select
                 fullWidth
                 name="country"
-                label="Country of Residence"
                 placeholder="Country of Residence"
                 data-testid="country-select"
                 error={Boolean(errors.country)}
@@ -132,11 +137,11 @@ export const ProfileForm = ({ onNext }: Props) => {
             </Grid>
 
             <Grid size={{ xs: 12 }}>
+              <InputLabel id="state">State of Residence</InputLabel>
               <TextField
                 select
                 fullWidth
                 name="state"
-                label="State of Residence"
                 placeholder="State of Residence"
                 error={Boolean(errors.state)}
                 helperText={errors.state}

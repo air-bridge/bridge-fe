@@ -5,3 +5,14 @@ export type ProfileFormValues = {
   country: string;
   state: string;
 };
+
+export type RegistrationPayload = {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  accountType: string;
+} & ProfileFormValues;
+
+export type RegistrationInput = Partial<
+  Record<keyof RegistrationPayload, string>
+>;

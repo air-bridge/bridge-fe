@@ -2,18 +2,17 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import WestIcon from "@mui/icons-material/West";
 import { AccountTypesInfo } from "../account-types-info";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { useState } from "react";
 import { AccountTabState } from "../signin/constant.ts";
-import { AccountType } from "../../types/auth.ts";
+import { useRegistrationContext } from "../../context/registration/util.ts";
 
 type Props = {
   onNext: (arg: AccountTabState) => void;
 };
 
 export const SelectAccountType = ({ onNext }: Props) => {
-  const [userAccountType, setUserAccountType] = useState<AccountType | null>(
-    null,
-  );
+  const { payload, setRegistrationInfo } = useRegistrationContext();
+  const userAccountType = payload.accountType;
+
   return (
     <Stack gap={{ xs: 4, lg: 10 }}>
       <Stack gap={0.5} direction="row" alignItems="center">
@@ -39,7 +38,11 @@ export const SelectAccountType = ({ onNext }: Props) => {
 
         <AccountTypesInfo
           accountType={userAccountType}
-          onSelect={setUserAccountType}
+          onSelect={(arg) =>
+            setRegistrationInfo({
+              accountType: arg,
+            })
+          }
         />
 
         <Box sx={{ width: { xs: "100%", lg: "60%" }, m: "auto" }}>

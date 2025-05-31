@@ -1,7 +1,7 @@
 import { describe, expect, vi, it, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { AccountTypesInfo } from "../index.tsx";
-import { AccountType } from "../../../types/auth.ts";
+import { ACCOUNT_TYPE } from "../../../context/registration/constant.ts";
 
 describe("Account Type Screen", () => {
   const mockOnSelect = vi.fn();
@@ -9,7 +9,7 @@ describe("Account Type Screen", () => {
   beforeEach(() => {
     render(
       <AccountTypesInfo
-        accountType={AccountType.Passenger}
+        accountType={ACCOUNT_TYPE.Passenger}
         onSelect={mockOnSelect}
       />,
     );
@@ -24,13 +24,13 @@ describe("Account Type Screen", () => {
     const triggerSender = screen.getByTestId("Sender");
     triggerSender.click();
     expect(mockOnSelect).toHaveBeenCalledOnce();
-    expect(mockOnSelect).toHaveBeenCalledWith(AccountType.Sender);
+    expect(mockOnSelect).toHaveBeenCalledWith(ACCOUNT_TYPE.Sender);
   });
 
   it("calls onSelect for Passenger account type", () => {
     const triggerSender = screen.getByTestId("Passenger");
     triggerSender.click();
     expect(mockOnSelect).toHaveBeenCalledOnce();
-    expect(mockOnSelect).toHaveBeenCalledWith(AccountType.Passenger);
+    expect(mockOnSelect).toHaveBeenCalledWith(ACCOUNT_TYPE.Passenger);
   });
 });

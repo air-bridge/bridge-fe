@@ -12,8 +12,3 @@ export type LoginFormValues = {
 export type ForgotPasswordFormValues = {
   email: string;
 };
-
-export enum AccountType {
-  Sender = "sender",
-  Passenger = "passenger",
-}

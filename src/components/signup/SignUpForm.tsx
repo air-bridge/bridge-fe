@@ -16,12 +16,14 @@ import { Formik } from "formik";
 import { RegistrationFormValues } from "../../types/auth.ts";
 import useTheme from "@mui/material/styles/useTheme";
 import { validationSchema } from "./validation.ts";
+import { useRegistrationContext } from "../../context/registration/util.ts";
 
 type Props = {
   onNext: () => void;
 };
 export const SignUpForm = ({ onNext }: Props) => {
   const theme = useTheme();
+  const { payload, setRegistrationInfo } = useRegistrationContext();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
@@ -31,16 +33,16 @@ export const SignUpForm = ({ onNext }: Props) => {
     setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
 
   const initialValues = {
-    email: "test@mail.com",
-    password: "",
-    confirmPassword: "",
+    email: payload.email,
+    password: payload.password,
+    confirmPassword: payload.confirmPassword,
   };
 
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={(values: RegistrationFormValues) => {
-        console.log(values);
+        setRegistrationInfo(values);
         onNext();
       }}
       validationSchema={validationSchema}

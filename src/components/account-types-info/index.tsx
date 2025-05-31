@@ -12,12 +12,12 @@ import {
   People,
   RadioButtonChecked,
 } from "@mui/icons-material";
-import { AccountType } from "../../types/auth.ts";
+import { ACCOUNT_TYPE } from "../../context/registration/constant.ts";
 
 const data = [
   {
     title: "Sender",
-    value: AccountType.Sender,
+    value: ACCOUNT_TYPE.Sender,
     Icon: People,
     description: "A sender is a person that want to send goods out.",
     features: [
@@ -31,7 +31,7 @@ const data = [
   },
   {
     title: "Passenger",
-    value: AccountType.Passenger,
+    value: ACCOUNT_TYPE.Passenger,
     Icon: BusinessCenter,
     description: "These are people that have space to help carry goods ",
     features: [
@@ -46,8 +46,8 @@ const data = [
 ];
 
 type Props = {
-  accountType: AccountType | null;
-  onSelect: (rg: AccountType) => void;
+  accountType: string | null;
+  onSelect: (rg: string) => void;
 };
 
 export const AccountTypesInfo = ({ accountType, onSelect }: Props) => {

@@ -12,3 +12,13 @@ export type LoginFormValues = {
 export type ForgotPasswordFormValues = {
   email: string;
 };
+
+export type UserAuth = {
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: string;
+  userName: string;
+  fullName: string;
+  roleName: string;
+  phoneNumber: string;
+};

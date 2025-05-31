@@ -1,8 +1,17 @@
 import { Button, Stack, Typography } from "@mui/material";
 import icon from "../../assets/images/profile-completed.png";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useRegistrationContext } from "../../context/registration/util.ts";
+import { setUserAuth } from "../../utils/userAuth.ts";
 
 export const ProfileSetupCompleted = () => {
+  const { payload } = useRegistrationContext();
+
+  useEffect(() => {
+    setUserAuth(payload);
+  }, []);
+
   return (
     <Stack
       gap={{ xs: 2, lg: 3 }}

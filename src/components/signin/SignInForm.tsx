@@ -12,7 +12,7 @@ export const SignInForm = () => {
   const handleShowPassword = () => setIsPasswordVisible(!isPasswordVisible);
 
   const initialValues = {
-    email: "test@mail.com",
+    email: "",
     password: "",
   };
 

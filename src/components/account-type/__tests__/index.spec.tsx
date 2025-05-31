@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
 import { SelectAccountType } from "../index.tsx";
+import { AccountTabState } from "../../signin/constant.ts";
 
 describe("Account Type Screen", () => {
   const mockOnNext = vi.fn();
@@ -22,8 +23,9 @@ describe("Account Type Screen", () => {
   });
 
   it("renders back button", () => {
-    const backLink = screen.getByRole("link", { name: "Back" });
-    expect(backLink).toHaveAttribute("href", "/auth");
+    const backLink = screen.getByRole("button", { name: "Back" });
+    fireEvent.click(backLink);
+    expect(mockOnNext).toHaveBeenCalledWith(AccountTabState.REGISTER);
   });
 
   it("renders continue button", () => {

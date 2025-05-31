@@ -1,15 +1,13 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { ComponentTestWrapper } from "../../../../config/tests/utils.tsx";
-import { SelectAccountType } from "../../../../components/account-type";
+import Account from "../index.tsx";
 
 describe("Account Component", () => {
-  const mockOnNext = vi.fn();
-
   beforeEach(() => {
     render(
       <ComponentTestWrapper>
-        <SelectAccountType onNext={mockOnNext} />,
+        <Account />,
       </ComponentTestWrapper>,
     );
   });

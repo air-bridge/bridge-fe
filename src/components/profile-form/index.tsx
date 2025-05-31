@@ -115,12 +115,17 @@ export const ProfileForm = ({ onNext }: Props) => {
             </Grid>
 
             <Grid size={{ xs: 12 }}>
-              <InputLabel id="country">Country</InputLabel>
+              <InputLabel>Country</InputLabel>
               <TextField
                 select
                 fullWidth
                 name="country"
                 placeholder="Country of Residence"
+                slotProps={{
+                  htmlInput: {
+                    "aria-label": "Country of Residence",
+                  },
+                }}
                 data-testid="country-select"
                 error={Boolean(errors.country)}
                 helperText={errors.country}
@@ -137,12 +142,17 @@ export const ProfileForm = ({ onNext }: Props) => {
             </Grid>
 
             <Grid size={{ xs: 12 }}>
-              <InputLabel id="state">State of Residence</InputLabel>
+              <InputLabel>State of Residence</InputLabel>
               <TextField
                 select
                 fullWidth
                 name="state"
                 placeholder="State of Residence"
+                slotProps={{
+                  htmlInput: {
+                    "aria-label": "State of Residence",
+                  },
+                }}
                 error={Boolean(errors.state)}
                 helperText={errors.state}
                 value={values.state}

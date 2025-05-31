@@ -9,7 +9,7 @@ describe("Sign-In component", () => {
   beforeEach(() => {
     render(
       <ComponentTestWrapper>
-        <SignIn onNext={mockOnNext()} />
+        <SignIn onNext={mockOnNext} />
       </ComponentTestWrapper>,
     );
   });

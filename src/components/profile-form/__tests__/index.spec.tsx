@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { ProfileForm } from "../index.tsx";
 
 describe("Profile form component", () => {
@@ -82,5 +82,9 @@ describe("Profile form component", () => {
     fireEvent.click(stateOption);
 
     fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+
+    await waitFor(() => {
+      expect(mockOnNext).toHaveBeenCalledOnce();
+    });
   });
 });

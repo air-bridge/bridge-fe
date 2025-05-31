@@ -1,7 +1,8 @@
 import { describe, it, vi, expect, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { ProfileSetup } from "../index.tsx";
 import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
+import { AccountTabState } from "../../signin/constant.ts";
 
 describe("Account Component", () => {
   const mockOnNext = vi.fn();
@@ -20,5 +21,44 @@ describe("Account Component", () => {
         "We require your details to complete your account creation",
       ),
     ).toBeInTheDocument();
+  });
+
+  it("renders back button", () => {
+    const backLink = screen.getByRole("button", { name: "Back" });
+    fireEvent.click(backLink);
+    expect(mockOnNext).toHaveBeenCalledWith(AccountTabState.ACCOUNT_TYPE);
+  });
+
+  it("moves to he next step", async () => {
+    fireEvent.change(screen.getByPlaceholderText("First Name"), {
+      target: { value: "Ale" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Last Name"), {
+      target: { value: "Maxi" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Phone Number"), {
+      target: { value: "1234567891" },
+    });
+
+    const countrySelect = screen.getByRole("combobox", {
+      name: "Country of Residence",
+    });
+
+    fireEvent.mouseDown(countrySelect);
+    const countryOption = screen.getByRole("option", { name: "Germany" });
+    fireEvent.click(countryOption);
+
+    const stateSelect = screen.getByRole("combobox", {
+      name: "State of Residence",
+    });
+    fireEvent.mouseDown(stateSelect);
+    const stateOption = screen.getByRole("option", { name: "Lagos" });
+    fireEvent.click(stateOption);
+
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+
+    await waitFor(() => {
+      expect(mockOnNext).toHaveBeenCalledWith(AccountTabState.COMPLETED);
+    });
   });
 });

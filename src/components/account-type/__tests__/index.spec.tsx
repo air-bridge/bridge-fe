@@ -1,18 +1,13 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
-import { SelectAccountType } from "../index.tsx";
+import { AccountType } from "../index.tsx";
 import { AccountTabState } from "../../signin/constant.ts";
 
 describe("Account Type Screen", () => {
   const mockOnNext = vi.fn();
 
   beforeEach(() => {
-    render(
-      <ComponentTestWrapper>
-        <SelectAccountType onNext={mockOnNext} />,
-      </ComponentTestWrapper>,
-    );
+    render(<AccountType onNext={mockOnNext} />);
   });
 
   it("renders the  headings", () => {
@@ -28,8 +23,17 @@ describe("Account Type Screen", () => {
     expect(mockOnNext).toHaveBeenCalledWith(AccountTabState.REGISTER);
   });
 
+  it("selects account type", () => {
+    const triggerSender = screen.getByTestId("Passenger");
+    triggerSender.click();
+    const continueButton = screen.getByRole("button", { name: "Continue" });
+    fireEvent.click(continueButton);
+    expect(mockOnNext).toHaveBeenCalledWith(AccountTabState.PROFILE_DATA);
+  });
+
   it("renders continue button", () => {
     const continueButton = screen.getByRole("button", { name: "Continue" });
-    expect(continueButton).toBeInTheDocument();
+    fireEvent.click(continueButton);
+    expect(mockOnNext).toHaveBeenCalledWith(AccountTabState.PROFILE_DATA);
   });
 });

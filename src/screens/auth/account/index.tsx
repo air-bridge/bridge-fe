@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import { Signup } from "../../../components/signup";
 import { SignIn } from "../../../components/signin";
 import { AccountTabState } from "../../../components/signin/constant.ts";
-import { SelectAccountType } from "../../../components/account-type";
+import { AccountType } from "../../../components/account-type";
 import { ProfileSetup } from "../../../components/profile-setup";
 import { AccountLayout } from "./AccountLayout.tsx";
 import { ProfileSetupCompleted } from "../../../components/profile-setup/ProfileSetupCompleted.tsx";
@@ -55,7 +55,7 @@ const Account = () => {
               <Signup onNext={(step) => setActiveTab(step)} />
             )}
             {activeTab === AccountTabState.ACCOUNT_TYPE && (
-              <SelectAccountType onNext={(step) => setActiveTab(step)} />
+              <AccountType onNext={(step) => setActiveTab(step)} />
             )}
             {activeTab === AccountTabState.PROFILE_DATA && (
               <ProfileSetup onNext={(step) => setActiveTab(step)} />

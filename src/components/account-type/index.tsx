@@ -9,7 +9,7 @@ type Props = {
   onNext: (arg: AccountTabState) => void;
 };
 
-export const SelectAccountType = ({ onNext }: Props) => {
+export const AccountType = ({ onNext }: Props) => {
   const { payload, setRegistrationInfo } = useRegistrationContext();
   const userAccountType = payload.accountType;
 

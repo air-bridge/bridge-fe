@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { ComponentTestWrapper } from "../../../../config/tests/utils.tsx";
 import Account from "../index.tsx";
 
@@ -55,5 +55,61 @@ describe("Account Component", () => {
     const signInButton = screen.getByRole("link", { name: "Sign in" });
     fireEvent.click(signInButton);
     expect(screen.getByRole("heading", { name: "Sign In" }));
+  });
+
+  it("should follow the registration steps", async () => {
+    const signupButton = screen.getByRole("link", { name: "Sign Up" });
+    fireEvent.click(signupButton);
+
+    // Fill registration
+    fireEvent.change(screen.getByPlaceholderText("Email"), {
+      target: { value: "test@mail.com" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Password"), {
+      target: { value: "Password@1" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Repeat Password"), {
+      target: { value: "Password@1" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Sign Up" }));
+
+    // Account type
+    await waitFor(() => {
+      expect(screen.getByText("Choose Account Type")).toBeInTheDocument();
+      fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    });
+
+    // Profile data
+    expect(screen.getByText("Profile Registration")).toBeInTheDocument();
+    fireEvent.change(screen.getByPlaceholderText("First Name"), {
+      target: { value: "Ale" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Last Name"), {
+      target: { value: "Maxi" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Phone Number"), {
+      target: { value: "1234567891" },
+    });
+
+    const countrySelect = screen.getByRole("combobox", {
+      name: "Country of Residence",
+    });
+
+    fireEvent.mouseDown(countrySelect);
+    const countryOption = screen.getByRole("option", { name: "Germany" });
+    fireEvent.click(countryOption);
+
+    const stateSelect = screen.getByRole("combobox", {
+      name: "State of Residence",
+    });
+    fireEvent.mouseDown(stateSelect);
+    const stateOption = screen.getByRole("option", { name: "Lagos" });
+    fireEvent.click(stateOption);
+
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+
+    await waitFor(() => {
+      expect(screen.getByText("Profile Created")).toBeInTheDocument();
+    });
   });
 });

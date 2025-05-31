@@ -1,27 +1,30 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
 import WestIcon from "@mui/icons-material/West";
-import { AccountTypesInfo } from "../../../components/account-types-info";
+import { AccountTypesInfo } from "../account-types-info";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { AccountType } from "../../../types/auth.ts";
-import { useState } from "react";
+import { AccountTabState } from "../signin/constant.ts";
+import { useRegistrationContext } from "../../context/registration/util.ts";
 
-const AccountTypeScreen = () => {
-  const [userAccountType, setUserAccountType] = useState<AccountType | null>(
-    null,
-  );
+type Props = {
+  onNext: (arg: AccountTabState) => void;
+};
+
+export const AccountType = ({ onNext }: Props) => {
+  const { payload, setRegistrationInfo } = useRegistrationContext();
+  const userAccountType = payload.accountType;
+
   return (
     <Stack gap={{ xs: 4, lg: 10 }}>
-      <Stack
-        gap={0.5}
-        direction="row"
-        alignItems="center"
-        component={Link}
-        to="/auth"
-        sx={{ color: "text.primary", "&:hover": { color: "text.primary" } }}
-      >
-        <WestIcon fontSize="small" />
-        <Typography variant="body2">Back</Typography>
+      <Stack gap={0.5} direction="row" alignItems="center">
+        <Button
+          size="small"
+          variant="text"
+          color="inherit"
+          startIcon={<WestIcon fontSize="small" />}
+          onClick={() => onNext(AccountTabState.REGISTER)}
+        >
+          Back
+        </Button>
       </Stack>
       <Stack gap={{ xs: 2, lg: 3 }}>
         <Box>
@@ -35,7 +38,11 @@ const AccountTypeScreen = () => {
 
         <AccountTypesInfo
           accountType={userAccountType}
-          onSelect={setUserAccountType}
+          onSelect={(arg) =>
+            setRegistrationInfo({
+              accountType: arg,
+            })
+          }
         />
 
         <Box sx={{ width: { xs: "100%", lg: "60%" }, m: "auto" }}>
@@ -44,6 +51,7 @@ const AccountTypeScreen = () => {
             fullWidth
             variant="contained"
             endIcon={<ChevronRightIcon />}
+            onClick={() => onNext(AccountTabState.PROFILE_DATA)}
           >
             Continue
           </Button>
@@ -52,5 +60,3 @@ const AccountTypeScreen = () => {
     </Stack>
   );
 };
-
-export default AccountTypeScreen;

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PasswordStrengthBar from "react-password-strength-bar";
 import Grid from "@mui/material/Grid2";
 import {
@@ -16,10 +16,14 @@ import { Formik } from "formik";
 import { RegistrationFormValues } from "../../types/auth.ts";
 import useTheme from "@mui/material/styles/useTheme";
 import { validationSchema } from "./validation.ts";
+import { useRegistrationContext } from "../../context/registration/util.ts";
 
-export const SignUpForm = () => {
+type Props = {
+  onNext: () => void;
+};
+export const SignUpForm = ({ onNext }: Props) => {
   const theme = useTheme();
-  const navigate = useNavigate();
+  const { payload, setRegistrationInfo } = useRegistrationContext();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
@@ -29,17 +33,17 @@ export const SignUpForm = () => {
     setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
 
   const initialValues = {
-    email: "test@mail.com",
-    password: "",
-    confirmPassword: "",
+    email: payload.email,
+    password: payload.password,
+    confirmPassword: payload.confirmPassword,
   };
 
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={(values: RegistrationFormValues) => {
-        console.log(values);
-        navigate("/auth/otp-verification");
+        setRegistrationInfo(values);
+        onNext();
       }}
       validationSchema={validationSchema}
       validateOnBlur
@@ -78,6 +82,7 @@ export const SignUpForm = () => {
                       endAdornment: (
                         <InputAdornment position="end">
                           <IconButton
+                            data-testid="toggle-password-visibility"
                             aria-label={
                               isPasswordVisible
                                 ? "hide the password"
@@ -129,6 +134,7 @@ export const SignUpForm = () => {
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton
+                          data-testid="toggle-confirm-password-visibility"
                           aria-label={
                             isConfirmPasswordVisible
                               ? "hide the password"

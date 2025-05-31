@@ -4,10 +4,12 @@ import { Box, Button, TextField, Theme } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useNavigate } from "react-router-dom";
 
-export const OTPForm = () => {
-  const isMobile = useMediaQuery<Theme>((theme) =>
-    theme.breakpoints.down("lg"),
-  );
+type Props = {
+  mobile?: boolean;
+};
+export const OTPForm = ({ mobile }: Props) => {
+  const isMobile =
+    mobile || useMediaQuery<Theme>((theme) => theme.breakpoints.down("lg"));
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [otp, setOtp] = useState(new Array(6).fill(""));
 

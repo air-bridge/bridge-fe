@@ -29,7 +29,7 @@ const OTPVerificationScreen = () => {
             OTP Verification ?
           </Typography>
           <Typography variant="body2" textAlign="center" color="text.secondary">
-            Enter the verication code we sent to
+            Enter the verification code we sent to
           </Typography>
         </Box>
 

@@ -2,7 +2,9 @@ import { object, string } from "yup";
 
 export const validationSchema = () =>
   object({
-    email: string().required("Email is required"),
+    email: string()
+      .required("Email is required")
+      .email("Provide a valid email address"),
     password: string()
       .required("Password is required")
       .min(8, "Password must be at least 8 characters")
@@ -21,6 +23,5 @@ export const validationSchema = () =>
           .test("passwordsMatch", "Password does not match", function (value) {
             return value === this.parent.password;
           }),
-      otherwise: (schema) => schema.required("Confirm Password is required"),
     }),
   });

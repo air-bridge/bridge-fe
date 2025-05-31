@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom/vitest";
-import { vi } from "vitest";
+import { vi, afterEach } from "vitest";
+import { cleanup } from "@testing-library/react";
 import * as ReactRouterDom from "react-router-dom";
 
 const mockedUseNavigate = vi.fn();
@@ -24,3 +25,18 @@ vi.mock("@mui/material/useMediaQuery", async () => {
     },
   };
 });
+
+// runs a cleanup after each test case (e.g. clearing jsdom)
+afterEach(() => {
+  cleanup();
+  vi.clearAllMocks();
+});
+
+class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+// @ts-ignore
+global.ResizeObserver = ResizeObserver;

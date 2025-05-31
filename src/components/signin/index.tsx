@@ -3,11 +3,12 @@ import { SocialMediaAuth } from "./SocialMediaAuth.tsx";
 import { SignInForm } from "./SignInForm.tsx";
 import MUILink from "@mui/material/Link";
 import { Link } from "react-router-dom";
+import { AccountTabState } from "./constant.ts";
 
 type Props = {
-  onChange: () => void;
+  onNext: (arg: AccountTabState) => void;
 };
-export const SignIn = ({ onChange }: Props) => {
+export const SignIn = ({ onNext }: Props) => {
   return (
     <Stack gap={2}>
       <Stack gap={1}>
@@ -45,7 +46,7 @@ export const SignIn = ({ onChange }: Props) => {
           href="/"
           onClick={(e) => {
             e.preventDefault();
-            onChange();
+            onNext(AccountTabState.REGISTER);
           }}
         >
           Sign Up

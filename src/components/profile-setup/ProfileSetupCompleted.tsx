@@ -1,9 +1,10 @@
 import { Button, Stack, Typography } from "@mui/material";
-import icon from "../../assets/images/profile-completed.png";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useRegistrationContext } from "../../context/registration/util.ts";
 import { setUserAuth } from "../../utils/userAuth.ts";
+import Lottie from "lottie-react";
+import animationJson from "./animation.json";
 
 export const ProfileSetupCompleted = () => {
   const { payload } = useRegistrationContext();
@@ -17,7 +18,7 @@ export const ProfileSetupCompleted = () => {
       gap={{ xs: 2, lg: 3 }}
       sx={{ width: { xs: "90%", lg: 400 }, m: "auto" }}
     >
-      <img src={icon} alt="icon" />
+      <Lottie animationData={animationJson} />
       <Stack gap={1}>
         <Typography variant="h3" textAlign="center">
           Profile Created

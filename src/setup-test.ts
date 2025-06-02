@@ -26,6 +26,13 @@ vi.mock("@mui/material/useMediaQuery", async () => {
   };
 });
 
+// Lottie
+vi.mock("lottie-react", () => {
+  return {
+    default: ({ children }: { children: unknown }) => children,
+  };
+});
+
 // runs a cleanup after each test case (e.g. clearing jsdom)
 afterEach(() => {
   cleanup();

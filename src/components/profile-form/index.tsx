@@ -1,4 +1,5 @@
 import Grid from "@mui/material/Grid2";
+import { MuiTelInput } from "mui-tel-input";
 import { Button, TextField, MenuItem, InputLabel } from "@mui/material";
 import { Formik } from "formik";
 import { validationSchema } from "./validation.ts";
@@ -69,9 +70,16 @@ export const ProfileForm = ({ onNext }: Props) => {
       validateOnBlur
       validateOnChange={false}
     >
-      {({ handleChange, handleSubmit, validateField, values, errors }) => (
+      {({
+        handleChange,
+        handleSubmit,
+        validateField,
+        setFieldValue,
+        values,
+        errors,
+      }) => (
         <form onSubmit={handleSubmit}>
-          <Grid container spacing={3}>
+          <Grid container spacing={2.5}>
             <Grid size={{ xs: 12 }}>
               <InputLabel id="firstName">First Name</InputLabel>
               <TextField
@@ -102,13 +110,23 @@ export const ProfileForm = ({ onNext }: Props) => {
 
             <Grid size={{ xs: 12 }}>
               <InputLabel id="phoneNumber">Phone Number</InputLabel>
-              <TextField
+              <MuiTelInput
                 fullWidth
+                variant="outlined"
+                InputLabelProps={{
+                  variant: "outlined",
+                  htmlFor: "phoneNumber",
+                }}
+                forceCallingCode
+                defaultCountry="NG"
+                error={Boolean(errors.phoneNumber)}
+                value={values.phoneNumber}
                 name="phoneNumber"
                 placeholder="Phone Number"
-                value={values.phoneNumber}
-                onChange={handleChange}
-                error={Boolean(errors.phoneNumber)}
+                preferredCountries={["NG", "DE", "GB"]}
+                onChange={(_, info) => {
+                  void setFieldValue("phoneNumber", info.numberValue);
+                }}
                 helperText={errors.phoneNumber}
                 onBlur={() => void validateField("phoneNumber")}
               />

@@ -11,7 +11,7 @@ const ForgotPasswordScreen = () => {
         direction="row"
         alignItems="center"
         component={Link}
-        to="/auth"
+        to="/account"
         sx={{ color: "text.primary", "&:hover": { color: "text.primary" } }}
       >
         <WestIcon fontSize="small" />
@@ -36,7 +36,7 @@ const ForgotPasswordScreen = () => {
           <Button
             fullWidth
             component={Link}
-            to="/auth"
+            to="/account"
             variant="text"
             color="secondary"
           >

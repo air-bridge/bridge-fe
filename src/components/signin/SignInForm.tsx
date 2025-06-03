@@ -5,12 +5,23 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Formik } from "formik";
 import { LoginFormValues } from "../../types/auth.ts";
 import { validationSchema } from "./validation.ts";
+import { useRegistrationContext } from "../../context/registration/util.ts";
+import { useNavigate } from "react-router-dom";
 
 export const SignInForm = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const { setRegistrationInfo } = useRegistrationContext();
+  const navigate = useNavigate();
 
   const handleShowPassword = () => setIsPasswordVisible(!isPasswordVisible);
 
+  const handSubmit = (payload: LoginFormValues) => {
+    setRegistrationInfo({
+      ...payload,
+    });
+
+    navigate("/");
+  };
   const initialValues = {
     email: "",
     password: "",
@@ -20,7 +31,7 @@ export const SignInForm = () => {
     <Formik
       initialValues={initialValues}
       onSubmit={(values: LoginFormValues) => {
-        console.log(values);
+        handSubmit(values);
       }}
       validationSchema={validationSchema}
       validateOnBlur

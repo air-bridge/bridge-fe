@@ -22,7 +22,7 @@ describe("ForgotPasswordScreen Component", () => {
   it("renders back button", () => {
     const backLinks = screen.getAllByRole("link", { name: "Back" });
     expect(backLinks).toHaveLength(2);
-    expect(backLinks[0]).toHaveAttribute("href", "/auth");
-    expect(backLinks[1]).toHaveAttribute("href", "/auth");
+    expect(backLinks[0]).toHaveAttribute("href", "/account");
+    expect(backLinks[1]).toHaveAttribute("href", "/account");
   });
 });

@@ -5,10 +5,8 @@ const InputLabel: Components<Theme>["MuiInputLabel"] = {
     root: {
       color: "#394753",
       marginBottom: "5px",
-      fontSize: "12px",
-      "@media (min-width: 1200px)": {
-        fontSize: "0.85rem",
-      },
+      fontSize: "0.85rem",
+      fontWeight: 400,
     },
   },
 };

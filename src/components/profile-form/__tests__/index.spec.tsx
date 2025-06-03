@@ -1,15 +1,33 @@
-import { describe, expect, it, beforeEach, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { ProfileForm } from "../index.tsx";
+import {
+  initialPayload,
+  RegistrationContext,
+} from "../../../context/registration/util.ts";
+import { RegistrationPayload } from "../../../types/user.ts";
+import { ACCOUNT_TYPE } from "../../../context/registration/constant.ts";
 
 describe("Profile form component", () => {
   const mockOnNext = vi.fn();
+  const mockSetRegistrationInfo = vi.fn();
 
-  beforeEach(() => {
-    render(<ProfileForm onNext={mockOnNext} />);
-  });
+  const renderComponent = (payload: RegistrationPayload) => {
+    render(
+      <RegistrationContext.Provider
+        value={{
+          payload,
+          setRegistrationInfo: mockSetRegistrationInfo,
+        }}
+      >
+        <ProfileForm onNext={mockOnNext} />
+      </RegistrationContext.Provider>,
+    );
+  };
 
   it("should update input fields correctly", () => {
+    renderComponent(initialPayload);
+
     const firstNameInput = screen.getByPlaceholderText("First Name");
     fireEvent.change(firstNameInput, {
       target: { value: "Alex" },
@@ -28,19 +46,18 @@ describe("Profile form component", () => {
     });
     fireEvent.blur(phoneInput);
 
-    const countrySelect = screen.getByRole("combobox", {
-      name: "Country of Residence",
+    const countrySelect = screen.getByPlaceholderText("Select country");
+    fireEvent.change(countrySelect, {
+      target: { value: "Nigeria" },
     });
-    fireEvent.mouseDown(countrySelect);
-    const countryOption = screen.getByRole("option", { name: "Nigeria" });
-    fireEvent.click(countryOption);
-    fireEvent.blur(countrySelect);
+    fireEvent.keyDown(countrySelect, { key: "ArrowDown" });
+    fireEvent.keyDown(countrySelect, { key: "Enter" });
 
     const stateSelect = screen.getByRole("combobox", {
       name: "State of Residence",
     });
     fireEvent.mouseDown(stateSelect);
-    const stateOption = screen.getByRole("option", { name: "Hamburg" });
+    const stateOption = screen.getByRole("option", { name: "Abuja" });
     fireEvent.click(stateOption);
     fireEvent.blur(stateSelect);
 
@@ -49,13 +66,82 @@ describe("Profile form component", () => {
     expect(screen.getByPlaceholderText("Phone Number")).toHaveValue(
       "1234567890",
     );
-    expect(screen.getByPlaceholderText("Country of Residence")).toHaveValue(
-      "ng",
+    expect(screen.getByPlaceholderText("Select country")).toHaveValue(
+      "Nigeria",
     );
-    expect(screen.getByPlaceholderText("State of Residence")).toHaveValue("hg");
+    expect(screen.getByPlaceholderText("State of Residence")).toHaveValue(
+      "Abuja",
+    );
+  });
+
+  it("should populate fields from initial state", () => {
+    renderComponent({
+      email: "test@mail.com",
+      password: "Password@1",
+      confirmPassword: "Password@1",
+      firstName: "Test",
+      lastName: "User",
+      phoneNumber: "01293893894",
+      country: "Nigeria",
+      state: "",
+      accountType: ACCOUNT_TYPE.Sender,
+    });
+
+    expect(screen.getByPlaceholderText("First Name")).toHaveValue("Test");
+    expect(screen.getByPlaceholderText("Last Name")).toHaveValue("User");
+    expect(screen.getByPlaceholderText("Phone Number")).toHaveValue(
+      "01293893894",
+    );
+    expect(screen.getByPlaceholderText("Select country")).toHaveValue(
+      "Nigeria",
+    );
+    expect(screen.getByPlaceholderText("State of Residence")).toHaveValue("");
+  });
+
+  it("should handle country deselect", () => {
+    renderComponent({
+      email: "test@mail.com",
+      password: "Password@1",
+      confirmPassword: "Password@1",
+      firstName: "Test",
+      lastName: "User",
+      phoneNumber: "",
+      country: "Nigeria",
+      state: "",
+      accountType: ACCOUNT_TYPE.Sender,
+    });
+
+    expect(screen.getByPlaceholderText("Select country")).toHaveValue(
+      "Nigeria",
+    );
+
+    const countrySelect = screen.getByPlaceholderText("Select country");
+    fireEvent.change(countrySelect, {
+      target: { value: "" },
+    });
+    fireEvent.keyDown(countrySelect, { key: "Backspace" });
+    fireEvent.blur(countrySelect);
+
+    expect(screen.getByPlaceholderText("Select country")).toHaveValue("");
+    expect(screen.getByPlaceholderText("State of Residence")).toHaveValue("");
+  });
+
+  it("should update country with empty isoField", () => {
+    renderComponent(initialPayload);
+
+    const countrySelect = screen.getByPlaceholderText("Select country");
+    fireEvent.keyDown(countrySelect, { key: "ArrowDown" });
+    fireEvent.click(screen.getByText("Indonesia"));
+
+    expect(screen.getByPlaceholderText("Select country")).toHaveValue(
+      "Indonesia",
+    );
+    expect(screen.getByPlaceholderText("State of Residence")).toHaveValue("");
   });
 
   it("should submit form", async () => {
+    renderComponent(initialPayload);
+
     fireEvent.change(screen.getByPlaceholderText("First Name"), {
       target: { value: "Alex" },
     });
@@ -66,17 +152,17 @@ describe("Profile form component", () => {
       target: { value: "1234567890" },
     });
 
-    const countrySelect = screen.getByRole("combobox", {
-      name: "Country of Residence",
+    const countrySelect = screen.getByPlaceholderText("Select country");
+    fireEvent.change(countrySelect, {
+      target: { value: "Nigeria" },
     });
-
-    fireEvent.mouseDown(countrySelect);
-    const countryOption = screen.getByRole("option", { name: "Germany" });
-    fireEvent.click(countryOption);
+    fireEvent.keyDown(countrySelect, { key: "ArrowDown" });
+    fireEvent.keyDown(countrySelect, { key: "Enter" });
 
     const stateSelect = screen.getByRole("combobox", {
       name: "State of Residence",
     });
+    expect(stateSelect).toBeInTheDocument();
     fireEvent.mouseDown(stateSelect);
     const stateOption = screen.getByRole("option", { name: "Lagos" });
     fireEvent.click(stateOption);

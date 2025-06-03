@@ -45,6 +45,7 @@ vi.mock("country-state-city", async () => {
       getAllCountries: vi.fn().mockReturnValue([
         { name: "Nigeria", isoCode: "NG" },
         { name: "Germany", isoCode: "DE" },
+        { name: "Indonesia", isoCode: "" },
       ]),
     },
     State: {

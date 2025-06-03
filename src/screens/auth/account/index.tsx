@@ -11,7 +11,7 @@ import { RegistrationContextProvider } from "../../../context/registration";
 
 const tabWithBackground = [AccountTabState.LOGIN, AccountTabState.REGISTER];
 const Account = () => {
-  const [activeTab, setActiveTab] = useState(AccountTabState.PROFILE_DATA);
+  const [activeTab, setActiveTab] = useState(AccountTabState.LOGIN);
   const [contentHeight, setContentHeight] = useState("auto");
   const contentRef = useRef<HTMLDivElement | null>(null);
 

@@ -40,17 +40,17 @@ describe("Account Component", () => {
       target: { value: "1234567891" },
     });
 
-    const countrySelect = screen.getByRole("combobox", {
-      name: "Country of Residence",
+    const countrySelect = screen.getByPlaceholderText("Select country");
+    fireEvent.change(countrySelect, {
+      target: { value: "Nigeria" },
     });
-
-    fireEvent.mouseDown(countrySelect);
-    const countryOption = screen.getByRole("option", { name: "Germany" });
-    fireEvent.click(countryOption);
+    fireEvent.keyDown(countrySelect, { key: "ArrowDown" });
+    fireEvent.keyDown(countrySelect, { key: "Enter" });
 
     const stateSelect = screen.getByRole("combobox", {
       name: "State of Residence",
     });
+    expect(stateSelect).toBeInTheDocument();
     fireEvent.mouseDown(stateSelect);
     const stateOption = screen.getByRole("option", { name: "Lagos" });
     fireEvent.click(stateOption);

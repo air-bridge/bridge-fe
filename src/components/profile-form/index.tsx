@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { Country, IState, State } from "country-state-city";
+import Autocomplete from "@mui/material/Autocomplete";
 import Grid from "@mui/material/Grid2";
 import { MuiTelInput } from "mui-tel-input";
 import { Button, TextField, MenuItem, InputLabel } from "@mui/material";
@@ -6,85 +9,66 @@ import { validationSchema } from "./validation.ts";
 import { ProfileFormValues } from "../../types/user.ts";
 import { useRegistrationContext } from "../../context/registration/util.ts";
 
-// TODO: populate options
-const countryOptions = [
-  {
-    label: "Nigeria",
-    value: "ng",
-  },
-  {
-    label: "United Kingdom",
-    value: "uk",
-  },
-  {
-    label: "Germany",
-    value: "de",
-  },
-  {
-    label: "United State of America",
-    value: "us",
-  },
-];
-const stateOptions = [
-  {
-    label: "Lagos",
-    value: "ng",
-  },
-  {
-    label: "Liverpool",
-    value: "uk",
-  },
-  {
-    label: "Hamburg",
-    value: "hg",
-  },
-  {
-    label: "Washington",
-    value: "us",
-  },
-];
-
 type Props = {
   onNext: () => void;
 };
 
 export const ProfileForm = ({ onNext }: Props) => {
   const { payload, setRegistrationInfo } = useRegistrationContext();
+  const countries = Country.getAllCountries();
+  const [stateOptions, setStateOptions] = useState<IState[]>([]);
 
-  const initialValues = {
-    firstName: payload.firstName,
-    lastName: payload.lastName,
-    phoneNumber: payload.phoneNumber,
-    country: payload.country,
-    state: payload.state,
+  const getStates = (countryIsoCode?: string | null) => {
+    if (countryIsoCode) {
+      const countryStates = State.getStatesOfCountry(countryIsoCode);
+      setStateOptions(countryStates);
+    } else {
+      setStateOptions([]);
+    }
+  };
+
+  useEffect(() => {
+    if (payload.country) {
+      const country = countries.find((c) => c.name === payload.country);
+      if (country) getStates(country.isoCode);
+    }
+  }, [payload.country]);
+
+  const initialValues: ProfileFormValues = {
+    firstName: payload.firstName || "",
+    lastName: payload.lastName || "",
+    phoneNumber: payload.phoneNumber || "",
+    country: payload.country || "",
+    state: payload.state || "",
   };
 
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values: ProfileFormValues) => {
-        setRegistrationInfo(values);
-        onNext();
-      }}
       validationSchema={validationSchema}
       validateOnBlur
       validateOnChange={false}
+      onSubmit={(values) => {
+        setRegistrationInfo(values);
+        onNext();
+      }}
     >
       {({
         handleChange,
         handleSubmit,
-        validateField,
         setFieldValue,
+        validateField,
         values,
         errors,
       }) => (
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2.5}>
             <Grid size={{ xs: 12 }}>
-              <InputLabel id="firstName">First Name</InputLabel>
+              <InputLabel htmlFor="firstName">First Name</InputLabel>
               <TextField
-                fullWidth
+                id="firstName"
                 name="firstName"
+                fullWidth
                 placeholder="First Name"
                 value={values.firstName}
                 onChange={handleChange}
@@ -95,10 +79,11 @@ export const ProfileForm = ({ onNext }: Props) => {
             </Grid>
 
             <Grid size={{ xs: 12 }}>
-              <InputLabel id="lastName">Last Name</InputLabel>
+              <InputLabel htmlFor="lastName">Last Name</InputLabel>
               <TextField
-                fullWidth
+                id="lastName"
                 name="lastName"
+                fullWidth
                 placeholder="Last Name"
                 value={values.lastName}
                 onChange={handleChange}
@@ -109,77 +94,70 @@ export const ProfileForm = ({ onNext }: Props) => {
             </Grid>
 
             <Grid size={{ xs: 12 }}>
-              <InputLabel id="phoneNumber">Phone Number</InputLabel>
+              <InputLabel htmlFor="phoneNumber">Phone Number</InputLabel>
               <MuiTelInput
+                id="phoneNumber"
                 fullWidth
-                variant="outlined"
-                InputLabelProps={{
-                  variant: "outlined",
-                  htmlFor: "phoneNumber",
-                }}
+                name="phoneNumber"
                 forceCallingCode
                 defaultCountry="NG"
-                error={Boolean(errors.phoneNumber)}
-                value={values.phoneNumber}
-                name="phoneNumber"
-                placeholder="Phone Number"
                 preferredCountries={["NG", "DE", "GB"]}
-                onChange={(_, info) => {
-                  void setFieldValue("phoneNumber", info.numberValue);
+                placeholder="Phone Number"
+                value={values.phoneNumber}
+                onChange={(value) => {
+                  void setFieldValue("phoneNumber", value);
                 }}
+                error={Boolean(errors.phoneNumber)}
                 helperText={errors.phoneNumber}
                 onBlur={() => void validateField("phoneNumber")}
               />
             </Grid>
 
             <Grid size={{ xs: 12 }}>
-              <InputLabel>Country</InputLabel>
-              <TextField
-                select
-                fullWidth
-                name="country"
-                placeholder="Country of Residence"
-                slotProps={{
-                  htmlInput: {
-                    "aria-label": "Country of Residence",
-                  },
+              <InputLabel htmlFor="country">Country of Residence</InputLabel>
+              <Autocomplete
+                id="country"
+                options={countries}
+                getOptionLabel={(option) => option.name}
+                value={countries.find((c) => c.name === values.country) || null}
+                onChange={(_, value) => {
+                  getStates(value?.isoCode);
+                  void setFieldValue("country", value?.name || "");
+                  void setFieldValue("state", "");
                 }}
-                data-testid="country-select"
-                error={Boolean(errors.country)}
-                helperText={errors.country}
-                value={values.country}
-                onChange={handleChange}
-                onBlur={() => void validateField("country")}
-              >
-                {countryOptions.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    placeholder="Select country"
+                    error={Boolean(errors.country)}
+                    helperText={errors.country}
+                  />
+                )}
+              />
             </Grid>
 
             <Grid size={{ xs: 12 }}>
-              <InputLabel>State of Residence</InputLabel>
+              <InputLabel htmlFor="state">State of Residence</InputLabel>
               <TextField
+                id="state"
+                name="state"
                 select
                 fullWidth
-                name="state"
                 placeholder="State of Residence"
                 slotProps={{
                   htmlInput: {
                     "aria-label": "State of Residence",
                   },
                 }}
-                error={Boolean(errors.state)}
-                helperText={errors.state}
                 value={values.state}
                 onChange={handleChange}
+                error={Boolean(errors.state)}
+                helperText={errors.state}
                 onBlur={() => void validateField("state")}
               >
                 {stateOptions.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
+                  <MenuItem key={option.isoCode} value={option.name}>
+                    {option.name}
                   </MenuItem>
                 ))}
               </TextField>

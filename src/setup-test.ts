@@ -2,6 +2,7 @@ import "@testing-library/jest-dom/vitest";
 import { vi, afterEach } from "vitest";
 import { cleanup } from "@testing-library/react";
 import * as ReactRouterDom from "react-router-dom";
+import * as countryStateCity from "country-state-city";
 
 const mockedUseNavigate = vi.fn();
 const mockedUseLocation = vi.fn();
@@ -30,6 +31,33 @@ vi.mock("@mui/material/useMediaQuery", async () => {
 vi.mock("lottie-react", () => {
   return {
     default: ({ children }: { children: unknown }) => children,
+  };
+});
+
+// Country state option
+vi.mock("country-state-city", async () => {
+  const actual =
+    await vi.importActual<typeof countryStateCity>("country-state-city");
+
+  return {
+    ...actual,
+    Country: {
+      getAllCountries: vi.fn().mockReturnValue([
+        { name: "Nigeria", isoCode: "NG" },
+        { name: "Germany", isoCode: "DE" },
+      ]),
+    },
+    State: {
+      getStatesOfCountry: vi.fn().mockImplementation((code: string) => {
+        if (code === "NG") {
+          return [
+            { name: "Lagos", isoCode: "LA" },
+            { name: "Abuja", isoCode: "FC" },
+          ];
+        }
+        return [];
+      }),
+    },
   };
 });
 

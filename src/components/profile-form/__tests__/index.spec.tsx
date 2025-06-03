@@ -28,19 +28,18 @@ describe("Profile form component", () => {
     });
     fireEvent.blur(phoneInput);
 
-    const countrySelect = screen.getByRole("combobox", {
-      name: "Country of Residence",
+    const countrySelect = screen.getByPlaceholderText("Select country");
+    fireEvent.change(countrySelect, {
+      target: { value: "Nigeria" },
     });
-    fireEvent.mouseDown(countrySelect);
-    const countryOption = screen.getByRole("option", { name: "Nigeria" });
-    fireEvent.click(countryOption);
-    fireEvent.blur(countrySelect);
+    fireEvent.keyDown(countrySelect, { key: "ArrowDown" });
+    fireEvent.keyDown(countrySelect, { key: "Enter" });
 
     const stateSelect = screen.getByRole("combobox", {
       name: "State of Residence",
     });
     fireEvent.mouseDown(stateSelect);
-    const stateOption = screen.getByRole("option", { name: "Hamburg" });
+    const stateOption = screen.getByRole("option", { name: "Abuja" });
     fireEvent.click(stateOption);
     fireEvent.blur(stateSelect);
 
@@ -49,10 +48,12 @@ describe("Profile form component", () => {
     expect(screen.getByPlaceholderText("Phone Number")).toHaveValue(
       "1234567890",
     );
-    expect(screen.getByPlaceholderText("Country of Residence")).toHaveValue(
-      "ng",
+    expect(screen.getByPlaceholderText("Select country")).toHaveValue(
+      "Nigeria",
     );
-    expect(screen.getByPlaceholderText("State of Residence")).toHaveValue("hg");
+    expect(screen.getByPlaceholderText("State of Residence")).toHaveValue(
+      "Abuja",
+    );
   });
 
   it("should submit form", async () => {
@@ -66,17 +67,17 @@ describe("Profile form component", () => {
       target: { value: "1234567890" },
     });
 
-    const countrySelect = screen.getByRole("combobox", {
-      name: "Country of Residence",
+    const countrySelect = screen.getByPlaceholderText("Select country");
+    fireEvent.change(countrySelect, {
+      target: { value: "Nigeria" },
     });
-
-    fireEvent.mouseDown(countrySelect);
-    const countryOption = screen.getByRole("option", { name: "Germany" });
-    fireEvent.click(countryOption);
+    fireEvent.keyDown(countrySelect, { key: "ArrowDown" });
+    fireEvent.keyDown(countrySelect, { key: "Enter" });
 
     const stateSelect = screen.getByRole("combobox", {
       name: "State of Residence",
     });
+    expect(stateSelect).toBeInTheDocument();
     fireEvent.mouseDown(stateSelect);
     const stateOption = screen.getByRole("option", { name: "Lagos" });
     fireEvent.click(stateOption);

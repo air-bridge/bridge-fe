@@ -7,6 +7,7 @@ import NotFoundScreen from "../../screens/auth/not-found";
 import ComponentsScreen from "../../screens/app/start";
 import ForgotPasswordScreen from "../../screens/auth/forgot-password";
 import HomeScreen from "../../screens/app/home";
+import OrdersScreen from "../../screens/app/orders";
 import Account from "../../screens/auth/account";
 import OTPVerificationScreen from "../../screens/auth/otp-verification";
 
@@ -38,6 +39,7 @@ export const Router = () => {
           errorElement={<InternalError />}
         >
           <Route index element={<HomeScreen />} />
+          <Route path="orders" element={<OrdersScreen />} />
         </Route>
 
         <Route path={ROUTES.COMPONENTS_ROUTE} element={<ComponentsScreen />} />

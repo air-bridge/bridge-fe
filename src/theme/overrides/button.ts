@@ -25,16 +25,6 @@ const Button: Components<Theme>["MuiButton"] = {
         padding: "10px 16px",
       },
     },
-    {
-      props: { variant: "outlined" },
-      style: {
-        border: "solid 1px #0000001a",
-        color: "#1C1C1C",
-        "&:hover": {
-          background: "#fff",
-        },
-      },
-    },
   ],
   styleOverrides: {
     root: {

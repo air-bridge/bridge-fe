@@ -1,13 +1,13 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { HomepageTabs } from "../../../components/homepage-tabs";
 
-const HomeScreen = () => {
+const OrdersScreen = () => {
   return (
     <Stack gap={2}>
       <HomepageTabs />
 
       <Box>
-        <Typography variant="subtitle1">Homepage</Typography>
+        <Typography variant="subtitle1">Orders</Typography>
         <Typography>
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hic, sed.
         </Typography>
@@ -16,4 +16,4 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+export default OrdersScreen;

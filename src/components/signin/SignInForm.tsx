@@ -1,6 +1,12 @@
 import { useState } from "react";
 import Grid from "@mui/material/Grid2";
-import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  IconButton,
+  InputAdornment,
+  TextField,
+} from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Formik } from "formik";
 import { LoginFormValues } from "../../types/auth.ts";
@@ -89,6 +95,10 @@ export const SignInForm = () => {
                 variant="contained"
                 color="primary"
                 type="submit"
+                loading={false}
+                loadingIndicator={
+                  <CircularProgress color="inherit" size={16} />
+                }
               >
                 Sign In
               </Button>

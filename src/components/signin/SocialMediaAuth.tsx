@@ -1,21 +1,13 @@
-import { Button, Stack, SvgIcon, Theme } from "@mui/material";
+import { Button, Stack, SvgIcon } from "@mui/material";
 import { Apple } from "@mui/icons-material";
 import GoogleIconSvg from "../../assets/icons/google.svg?react";
-import useMediaQuery from "@mui/material/useMediaQuery";
 
-type Props = {
-  mobile?: boolean;
-};
-export const SocialMediaAuth = ({ mobile }: Props) => {
-  const isMobile =
-    mobile || useMediaQuery<Theme>((theme) => theme.breakpoints.down("lg"));
-
+export const SocialMediaAuth = () => {
   return (
     <Stack direction="row" justifyContent="center" gap={{ xs: 1, lg: 3 }}>
       <Button
         variant="outlined"
         color="secondary"
-        size={isMobile ? "medium" : "large"}
         startIcon={<SvgIcon component={GoogleIconSvg} />}
       >
         Sign in with Google
@@ -23,9 +15,8 @@ export const SocialMediaAuth = ({ mobile }: Props) => {
 
       <Button
         variant="outlined"
-        color="primary"
-        size={isMobile ? "medium" : "large"}
-        startIcon={<Apple />}
+        color="secondary"
+        startIcon={<Apple sx={{ color: "text.primary" }} />}
       >
         Sign in with Apple
       </Button>

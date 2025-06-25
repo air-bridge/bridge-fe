@@ -1,13 +1,13 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import HomeScreen from "../index.tsx";
-import { ComponentTestWrapper } from "../../../../config/tests/utils.tsx";
+import { HomepageTabs } from "../index.tsx";
+import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
 
 describe("HomeScreen Component", () => {
   it("renders the Home Screen text", () => {
     render(
       <ComponentTestWrapper>
-        <HomeScreen />
+        <HomepageTabs />
       </ComponentTestWrapper>,
     );
 

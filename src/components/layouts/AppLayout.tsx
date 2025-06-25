@@ -1,7 +1,8 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import { Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { useEffect } from "react";
 import { getAuthUser } from "../../utils/userAuth.ts";
+import { Header } from "../header";
 
 const AppLayout = () => {
   const navigate = useNavigate();
@@ -15,9 +16,12 @@ const AppLayout = () => {
   }, []);
 
   return (
-    <Box>
-      <Outlet />
-    </Box>
+    <Stack gap={2}>
+      <Header />
+      <Box px={5}>
+        <Outlet />
+      </Box>
+    </Stack>
   );
 };
 

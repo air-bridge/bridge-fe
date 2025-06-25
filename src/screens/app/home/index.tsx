@@ -1,17 +1,13 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import { HomepageTabs } from "../../../components/homepage-tabs";
+import { OverViewStats } from "../../../components/stats/OverViewStats.tsx";
 
 const HomeScreen = () => {
   return (
-    <Stack gap={2}>
+    <Stack gap={3}>
       <HomepageTabs />
 
-      <Box>
-        <Typography variant="subtitle1">Homepage</Typography>
-        <Typography>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hic, sed.
-        </Typography>
-      </Box>
+      <OverViewStats />
     </Stack>
   );
 };

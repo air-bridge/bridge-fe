@@ -9,12 +9,11 @@ type Props = {
 
 export const OrderTimeline = ({ order }: Props) => {
   return (
-    <Box mt={3} position="relative" pl={3}>
-      {/* Vertical Line */}
+    <Box position="relative">
       <Box
         sx={{
           position: "absolute",
-          left: 33,
+          left: 8,
           top: 12,
           bottom: 0,
           borderLeft: "dashed 1px",
@@ -26,11 +25,11 @@ export const OrderTimeline = ({ order }: Props) => {
       <Box display="flex" alignItems="flex-start" mb={2}>
         <Avatar
           sx={{
-            width: 20,
-            height: 20,
+            width: 15,
+            height: 15,
             bgcolor: "white",
-            color: "grey.400",
-            mt: 0.5,
+            color: "grey.900",
+            mt: 0.2,
           }}
         >
           <RadioButtonUncheckedIcon fontSize="small" />
@@ -41,14 +40,14 @@ export const OrderTimeline = ({ order }: Props) => {
             {order.createdAt}
           </Typography>
           <Typography variant="subtitle2" color="success.main" mt={3}>
-            {order.tripType}
+            {order.tripType}&nbsp;
           </Typography>
         </Box>
       </Box>
 
       {/* Destination */}
       <Box display="flex" alignItems="center">
-        <Avatar sx={{ width: 20, height: 20, bgcolor: "white", mt: 3 }}>
+        <Avatar sx={{ width: 17, height: 20, bgcolor: "white", mt: 3 }}>
           <LocationOnIcon fontSize="small" sx={{ color: "black" }} />
         </Avatar>
         <Box ml={2} mt={2.5}>

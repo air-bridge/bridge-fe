@@ -13,4 +13,5 @@ export interface Order {
   origin: string;
   destination?: string;
   tripType?: string;
+  category: string[];
 }

@@ -10,7 +10,7 @@ const OrderCard = ({ order }: Props) => {
   return (
     <Card>
       <CardContent>
-        <Stack gap={1}>
+        <Stack>
           <Typography variant="subtitle1">{order.title}</Typography>
 
           <Stack
@@ -35,6 +35,33 @@ const OrderCard = ({ order }: Props) => {
         >
           <OrderTimeline order={order} />
         </Box>
+
+        <Stack alignItems="center" gap={2} direction="row" minHeight={20}>
+          {order.category.length > 0 && (
+            <>
+              <Typography color="text.secondary" variant="body2">
+                Package type:
+              </Typography>
+
+              <Stack direction="row" alignItems="center" gap={0.5}>
+                {order.category.map((c, index) => (
+                  <Typography
+                    variant="caption"
+                    key={index}
+                    sx={{
+                      borderRadius: 1.5,
+                      px: 0.5,
+                      py: 0.25,
+                      bgcolor: "success.light",
+                    }}
+                  >
+                    {c}
+                  </Typography>
+                ))}
+              </Stack>
+            </>
+          )}
+        </Stack>
       </CardContent>
     </Card>
   );

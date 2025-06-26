@@ -8,6 +8,7 @@ export const orders: Order[] = [
     weight: "30KG",
     status: OrderStatus.Draft,
     origin: "Lagos",
+    category: [],
   },
   {
     id: "2",
@@ -18,6 +19,7 @@ export const orders: Order[] = [
     origin: "Berlin",
     destination: "Lagos",
     tripType: "1 way trip",
+    category: ["Documents", "Box", "Luggage"],
   },
   {
     id: "3",
@@ -28,5 +30,6 @@ export const orders: Order[] = [
     origin: "Texas",
     destination: "Paris",
     tripType: "1 way trip",
+    category: ["Documents", "Box", "Luggage"],
   },
 ];

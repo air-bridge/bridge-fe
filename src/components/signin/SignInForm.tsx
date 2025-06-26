@@ -13,6 +13,7 @@ import { LoginFormValues } from "../../types/auth.ts";
 import { validationSchema } from "./validation.ts";
 import { useRegistrationContext } from "../../context/registration/util.ts";
 import { useNavigate } from "react-router-dom";
+import { setUserAuth } from "../../utils/userAuth.ts";
 
 export const SignInForm = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -24,6 +25,18 @@ export const SignInForm = () => {
   const handSubmit = (payload: LoginFormValues) => {
     setRegistrationInfo({
       ...payload,
+    });
+
+    // TODO: remove after integration
+    setUserAuth({
+      ...payload,
+      firstName: "string",
+      lastName: "string",
+      phoneNumber: "string",
+      country: "string",
+      state: "string",
+      confirmPassword: "",
+      accountType: "",
     });
 
     navigate("/");

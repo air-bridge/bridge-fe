@@ -13,7 +13,7 @@ const HomeScreen = ({ count = 1 }: Props) => {
 
   return (
     <Stack gap={2}>
-      <HomepageTabs />
+      <HomepageTabs showAction={count > 0} />
 
       <OverviewStats />
 

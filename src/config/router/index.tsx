@@ -10,6 +10,7 @@ import HomeScreen from "../../screens/app/home";
 import OrdersScreen from "../../screens/app/orders";
 import Account from "../../screens/auth/account";
 import OTPVerificationScreen from "../../screens/auth/otp-verification";
+import { CreateOrderScreen } from "../../screens/app/create-order";
 
 export const Router = () => {
   return (
@@ -40,6 +41,7 @@ export const Router = () => {
         >
           <Route index element={<HomeScreen />} />
           <Route path="orders" element={<OrdersScreen />} />
+          <Route path="create-order" element={<CreateOrderScreen />} />
         </Route>
 
         <Route path={ROUTES.COMPONENTS_ROUTE} element={<ComponentsScreen />} />

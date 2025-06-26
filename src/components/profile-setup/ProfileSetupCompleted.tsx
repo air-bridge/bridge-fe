@@ -18,7 +18,7 @@ export const ProfileSetupCompleted = () => {
       gap={{ xs: 2, lg: 3 }}
       sx={{ width: { xs: "90%", lg: 400 }, m: "auto" }}
     >
-      <Lottie animationData={animationJson} />
+      <Lottie loop={false} animationData={animationJson} />
       <Stack gap={1}>
         <Typography variant="h3" textAlign="center">
           Profile Created

@@ -4,7 +4,7 @@ import { HomepageTabs } from "../../../components/homepage-tabs";
 const OrdersScreen = () => {
   return (
     <Stack gap={2}>
-      <HomepageTabs />
+      <HomepageTabs showAction={true} />
 
       <Box>
         <Typography variant="subtitle1">Orders</Typography>

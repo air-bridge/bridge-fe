@@ -8,7 +8,7 @@ import { EmptyOrder } from "../../../components/order-list/EmptyOrder.tsx";
 type Props = {
   count?: number;
 };
-const HomeScreen = ({ count = 0 }: Props) => {
+const HomeScreen = ({ count = 1 }: Props) => {
   // TODO: switch to api count
 
   return (

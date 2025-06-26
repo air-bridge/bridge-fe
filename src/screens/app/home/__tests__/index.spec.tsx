@@ -13,5 +13,16 @@ describe("HomeScreen Component", () => {
 
     expect(screen.getByRole("link", { name: "Overview" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Orders" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "See All" })).toBeInTheDocument();
+  });
+
+  it("renders order list", () => {
+    render(
+      <ComponentTestWrapper>
+        <HomeScreen count={3} />
+      </ComponentTestWrapper>,
+    );
+
+    expect(screen.getByText("Order List")).toBeInTheDocument();
   });
 });

@@ -18,19 +18,19 @@ const data = [
   },
   {
     name: "Active Request",
-    count: "10+",
+    count: "15+",
     background: "warning.light",
     color: "warning.main",
   },
   {
     name: "Successful Sent Goods",
-    count: "0+",
+    count: "5+",
     background: "success.light",
     color: "success.main",
   },
 ];
 
-export const OverViewStats = () => {
+export const OverviewStats = () => {
   return (
     <Card>
       <CardContent sx={{ px: 6, pt: 6, mb: 4 }}>

@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import { Box, Stack } from "@mui/material";
+import { Box } from "@mui/material";
 import { useEffect } from "react";
 import { getAuthUser } from "../../utils/userAuth.ts";
 import { Header } from "../header";
@@ -16,12 +16,12 @@ const AppLayout = () => {
   }, []);
 
   return (
-    <Stack gap={2}>
+    <>
       <Header />
-      <Box px={5}>
+      <Box py={2} px={{ xs: 2, lg: 5 }}>
         <Outlet />
       </Box>
-    </Stack>
+    </>
   );
 };
 

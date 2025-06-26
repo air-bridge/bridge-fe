@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack, Theme, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import profileAvatar from "../../assets/images/profile.png";
@@ -6,6 +6,7 @@ import { useState } from "react";
 import OutsideClickHandler from "../../hooks/useOutsideClickHandler.tsx";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link } from "react-router-dom";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const menuItems = [
   {
@@ -25,7 +26,14 @@ const menuItems = [
   },
 ];
 
-export const ProfileCard = () => {
+type Props = {
+  mobile?: boolean;
+};
+
+export const ProfileCard = ({ mobile }: Props) => {
+  const isMobile =
+    mobile || useMediaQuery<Theme>((theme) => theme.breakpoints.down("lg"));
+
   const [expanded, setExpanded] = useState(false);
   return (
     <OutsideClickHandler onOutsideClick={() => setExpanded(false)}>
@@ -48,11 +56,12 @@ export const ProfileCard = () => {
           }}
         >
           <img src={profileAvatar} alt="profile" width={40} />
-
-          <Box>
-            <Typography variant="subtitle2">Robert Allen</Typography>
-            <Typography variant="caption">Hey Robert</Typography>
-          </Box>
+          {!isMobile && (
+            <Box>
+              <Typography variant="subtitle2">Robert Allen</Typography>
+              <Typography variant="caption">Hey Robert</Typography>
+            </Box>
+          )}
 
           {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         </Stack>
@@ -98,7 +107,7 @@ export const ProfileCard = () => {
                   variant="body2"
                   sx={{
                     fontWeight: "600",
-                    color: menu.highlight ? "error.main" : "inherit",
+                    color: menu.highlight ? "error.main" : "text.primary",
                   }}
                 >
                   {menu.text}

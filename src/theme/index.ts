@@ -196,7 +196,7 @@ const theme = createTheme({
     divider: "rgba(0, 0, 0, 0.12)",
     primary: {
       main: "#6544C5",
-      light: "#8C73D9",
+      light: "#ebe8fd",
       dark: "#3C2580",
       contrastText: "#FFF",
     },
@@ -215,19 +215,19 @@ const theme = createTheme({
     },
     success: {
       main: "#0F7409",
-      light: "#42BD3B",
+      light: "#EAFFE5",
       dark: "#0B4707",
       contrastText: "#FFF",
     },
     info: {
       main: "#1294F2",
-      light: "#F1F6FE",
+      light: "#F5FAFF",
       dark: "#01579B",
       contrastText: "#FFF",
     },
     warning: {
       main: "#C79E0B",
-      light: "#EACB4F",
+      light: "#FFF9E6",
       dark: "#6E5805",
       contrastText: "#FFF",
     },

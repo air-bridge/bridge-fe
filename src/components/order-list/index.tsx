@@ -1,8 +1,11 @@
-import { orders } from "../../mocks/order.ts";
 import OrderCard from "../order-card";
 import { Grid2 } from "@mui/material";
+import { Order } from "../../types/order.ts";
 
-export const OrderList = () => {
+type Props = {
+  orders: Order[];
+};
+export const OrderList = ({ orders }: Props) => {
   return (
     <Grid2 container spacing={2}>
       {orders.map((order) => (

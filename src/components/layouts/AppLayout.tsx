@@ -1,11 +1,15 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useEffect } from "react";
 import { getAuthUser } from "../../utils/userAuth.ts";
 import { Header } from "../header";
 
+const fullScreenPaths = ["create-order"];
 const AppLayout = () => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  const isFullScreen = fullScreenPaths.includes(pathname.replace("/", ""));
 
   useEffect(() => {
     const authUser = getAuthUser();
@@ -15,7 +19,9 @@ const AppLayout = () => {
     }
   }, []);
 
-  return (
+  return isFullScreen ? (
+    <Outlet />
+  ) : (
     <>
       <Header />
       <Box py={2} px={{ xs: 2, lg: 5 }}>

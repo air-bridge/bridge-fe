@@ -1,4 +1,4 @@
-import { describe, expect, beforeEach, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/react";
 import { mockDraftOrder, mockPendingOrder } from "../../../mocks/order.ts";
 import OrderCard from "../index.tsx";

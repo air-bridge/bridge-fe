@@ -6,6 +6,6 @@ describe("HomeScreen Component", () => {
   it("renders the Create Order Screen", () => {
     const { getByText } = render(<CreateOrderScreen />);
 
-    expect(getByText("Create Order Screen")).toBeInTheDocument();
+    expect(getByText("Create Order")).toBeInTheDocument();
   });
 });

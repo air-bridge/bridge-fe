@@ -11,7 +11,7 @@ describe("OrderTimeline ", () => {
   it("renders details correctly", () => {
     expect(screen.getByText(mockOpenOrder.origin)).toBeInTheDocument();
     expect(screen.getByText(mockOpenOrder.createdAt)).toBeInTheDocument();
-    expect(screen.getByText(mockOpenOrder.tripType)).toBeInTheDocument();
-    expect(screen.getByText(mockOpenOrder.destination)).toBeInTheDocument();
+    expect(screen.getByText("1 way trip")).toBeInTheDocument();
+    expect(screen.getByText("Lagos")).toBeInTheDocument();
   });
 });

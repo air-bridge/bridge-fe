@@ -15,3 +15,13 @@ export interface Order {
   tripType?: string;
   category: string[];
 }
+
+export type OrderFormValues = {
+  title: string;
+  luggageType: string;
+  weight: number;
+  destination?: string;
+  origin?: string;
+  receiver?: string;
+  address?: string;
+};

@@ -13,9 +13,5 @@ const chipColor: Record<OrderStatus, ChipProps["color"]> = {
 };
 
 export const OrderStatusLabel = ({ status }: Props) => {
-  return (
-    <div>
-      <Chip label={status} size="small" color={chipColor[status]} />
-    </div>
-  );
+  return <Chip label={status} size="small" color={chipColor[status]} />;
 };

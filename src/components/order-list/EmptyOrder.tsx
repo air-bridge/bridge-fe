@@ -1,9 +1,17 @@
-import { Stack, Button, Typography, Box } from "@mui/material";
+import { Stack, Button, Typography, Box, Theme } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import emptyOrder from "../../assets/images/empty-order.png";
 import { Link } from "react-router-dom";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
-export const EmptyOrder = () => {
+type Props = {
+  mobile?: boolean;
+};
+
+export const EmptyOrder = ({ mobile }: Props) => {
+  const isMobile =
+    mobile || useMediaQuery<Theme>((theme) => theme.breakpoints.down("lg"));
+
   return (
     <Stack
       direction={{ xs: "column", lg: "row" }}
@@ -11,7 +19,7 @@ export const EmptyOrder = () => {
       justifyContent="center"
       alignItems="center"
     >
-      <img src={emptyOrder} width={290} alt="empty order" />
+      <img src={emptyOrder} width={isMobile ? 180 : 290} alt="empty order" />
       <Box sx={{ textAlign: "center" }}>
         <Typography
           variant="subtitle1"

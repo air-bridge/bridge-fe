@@ -23,10 +23,10 @@ export const Header = ({ mobile }: Props) => {
       px={{ xs: 2, lg: 5 }}
     >
       <Link to="/">
-        <img src={logo} alt="logo" width={160} />
+        <img src={logo} alt="logo" width={isMobile ? 130 : 160} />
       </Link>
 
-      <Stack gap={3} alignItems="center" direction="row">
+      <Stack gap={{ xs: 1, lg: 3 }} alignItems="center" direction="row">
         <IconButton
           sx={{
             backgroundColor: "grey.200",

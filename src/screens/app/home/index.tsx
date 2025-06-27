@@ -4,12 +4,14 @@ import { OverviewStats } from "../../../components/stats/OverViewStats.tsx";
 import { Link } from "react-router-dom";
 import { OrderList } from "../../../components/order-list";
 import { EmptyOrder } from "../../../components/order-list/EmptyOrder.tsx";
+import { orders } from "../../../mocks/order.ts";
 
 type Props = {
   count?: number;
 };
-const HomeScreen = ({ count = 1 }: Props) => {
+const HomeScreen = ({ count = 0 }: Props) => {
   // TODO: switch to api count
+  const homeOrders = orders.slice(0, 2);
 
   return (
     <Stack gap={2}>
@@ -30,17 +32,19 @@ const HomeScreen = ({ count = 1 }: Props) => {
         >
           <Typography variant="body1">My Parcel</Typography>
 
-          <Typography
-            variant="body2"
-            component={Link}
-            to="/orders"
-            color="primary.main"
-          >
-            See All
-          </Typography>
+          {count > 0 && (
+            <Typography
+              variant="body2"
+              component={Link}
+              to="/orders"
+              color="primary.main"
+            >
+              See All
+            </Typography>
+          )}
         </Stack>
 
-        {count === 0 ? <EmptyOrder /> : <OrderList />}
+        {count === 0 ? <EmptyOrder /> : <OrderList orders={homeOrders} />}
       </Stack>
     </Stack>
   );

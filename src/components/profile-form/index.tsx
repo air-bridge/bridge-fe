@@ -83,14 +83,14 @@ export const ProfileForm = ({ onNext }: Props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {isError && (
-        <Grid size={{ xs: 12 }}>
-          <Alert severity="error" variant="filled">
-            {error?.message}
-          </Alert>
-        </Grid>
-      )}
       <Grid container spacing={2.5}>
+        {isError && (
+          <Grid size={{ xs: 12 }}>
+            <Alert severity="error" variant="filled">
+              {error?.message}
+            </Alert>
+          </Grid>
+        )}
         <Grid size={{ xs: 12 }}>
           <InputLabel htmlFor="firstname">First Name</InputLabel>
           <Controller

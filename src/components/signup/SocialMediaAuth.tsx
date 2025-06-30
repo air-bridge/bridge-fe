@@ -24,9 +24,9 @@ export const SocialMediaAuth = ({ mobile }: Props) => {
 
       <Button
         variant="outlined"
-        color="primary"
+        color="inherit"
         size={isMobile ? "medium" : "large"}
-        startIcon={<Apple />}
+        startIcon={<Apple sx={{ color: "text.primary" }} />}
       >
         Sign up with Apple
       </Button>

@@ -15,7 +15,7 @@ export const SocialMediaAuth = () => {
 
       <Button
         variant="outlined"
-        color="secondary"
+        color="inherit"
         startIcon={<Apple sx={{ color: "text.primary" }} />}
       >
         Sign in with Apple

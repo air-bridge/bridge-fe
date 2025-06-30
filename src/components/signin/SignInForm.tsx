@@ -8,7 +8,8 @@ import {
   TextField,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Formik } from "formik";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginFormValues } from "../../types/auth.ts";
 import { validationSchema } from "./validation.ts";
 import { useRegistrationContext } from "../../context/registration/util.ts";
@@ -22,7 +23,19 @@ export const SignInForm = () => {
 
   const handleShowPassword = () => setIsPasswordVisible(!isPasswordVisible);
 
-  const handSubmit = (payload: LoginFormValues) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormValues>({
+    resolver: yupResolver(validationSchema()),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = (payload: LoginFormValues) => {
     setRegistrationInfo({
       ...payload,
     });
@@ -41,42 +54,40 @@ export const SignInForm = () => {
 
     navigate("/");
   };
-  const initialValues = {
-    email: "",
-    password: "",
-  };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={(values: LoginFormValues) => {
-        handSubmit(values);
-      }}
-      validationSchema={validationSchema}
-      validateOnBlur
-      validateOnChange={false}
-    >
-      {({ handleChange, handleSubmit, values }) => (
-        <form onSubmit={handleSubmit} autoComplete="off">
-          <Grid container spacing={3}>
-            <Grid size={{ xs: 12 }}>
+    <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+      <Grid container spacing={3}>
+        <Grid size={{ xs: 12 }}>
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
               <TextField
+                {...field}
                 fullWidth
                 name="email"
                 placeholder="Email"
-                value={values.email}
-                onChange={handleChange}
                 autoComplete="off"
+                error={!!errors.email}
+                helperText={errors.email?.message}
               />
-            </Grid>
-            <Grid size={{ xs: 12 }}>
+            )}
+          />
+        </Grid>
+        <Grid size={{ xs: 12 }}>
+          <Controller
+            name="password"
+            control={control}
+            render={({ field }) => (
               <TextField
+                {...field}
                 type={isPasswordVisible ? "text" : "password"}
                 fullWidth
                 name="password"
                 placeholder="Password"
-                value={values.password}
-                onChange={handleChange}
+                error={!!errors.password}
+                helperText={errors.password?.message}
                 slotProps={{
                   input: {
                     endAdornment: (
@@ -101,24 +112,23 @@ export const SignInForm = () => {
                   },
                 }}
               />
-            </Grid>
-            <Grid size={{ xs: 12 }}>
-              <Button
-                fullWidth
-                variant="contained"
-                color="primary"
-                type="submit"
-                loading={false}
-                loadingIndicator={
-                  <CircularProgress color="inherit" size={16} />
-                }
-              >
-                Sign In
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-      )}
-    </Formik>
+            )}
+          />
+        </Grid>
+        <Grid size={{ xs: 12 }}>
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={isSubmitting}
+            loading={isSubmitting}
+            loadingIndicator={<CircularProgress color="inherit" size={16} />}
+          >
+            Sign In
+          </Button>
+        </Grid>
+      </Grid>
+    </form>
   );
 };

@@ -4,7 +4,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Grid from "@mui/material/Grid2";
 import { MuiTelInput } from "mui-tel-input";
 import { Button, TextField, MenuItem, InputLabel } from "@mui/material";
-import { Formik } from "formik";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { validationSchema } from "./validation.ts";
 import { ProfileFormValues } from "../../types/user.ts";
 import { useRegistrationContext } from "../../context/registration/util.ts";
@@ -27,75 +28,88 @@ export const ProfileForm = ({ onNext }: Props) => {
     }
   };
 
-  useEffect(() => {
-    if (payload.country) {
-      const country = countries.find((c) => c.name === payload.country);
-      if (country) getStates(country.isoCode);
-    }
-  }, [payload.country]);
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+    watch,
+  } = useForm<ProfileFormValues>({
+    resolver: yupResolver(validationSchema()),
+    defaultValues: {
+      firstName: payload.firstName || "",
+      lastName: payload.lastName || "",
+      phoneNumber: payload.phoneNumber || "",
+      country: payload.country || "",
+      state: payload.state || "",
+    },
+  });
 
-  const initialValues: ProfileFormValues = {
-    firstName: payload.firstName || "",
-    lastName: payload.lastName || "",
-    phoneNumber: payload.phoneNumber || "",
-    country: payload.country || "",
-    state: payload.state || "",
+  // Watch for country changes to update state options
+  const selectedCountry = watch("country");
+  useEffect(() => {
+    if (selectedCountry) {
+      const country = countries.find((c) => c.name === selectedCountry);
+      if (country) getStates(country.isoCode);
+    } else {
+      setStateOptions([]);
+    }
+  }, [selectedCountry]);
+
+  const onSubmit = (values: ProfileFormValues) => {
+    setRegistrationInfo(values);
+    onNext();
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      validateOnBlur
-      validateOnChange={false}
-      onSubmit={(values) => {
-        setRegistrationInfo(values);
-        onNext();
-      }}
-    >
-      {({
-        handleChange,
-        handleSubmit,
-        setFieldValue,
-        validateField,
-        values,
-        errors,
-      }) => (
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={2.5}>
-            <Grid size={{ xs: 12 }}>
-              <InputLabel htmlFor="firstName">First Name</InputLabel>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Grid container spacing={2.5}>
+        <Grid size={{ xs: 12 }}>
+          <InputLabel htmlFor="firstName">First Name</InputLabel>
+          <Controller
+            name="firstName"
+            control={control}
+            render={({ field }) => (
               <TextField
+                {...field}
                 id="firstName"
                 name="firstName"
                 fullWidth
                 placeholder="First Name"
-                value={values.firstName}
-                onChange={handleChange}
                 error={Boolean(errors.firstName)}
-                helperText={errors.firstName}
-                onBlur={() => void validateField("firstName")}
+                helperText={errors.firstName?.message}
               />
-            </Grid>
+            )}
+          />
+        </Grid>
 
-            <Grid size={{ xs: 12 }}>
-              <InputLabel htmlFor="lastName">Last Name</InputLabel>
+        <Grid size={{ xs: 12 }}>
+          <InputLabel htmlFor="lastName">Last Name</InputLabel>
+          <Controller
+            name="lastName"
+            control={control}
+            render={({ field }) => (
               <TextField
+                {...field}
                 id="lastName"
                 name="lastName"
                 fullWidth
                 placeholder="Last Name"
-                value={values.lastName}
-                onChange={handleChange}
                 error={Boolean(errors.lastName)}
-                helperText={errors.lastName}
-                onBlur={() => void validateField("lastName")}
+                helperText={errors.lastName?.message}
               />
-            </Grid>
+            )}
+          />
+        </Grid>
 
-            <Grid size={{ xs: 12 }}>
-              <InputLabel htmlFor="phoneNumber">Phone Number</InputLabel>
+        <Grid size={{ xs: 12 }}>
+          <InputLabel htmlFor="phoneNumber">Phone Number</InputLabel>
+          <Controller
+            name="phoneNumber"
+            control={control}
+            render={({ field }) => (
               <MuiTelInput
+                {...field}
                 id="phoneNumber"
                 fullWidth
                 name="phoneNumber"
@@ -103,42 +117,50 @@ export const ProfileForm = ({ onNext }: Props) => {
                 defaultCountry="NG"
                 preferredCountries={["NG", "DE", "GB"]}
                 placeholder="Phone Number"
-                value={values.phoneNumber}
-                onChange={(value) => {
-                  void setFieldValue("phoneNumber", value);
-                }}
                 error={Boolean(errors.phoneNumber)}
-                helperText={errors.phoneNumber}
-                onBlur={() => void validateField("phoneNumber")}
+                helperText={errors.phoneNumber?.message}
+                onChange={field.onChange}
               />
-            </Grid>
+            )}
+          />
+        </Grid>
 
-            <Grid size={{ xs: 12 }}>
-              <InputLabel htmlFor="country">Country of Residence</InputLabel>
+        <Grid size={{ xs: 12 }}>
+          <InputLabel htmlFor="country">Country of Residence</InputLabel>
+          <Controller
+            name="country"
+            control={control}
+            render={({ field }) => (
               <Autocomplete
                 id="country"
                 options={countries}
                 getOptionLabel={(option) => option.name}
-                value={countries.find((c) => c.name === values.country) || null}
+                value={countries.find((c) => c.name === field.value) || null}
                 onChange={(_, value) => {
-                  getStates(value?.isoCode);
-                  void setFieldValue("country", value?.name || "");
-                  void setFieldValue("state", "");
+                  setValue("country", value?.name || "");
+                  setValue("state", "");
                 }}
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     placeholder="Select country"
                     error={Boolean(errors.country)}
-                    helperText={errors.country}
+                    helperText={errors.country?.message}
                   />
                 )}
               />
-            </Grid>
+            )}
+          />
+        </Grid>
 
-            <Grid size={{ xs: 12 }}>
-              <InputLabel htmlFor="state">State of Residence</InputLabel>
+        <Grid size={{ xs: 12 }}>
+          <InputLabel htmlFor="state">State of Residence</InputLabel>
+          <Controller
+            name="state"
+            control={control}
+            render={({ field }) => (
               <TextField
+                {...field}
                 id="state"
                 name="state"
                 select
@@ -149,11 +171,8 @@ export const ProfileForm = ({ onNext }: Props) => {
                     "aria-label": "State of Residence",
                   },
                 }}
-                value={values.state}
-                onChange={handleChange}
                 error={Boolean(errors.state)}
-                helperText={errors.state}
-                onBlur={() => void validateField("state")}
+                helperText={errors.state?.message}
               >
                 {stateOptions.map((option) => (
                   <MenuItem key={option.isoCode} value={option.name}>
@@ -161,21 +180,16 @@ export const ProfileForm = ({ onNext }: Props) => {
                   </MenuItem>
                 ))}
               </TextField>
-            </Grid>
+            )}
+          />
+        </Grid>
 
-            <Grid size={{ xs: 12 }}>
-              <Button
-                fullWidth
-                variant="contained"
-                color="primary"
-                type="submit"
-              >
-                Continue
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-      )}
-    </Formik>
+        <Grid size={{ xs: 12 }}>
+          <Button fullWidth variant="contained" color="primary" type="submit">
+            Continue
+          </Button>
+        </Grid>
+      </Grid>
+    </form>
   );
 };

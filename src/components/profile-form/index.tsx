@@ -3,12 +3,22 @@ import { Country, IState, State } from "country-state-city";
 import Autocomplete from "@mui/material/Autocomplete";
 import Grid from "@mui/material/Grid2";
 import { MuiTelInput } from "mui-tel-input";
-import { Button, TextField, MenuItem, InputLabel } from "@mui/material";
+import {
+  Button,
+  TextField,
+  MenuItem,
+  InputLabel,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validationSchema } from "./validation.ts";
 import { ProfileFormValues } from "../../types/user.ts";
 import { useRegistrationContext } from "../../context/registration/util.ts";
+import { useMutation } from "@tanstack/react-query";
+import { register } from "../../api/auth.ts";
+import { setUserAuth } from "../../utils/userAuth.ts";
 
 type Props = {
   onNext: () => void;
@@ -32,21 +42,29 @@ export const ProfileForm = ({ onNext }: Props) => {
     control,
     handleSubmit,
     setValue,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     watch,
   } = useForm<ProfileFormValues>({
     resolver: yupResolver(validationSchema()),
     defaultValues: {
-      firstName: payload.firstName || "",
-      lastName: payload.lastName || "",
-      phoneNumber: payload.phoneNumber || "",
-      country: payload.country || "",
+      firstname: payload.firstname || "",
+      lastname: payload.lastname || "",
+      phone: payload.phone || "",
+      country_code: payload.country_code || "",
       state: payload.state || "",
     },
   });
 
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationFn: register,
+    onSuccess: (data) => {
+      setUserAuth(data);
+      onNext();
+    },
+  });
+
   // Watch for country changes to update state options
-  const selectedCountry = watch("country");
+  const selectedCountry = watch("country_code");
   useEffect(() => {
     if (selectedCountry) {
       const country = countries.find((c) => c.name === selectedCountry);
@@ -58,45 +76,54 @@ export const ProfileForm = ({ onNext }: Props) => {
 
   const onSubmit = (values: ProfileFormValues) => {
     setRegistrationInfo(values);
-    onNext();
+    mutate({ ...payload, ...values });
   };
+
+  const isLoading = isSubmitting || isPending;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      {isError && (
+        <Grid size={{ xs: 12 }}>
+          <Alert severity="error" variant="filled">
+            {error?.message}
+          </Alert>
+        </Grid>
+      )}
       <Grid container spacing={2.5}>
         <Grid size={{ xs: 12 }}>
-          <InputLabel htmlFor="firstName">First Name</InputLabel>
+          <InputLabel htmlFor="firstname">First Name</InputLabel>
           <Controller
-            name="firstName"
+            name="firstname"
             control={control}
             render={({ field }) => (
               <TextField
                 {...field}
-                id="firstName"
-                name="firstName"
+                id="firstname"
+                name="firstname"
                 fullWidth
                 placeholder="First Name"
-                error={Boolean(errors.firstName)}
-                helperText={errors.firstName?.message}
+                error={Boolean(errors.firstname)}
+                helperText={errors.firstname?.message}
               />
             )}
           />
         </Grid>
 
         <Grid size={{ xs: 12 }}>
-          <InputLabel htmlFor="lastName">Last Name</InputLabel>
+          <InputLabel htmlFor="lastname">Last Name</InputLabel>
           <Controller
-            name="lastName"
+            name="lastname"
             control={control}
             render={({ field }) => (
               <TextField
                 {...field}
-                id="lastName"
-                name="lastName"
+                id="lastname"
+                name="lastname"
                 fullWidth
                 placeholder="Last Name"
-                error={Boolean(errors.lastName)}
-                helperText={errors.lastName?.message}
+                error={Boolean(errors.lastname)}
+                helperText={errors.lastname?.message}
               />
             )}
           />
@@ -105,20 +132,20 @@ export const ProfileForm = ({ onNext }: Props) => {
         <Grid size={{ xs: 12 }}>
           <InputLabel htmlFor="phoneNumber">Phone Number</InputLabel>
           <Controller
-            name="phoneNumber"
+            name="phone"
             control={control}
             render={({ field }) => (
               <MuiTelInput
                 {...field}
-                id="phoneNumber"
+                id="phone"
                 fullWidth
-                name="phoneNumber"
+                name="phone"
                 forceCallingCode
                 defaultCountry="NG"
                 preferredCountries={["NG", "DE", "GB"]}
                 placeholder="Phone Number"
-                error={Boolean(errors.phoneNumber)}
-                helperText={errors.phoneNumber?.message}
+                error={Boolean(errors.phone)}
+                helperText={errors.phone?.message}
                 onChange={field.onChange}
               />
             )}
@@ -126,9 +153,9 @@ export const ProfileForm = ({ onNext }: Props) => {
         </Grid>
 
         <Grid size={{ xs: 12 }}>
-          <InputLabel htmlFor="country">Country of Residence</InputLabel>
+          <InputLabel htmlFor="country_code">Country of Residence</InputLabel>
           <Controller
-            name="country"
+            name="country_code"
             control={control}
             render={({ field }) => (
               <Autocomplete
@@ -137,15 +164,15 @@ export const ProfileForm = ({ onNext }: Props) => {
                 getOptionLabel={(option) => option.name}
                 value={countries.find((c) => c.name === field.value) || null}
                 onChange={(_, value) => {
-                  setValue("country", value?.name || "");
+                  setValue("country_code", value?.name || "");
                   setValue("state", "");
                 }}
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     placeholder="Select country"
-                    error={Boolean(errors.country)}
-                    helperText={errors.country?.message}
+                    error={Boolean(errors.country_code)}
+                    helperText={errors.country_code?.message}
                   />
                 )}
               />
@@ -185,7 +212,15 @@ export const ProfileForm = ({ onNext }: Props) => {
         </Grid>
 
         <Grid size={{ xs: 12 }}>
-          <Button fullWidth variant="contained" color="primary" type="submit">
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={isLoading}
+            loading={isLoading}
+            loadingIndicator={<CircularProgress color="inherit" size={16} />}
+          >
             Continue
           </Button>
         </Grid>

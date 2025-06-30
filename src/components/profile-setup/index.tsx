@@ -34,7 +34,7 @@ export const ProfileSetup = ({ onNext }: Props) => {
           </Typography>
         </Box>
 
-        <ProfileForm onNext={() => onNext(AccountTabState.COMPLETED)} />
+        <ProfileForm onNext={() => onNext(AccountTabState.OTP_VERIFICATION)} />
       </Stack>
     </Stack>
   );

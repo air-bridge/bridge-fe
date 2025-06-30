@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import Grid from "@mui/material/Grid2";
 import {
+  Alert,
   Button,
   CircularProgress,
   IconButton,
@@ -12,13 +14,12 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginFormValues } from "../../types/auth.ts";
 import { validationSchema } from "./validation.ts";
-import { useRegistrationContext } from "../../context/registration/util.ts";
 import { useNavigate } from "react-router-dom";
 import { setUserAuth } from "../../utils/userAuth.ts";
+import { login } from "../../api/auth.ts";
 
 export const SignInForm = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const { setRegistrationInfo } = useRegistrationContext();
   const navigate = useNavigate();
 
   const handleShowPassword = () => setIsPasswordVisible(!isPasswordVisible);
@@ -35,29 +36,30 @@ export const SignInForm = () => {
     },
   });
 
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationFn: login,
+    onSuccess: (data) => {
+      setUserAuth(data.data);
+      navigate("/");
+    },
+  });
+
   const onSubmit = (payload: LoginFormValues) => {
-    setRegistrationInfo({
-      ...payload,
-    });
-
-    // TODO: remove after integration
-    setUserAuth({
-      ...payload,
-      firstName: "string",
-      lastName: "string",
-      phoneNumber: "string",
-      country: "string",
-      state: "string",
-      confirmPassword: "",
-      accountType: "",
-    });
-
-    navigate("/");
+    mutate(payload);
   };
+
+  const isLoading = isSubmitting || isPending;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
       <Grid container spacing={3}>
+        {isError && (
+          <Grid size={{ xs: 12 }}>
+            <Alert severity="error" variant="filled">
+              {error?.message}
+            </Alert>
+          </Grid>
+        )}
         <Grid size={{ xs: 12 }}>
           <Controller
             name="email"
@@ -121,8 +123,8 @@ export const SignInForm = () => {
             variant="contained"
             color="primary"
             type="submit"
-            disabled={isSubmitting}
-            loading={isSubmitting}
+            disabled={isLoading}
+            loading={isLoading}
             loadingIndicator={<CircularProgress color="inherit" size={16} />}
           >
             Sign In

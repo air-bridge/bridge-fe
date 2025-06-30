@@ -11,7 +11,7 @@ type Props = {
 
 export const AccountType = ({ onNext }: Props) => {
   const { payload, setRegistrationInfo } = useRegistrationContext();
-  const userAccountType = payload.accountType;
+  const userAccountType = payload.role;
 
   return (
     <Stack gap={{ xs: 4, lg: 10 }}>
@@ -40,7 +40,7 @@ export const AccountType = ({ onNext }: Props) => {
           accountType={userAccountType}
           onSelect={(arg) =>
             setRegistrationInfo({
-              accountType: arg,
+              role: arg,
             })
           }
         />

@@ -1,6 +1,5 @@
 import Cookies from "js-cookie";
 import { UserAuth } from "../types/auth.ts";
-import { RegistrationPayload } from "../types/user.ts";
 
 export const AUTH_KEY = "airBridgeAuth";
 
@@ -11,25 +10,25 @@ export function getAccessToken(): string | undefined {
 
     const storedValue = JSON.parse(cookieValue) as UserAuth;
 
-    const { accessToken } = storedValue;
-    return accessToken;
+    const { token } = storedValue;
+    return token;
   } catch (e) {
     return undefined;
   }
 }
 
-export function getAuthUser(): RegistrationPayload | undefined {
+export function getAuthUser(): UserAuth | undefined {
   try {
     const cookieValue = Cookies.get(AUTH_KEY);
     if (!cookieValue) return undefined;
 
-    return JSON.parse(cookieValue) as RegistrationPayload;
+    return JSON.parse(cookieValue) as UserAuth;
   } catch (e) {
     return undefined;
   }
 }
 
-export function setUserAuth(data: RegistrationPayload): void {
+export function setUserAuth(data: UserAuth): void {
   Cookies.set(AUTH_KEY, JSON.stringify(data), {
     expires: 1,
     path: "/",

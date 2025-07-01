@@ -34,11 +34,11 @@ describe("Profile form component", () => {
     });
     fireEvent.blur(firstNameInput);
 
-    const lastNameInput = screen.getByPlaceholderText("Last Name");
-    fireEvent.change(lastNameInput, {
+    const lastnameInput = screen.getByPlaceholderText("Last Name");
+    fireEvent.change(lastnameInput, {
       target: { value: "Max" },
     });
-    fireEvent.blur(lastNameInput);
+    fireEvent.blur(lastnameInput);
 
     const phoneInput = screen.getByPlaceholderText("Phone Number");
     fireEvent.change(phoneInput, {
@@ -79,12 +79,12 @@ describe("Profile form component", () => {
       email: "test@mail.com",
       password: "Password@1",
       confirmPassword: "Password@1",
-      firstName: "Test",
-      lastName: "User",
-      phoneNumber: "01293893894",
-      country: "Nigeria",
+      firstname: "Test",
+      lastname: "User",
+      phone: "01293893894",
+      country_code: "Nigeria",
       state: "",
-      accountType: ACCOUNT_TYPE.Sender,
+      role: ACCOUNT_TYPE.Sender,
     });
 
     expect(screen.getByPlaceholderText("First Name")).toHaveValue("Test");
@@ -103,12 +103,12 @@ describe("Profile form component", () => {
       email: "test@mail.com",
       password: "Password@1",
       confirmPassword: "Password@1",
-      firstName: "Test",
-      lastName: "User",
-      phoneNumber: "",
-      country: "Nigeria",
+      firstname: "Test",
+      lastname: "User",
+      phone: "",
+      country_code: "Nigeria",
       state: "",
-      accountType: ACCOUNT_TYPE.Sender,
+      role: ACCOUNT_TYPE.Sender,
     });
 
     expect(screen.getByPlaceholderText("Select country")).toHaveValue(

@@ -38,8 +38,8 @@ export const register = async (payload: RegistrationPayload) => {
   return {
     refresh_token: response.data.refresh_token,
     token: response.data.token,
-    firstName: payload.firstname,
-    lastName: payload.lastname,
+    firstname: payload.firstname,
+    lastname: payload.lastname,
     role: payload.role,
     email: payload.email,
   };

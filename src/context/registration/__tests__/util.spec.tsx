@@ -21,17 +21,17 @@ describe("useRegistrationContext", () => {
 
   it("should update context state", () => {
     const { result } = renderHook(useRegistrationContext, { wrapper });
-    expect(result.current.payload.firstName).toBe("");
-    expect(result.current.payload.lastName).toBe("");
+    expect(result.current.payload.firstname).toBe("");
+    expect(result.current.payload.lastname).toBe("");
 
     act(() => {
       result.current.setRegistrationInfo({
-        firstName: "Test",
-        lastName: "Last",
+        firstname: "Test",
+        lastname: "Last",
       });
     });
 
-    expect(result.current.payload.firstName).toBe("Test");
-    expect(result.current.payload.lastName).toBe("Last");
+    expect(result.current.payload.firstname).toBe("Test");
+    expect(result.current.payload.lastname).toBe("Last");
   });
 });

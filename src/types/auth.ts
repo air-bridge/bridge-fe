@@ -16,8 +16,8 @@ export type ForgotPasswordFormValues = {
 export type UserAuth = {
   refresh_token: string;
   token: string;
-  firstName: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
   email: string;
   role: string;
 };

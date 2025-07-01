@@ -8,8 +8,10 @@ vi.mock("react-router-dom", () => ({
 }));
 
 describe("OTP Form Component", () => {
+  const mockOnNext = vi.fn();
+
   beforeEach(() => {
-    render(<OTPForm />);
+    render(<OTPForm onNext={mockOnNext} />);
   });
 
   it("should update input fields correctly", () => {
@@ -54,8 +56,9 @@ describe("OTP Form Component", () => {
 });
 
 describe("OTP Form Component - Mobile", () => {
+  const mockOnNext = vi.fn();
   it("should update input fields correctly", () => {
-    render(<OTPForm mobile />);
+    render(<OTPForm onNext={mockOnNext} mobile />);
     const inputs = screen.getAllByRole("textbox");
     fireEvent.change(inputs[0], { target: { value: "4" } });
     fireEvent.change(inputs[1], { target: { value: "5" } });

@@ -7,6 +7,7 @@ import OutsideClickHandler from "../../hooks/useOutsideClickHandler.tsx";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link } from "react-router-dom";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { getAuthUser } from "../../utils/userAuth.ts";
 
 const menuItems = [
   {
@@ -26,13 +27,11 @@ const menuItems = [
   },
 ];
 
-type Props = {
-  mobile?: boolean;
-};
-
-export const ProfileCard = ({ mobile }: Props) => {
-  const isMobile =
-    mobile || useMediaQuery<Theme>((theme) => theme.breakpoints.down("lg"));
+export const ProfileCard = () => {
+  const isMobile = useMediaQuery<Theme>((theme) =>
+    theme.breakpoints.down("lg"),
+  );
+  const userAuth = getAuthUser();
 
   const [expanded, setExpanded] = useState(false);
   return (
@@ -56,10 +55,10 @@ export const ProfileCard = ({ mobile }: Props) => {
           }}
         >
           <img src={profileAvatar} alt="profile" width={40} />
-          {!isMobile && (
+          {!isMobile && userAuth && (
             <Box>
-              <Typography variant="subtitle2">Robert Allen</Typography>
-              <Typography variant="caption">Hey Robert</Typography>
+              <Typography variant="subtitle2">{`${userAuth?.firstname} ${userAuth?.lastname}`}</Typography>
+              <Typography variant="caption">{`Hey ${userAuth?.firstname}`}</Typography>
             </Box>
           )}
 

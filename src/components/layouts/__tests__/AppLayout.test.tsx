@@ -30,17 +30,15 @@ const makeLocation = (pathname: string) => ({
 });
 
 describe("AppLayout", () => {
+  const mockedUseLocation = vi.mocked(ReactRouterDom.useLocation);
+  const mockedGetAuthUser = vi.mocked(userAuth.getAuthUser);
+
   beforeEach(() => {
-    vi.clearAllMocks();
+    mockedUseLocation.mockReturnValue(makeLocation("/"));
+    mockedGetAuthUser.mockReturnValue(mockUserAuth);
   });
 
   it("renders the Outlet content with Header for normal path", () => {
-    const mockedUseLocation = vi.mocked(ReactRouterDom.useLocation);
-    const mockedGetAuthUser = vi.mocked(userAuth.getAuthUser);
-
-    mockedUseLocation.mockReturnValue(makeLocation("/"));
-    mockedGetAuthUser.mockReturnValue(mockUserAuth);
-
     render(
       <MemoryRouter initialEntries={["/"]}>
         <Routes>
@@ -56,11 +54,7 @@ describe("AppLayout", () => {
   });
 
   it("renders only Outlet for full screen path (no Header)", () => {
-    const mockedUseLocation = vi.mocked(ReactRouterDom.useLocation);
-    const mockedGetAuthUser = vi.mocked(userAuth.getAuthUser);
-
     mockedUseLocation.mockReturnValue(makeLocation("/create-order"));
-    mockedGetAuthUser.mockReturnValue(mockUserAuth);
 
     render(
       <MemoryRouter initialEntries={["/create-order"]}>
@@ -77,10 +71,6 @@ describe("AppLayout", () => {
   });
 
   it("redirects to /account if user is not authenticated", () => {
-    const mockedUseLocation = vi.mocked(ReactRouterDom.useLocation);
-    const mockedGetAuthUser = vi.mocked(userAuth.getAuthUser);
-
-    mockedUseLocation.mockReturnValue(makeLocation("/"));
     mockedGetAuthUser.mockReturnValue(undefined);
 
     render(

@@ -4,13 +4,10 @@ import emptyOrder from "../../assets/images/empty-order.png";
 import { Link } from "react-router-dom";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-type Props = {
-  mobile?: boolean;
-};
-
-export const EmptyOrder = ({ mobile }: Props) => {
-  const isMobile =
-    mobile || useMediaQuery<Theme>((theme) => theme.breakpoints.down("lg"));
+export const EmptyOrder = () => {
+  const isMobile = useMediaQuery<Theme>((theme) =>
+    theme.breakpoints.down("lg"),
+  );
 
   return (
     <Stack

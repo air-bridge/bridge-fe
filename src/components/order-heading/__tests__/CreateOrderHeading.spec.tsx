@@ -1,6 +1,9 @@
 import { describe, expect, it, beforeEach, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
+import {
+  ComponentTestWrapper,
+  spyOnMediaQuery,
+} from "../../../config/tests/utils.tsx";
 import * as userAuth from "../../../utils/userAuth.ts";
 import { mockUserAuth } from "../../../mocks/user.ts";
 import * as useMediaQuery from "@mui/material/useMediaQuery";
@@ -75,17 +78,14 @@ describe("Order Heading - Mobile", () => {
 describe("CreateOrderHeading useMediaQuery callback coverage", () => {
   it("should execute the useMediaQuery callback", () => {
     const mockDown = vi.fn().mockReturnValue(false);
-    vi.spyOn(useMediaQuery, "default").mockImplementation((cb: unknown) => {
-      if (typeof cb === "function") {
-        return cb({ breakpoints: { down: mockDown } });
-      }
-      return false;
-    });
+    spyOnMediaQuery(mockDown);
+
     render(
       <ComponentTestWrapper>
         <CreateOrderHeading />
       </ComponentTestWrapper>,
     );
+
     expect(mockDown).toHaveBeenCalledWith("lg");
   });
 });

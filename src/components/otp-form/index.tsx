@@ -18,13 +18,13 @@ import { getAuthUser } from "../../utils/userAuth.ts";
 import { shadowEmailString } from "../../utils/string.ts";
 
 type Props = {
-  mobile?: boolean;
   onNext: () => void;
 };
-export const OTPForm = ({ mobile, onNext }: Props) => {
+export const OTPForm = ({ onNext }: Props) => {
   const userAuth = getAuthUser();
-  const isMobile =
-    mobile || useMediaQuery<Theme>((theme) => theme.breakpoints.down("lg"));
+  const isMobile = useMediaQuery<Theme>((theme) =>
+    theme.breakpoints.down("lg"),
+  );
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [otp, setOtp] = useState(new Array(6).fill(""));
 

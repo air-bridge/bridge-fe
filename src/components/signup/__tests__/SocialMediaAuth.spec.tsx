@@ -2,7 +2,7 @@ import { describe, expect, it, beforeEach, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { SocialMediaAuth } from "../SocialMediaAuth.tsx";
 import * as useMediaQueryModule from "@mui/material/useMediaQuery";
-import * as useMediaQuery from "@mui/material/useMediaQuery";
+import { spyOnMediaQuery } from "../../../config/tests/utils.tsx";
 
 describe("Social Media Auth Signup", () => {
   beforeEach(() => {
@@ -45,12 +45,8 @@ describe("Social Media Auth Signup (mobile)", () => {
 describe("SocialMediaAuth useMediaQuery callback coverage", () => {
   it("should execute the useMediaQuery callback", () => {
     const mockDown = vi.fn().mockReturnValue(false);
-    vi.spyOn(useMediaQuery, "default").mockImplementation((cb: unknown) => {
-      if (typeof cb === "function") {
-        return cb({ breakpoints: { down: mockDown } });
-      }
-      return false;
-    });
+    spyOnMediaQuery(mockDown);
+
     render(<SocialMediaAuth />);
     expect(mockDown).toHaveBeenCalledWith("lg");
   });

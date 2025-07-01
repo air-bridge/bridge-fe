@@ -1,4 +1,4 @@
-import { Button, Stack, SvgIcon } from "@mui/material";
+import { Button, Stack, SvgIcon, Typography } from "@mui/material";
 import { Apple } from "@mui/icons-material";
 import GoogleIconSvg from "../../assets/icons/google.svg?react";
 
@@ -10,15 +10,19 @@ export const SocialMediaAuth = () => {
         color="secondary"
         startIcon={<SvgIcon component={GoogleIconSvg} />}
       >
-        Sign in with Google
+        <Typography sx={{ color: "text.primary" }}>
+          Sign in with Google
+        </Typography>
       </Button>
 
       <Button
         variant="outlined"
-        color="inherit"
+        color="secondary"
         startIcon={<Apple sx={{ color: "text.primary" }} />}
       >
-        Sign in with Apple
+        <Typography sx={{ color: "text.primary" }}>
+          Sign in with Apple
+        </Typography>
       </Button>
     </Stack>
   );

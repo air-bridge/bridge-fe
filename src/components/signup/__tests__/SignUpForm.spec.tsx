@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { SignUpForm } from "../SignUpForm.tsx";
 import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
 
@@ -38,6 +38,18 @@ describe("Signup form component", () => {
     expect(screen.getByPlaceholderText("Repeat Password")).toHaveValue(
       "password",
     );
+  });
+
+  it("should show validation errors", async () => {
+    fireEvent.click(screen.getByRole("button", { name: "Sign Up" }));
+
+    await waitFor(() => {
+      expect(screen.getByText("Email is required")).toBeInTheDocument();
+      expect(screen.getByText("Password is required")).toBeInTheDocument();
+      expect(
+        screen.getByText("Confirm Password is required"),
+      ).toBeInTheDocument();
+    });
   });
 
   it("should submit form", () => {

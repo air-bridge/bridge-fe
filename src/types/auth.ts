@@ -14,11 +14,10 @@ export type ForgotPasswordFormValues = {
 };
 
 export type UserAuth = {
-  accessToken: string;
-  refreshToken: string;
-  expiresIn: string;
-  userName: string;
-  fullName: string;
-  roleName: string;
-  phoneNumber: string;
+  refresh_token: string;
+  token: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  role: string;
 };

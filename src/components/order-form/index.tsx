@@ -12,23 +12,29 @@ import * as yup from "yup";
 import { luggageCategories } from "./util.ts";
 import { OrderFormValues } from "../../types/order.ts";
 
-const schema = yup.object({
+const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
   title: yup.string().required("Title is required"),
   luggageType: yup.string().required("Luggage Type is required"),
   weight: yup
     .number()
-    .typeError("Weight is not valid")
-    .required("Weight is required"),
-  origin: yup.string(),
-  destination: yup.string(),
-  receiver: yup.string(),
-  address: yup.string(),
+    .typeError("Weight must be a number")
+    .positive("Weight must be a number")
+    .nullable()
+    .notRequired(),
+  origin: yup.string().nullable().notRequired(),
+  destination: yup.string().nullable().notRequired(),
+  receiver: yup.string().nullable().notRequired(),
+  address: yup.string().nullable().notRequired(),
 });
 
 const initialValues: OrderFormValues = {
   title: "",
   luggageType: "box",
-  weight: 10,
+  weight: undefined,
+  origin: "",
+  destination: "",
+  receiver: "",
+  address: "",
 };
 export const OrderForm = () => {
   const {
@@ -38,7 +44,6 @@ export const OrderForm = () => {
     setValue,
     formState: { errors },
   } = useForm<OrderFormValues>({
-    // @ts-ignore
     resolver: yupResolver(schema),
     defaultValues: initialValues,
   });
@@ -53,7 +58,6 @@ export const OrderForm = () => {
     <Stack
       gap={{ xs: 2, lg: 3 }}
       component="form"
-      // @ts-ignore
       onSubmit={handleSubmit(onSubmit)}
       noValidate
     >
@@ -122,14 +126,7 @@ export const OrderForm = () => {
         render={({ field }) => (
           <Box>
             <InputLabel htmlFor="origin">From (Pickup address)</InputLabel>
-            <TextField
-              id="origin"
-              variant="outlined"
-              {...field}
-              error={!!errors.origin}
-              helperText={errors.origin?.message}
-              fullWidth
-            />
+            <TextField id="origin" variant="outlined" {...field} fullWidth />
           </Box>
         )}
       />
@@ -144,8 +141,6 @@ export const OrderForm = () => {
               id="destination"
               variant="outlined"
               {...field}
-              error={!!errors.destination}
-              helperText={errors.destination?.message}
               fullWidth
             />
           </Box>
@@ -160,14 +155,7 @@ export const OrderForm = () => {
         render={({ field }) => (
           <Box>
             <InputLabel htmlFor="receiver">Full name</InputLabel>
-            <TextField
-              id="receiver"
-              variant="outlined"
-              {...field}
-              error={!!errors.receiver}
-              helperText={errors.receiver?.message}
-              fullWidth
-            />
+            <TextField id="receiver" variant="outlined" {...field} fullWidth />
           </Box>
         )}
       />
@@ -178,14 +166,7 @@ export const OrderForm = () => {
         render={({ field }) => (
           <Box>
             <InputLabel htmlFor="address">Delivery Address</InputLabel>
-            <TextField
-              id="address"
-              variant="outlined"
-              {...field}
-              error={!!errors.address}
-              helperText={errors.address?.message}
-              fullWidth
-            />
+            <TextField id="address" variant="outlined" {...field} fullWidth />
           </Box>
         )}
       />

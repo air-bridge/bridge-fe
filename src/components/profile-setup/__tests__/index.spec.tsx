@@ -3,6 +3,11 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { ProfileSetup } from "../index.tsx";
 import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
 import { AccountTabState } from "../../signin/constant.ts";
+import { mockUserAuth } from "../../../mocks/user.ts";
+
+vi.mock("../../../api/auth.ts", () => ({
+  register: vi.fn(() => Promise.resolve({ data: mockUserAuth })),
+}));
 
 describe("Account Component", () => {
   const mockOnNext = vi.fn();
@@ -58,7 +63,7 @@ describe("Account Component", () => {
     fireEvent.click(screen.getByRole("button", { name: "Continue" }));
 
     await waitFor(() => {
-      expect(mockOnNext).toHaveBeenCalledWith(AccountTabState.COMPLETED);
+      expect(mockOnNext).toHaveBeenCalledWith(AccountTabState.OTP_VERIFICATION);
     });
   });
 });

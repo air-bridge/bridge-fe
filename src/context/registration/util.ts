@@ -11,12 +11,12 @@ export const initialPayload = {
   email: "",
   password: "",
   confirmPassword: "",
-  firstName: "",
-  lastName: "",
-  phoneNumber: "",
-  country: "",
+  firstname: "",
+  lastname: "",
+  phone: "",
+  country_code: "",
   state: "",
-  accountType: ACCOUNT_TYPE.Sender,
+  role: ACCOUNT_TYPE.Sender,
 };
 
 export const RegistrationContext = createContext<Props>({

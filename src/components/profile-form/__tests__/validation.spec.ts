@@ -4,10 +4,10 @@ import { validationSchema } from "../validation";
 describe("Profile Form Validation", () => {
   const schema = validationSchema();
   const validProfile = {
-    firstName: "Max",
-    lastName: "Alex",
-    phoneNumber: "12345678",
-    country: "Germany",
+    firstname: "Max",
+    lastname: "Alex",
+    phone: "12345678",
+    country_code: "Germany",
     state: "Lagos",
   };
 
@@ -17,10 +17,10 @@ describe("Profile Form Validation", () => {
 
   it("should return error when first name is missing", async () => {
     const invalidFormValues = {
-      firstName: "",
-      lastName: "Alex",
-      phoneNumber: "12345678",
-      country: "Germany",
+      firstname: "",
+      lastname: "Alex",
+      phone: "12345678",
+      country_code: "Germany",
       state: "Berlin",
     };
 
@@ -31,10 +31,10 @@ describe("Profile Form Validation", () => {
 
   it("should return error when last name is missing", async () => {
     const invalidFormValues = {
-      firstName: "Max",
-      lastName: "",
-      phoneNumber: "12345678",
-      country: "Germany",
+      firstname: "Max",
+      lastname: "",
+      phone: "12345678",
+      country_code: "Germany",
       state: "Berlin",
     };
 
@@ -45,10 +45,10 @@ describe("Profile Form Validation", () => {
 
   it("should return error when phone number is missing", async () => {
     const invalidFormValues = {
-      firstName: "Max",
-      lastName: "Alex",
-      phoneNumber: "",
-      country: "Germany",
+      firstname: "Max",
+      lastname: "Alex",
+      phone: "",
+      country_code: "Germany",
       state: "Berlin",
     };
 
@@ -59,10 +59,10 @@ describe("Profile Form Validation", () => {
 
   it("should return error when country is missing", async () => {
     const invalidFormValues = {
-      firstName: "Max",
-      lastName: "Alex",
-      phoneNumber: "12345678",
-      country: "",
+      firstname: "Max",
+      lastname: "Alex",
+      phone: "12345678",
+      country_code: "",
       state: "Berlin",
     };
 
@@ -73,10 +73,10 @@ describe("Profile Form Validation", () => {
 
   it("should return error when state is missing", async () => {
     const invalidFormValues = {
-      firstName: "Max",
-      lastName: "Alex",
-      phoneNumber: "12345678",
-      country: "Germany",
+      firstname: "Max",
+      lastname: "Alex",
+      phone: "12345678",
+      country_code: "Germany",
       state: "",
     };
 

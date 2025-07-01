@@ -10,9 +10,11 @@ import {
   Stack,
   TextField,
   Typography,
+  Checkbox,
 } from "@mui/material";
-import { CheckBox, Visibility, VisibilityOff } from "@mui/icons-material";
-import { Formik } from "formik";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { RegistrationFormValues } from "../../types/auth.ts";
 import useTheme from "@mui/material/styles/useTheme";
 import { validationSchema } from "./validation.ts";
@@ -32,51 +34,61 @@ export const SignUpForm = ({ onNext }: Props) => {
   const handleShowConfirmPassword = () =>
     setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
 
-  const initialValues = {
-    email: payload.email,
-    password: payload.password,
-    confirmPassword: payload.confirmPassword,
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    watch,
+  } = useForm<RegistrationFormValues>({
+    resolver: yupResolver(validationSchema()),
+    defaultValues: {
+      email: payload.email || "",
+      password: payload.password || "",
+      confirmPassword: payload.confirmPassword || "",
+    },
+  });
+
+  const passwordValue = watch("password");
+
+  const onSubmit = (values: RegistrationFormValues) => {
+    setRegistrationInfo(values);
+    onNext();
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={(values: RegistrationFormValues) => {
-        setRegistrationInfo(values);
-        onNext();
-      }}
-      validationSchema={validationSchema}
-      validateOnBlur
-      validateOnChange={false}
-    >
-      {({ handleChange, handleSubmit, validateField, values, errors }) => (
-        <form onSubmit={handleSubmit} autoComplete="off">
-          <Grid container spacing={3}>
-            <Grid size={{ xs: 12 }}>
+    <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+      <Grid container spacing={3}>
+        <Grid size={{ xs: 12 }}>
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
               <TextField
+                {...field}
                 fullWidth
                 name="email"
                 placeholder="Email"
-                value={values.email}
-                onChange={handleChange}
                 error={Boolean(errors.email)}
-                helperText={errors.email}
+                helperText={errors.email?.message}
                 autoComplete="off"
-                onBlur={() => void validateField("email")}
               />
-            </Grid>
-            <Grid size={{ xs: 12 }}>
-              <Stack gap={1}>
+            )}
+          />
+        </Grid>
+        <Grid size={{ xs: 12 }}>
+          <Stack gap={1}>
+            <Controller
+              name="password"
+              control={control}
+              render={({ field }) => (
                 <TextField
+                  {...field}
                   type={isPasswordVisible ? "text" : "password"}
                   fullWidth
                   name="password"
                   placeholder="Password"
-                  value={values.password}
-                  onChange={handleChange}
                   error={Boolean(errors.password)}
-                  helperText={errors.password}
-                  onBlur={() => void validateField("password")}
+                  helperText={errors.password?.message}
                   slotProps={{
                     input: {
                       endAdornment: (
@@ -102,33 +114,36 @@ export const SignUpForm = ({ onNext }: Props) => {
                     },
                   }}
                 />
-                <PasswordStrengthBar
-                  password={values.password}
-                  minLength={1}
-                  shortScoreWord=""
-                  scoreWordStyle={{
-                    textTransform: "capitalize",
-                    fontSize: theme.typography.caption.fontSize,
-                  }}
-                  scoreWords={["Weak", "Fair", "Good", "Strong", "Very Strong"]}
-                />
-                <Typography color="text.secondary" variant="body2">
-                  Use 8 or more characters with a mix of letters, numbers &
-                  symbols.
-                </Typography>
-              </Stack>
-            </Grid>
-            <Grid size={{ xs: 12 }}>
+              )}
+            />
+            <PasswordStrengthBar
+              password={passwordValue}
+              minLength={1}
+              shortScoreWord=""
+              scoreWordStyle={{
+                textTransform: "capitalize",
+                fontSize: theme.typography.caption.fontSize,
+              }}
+              scoreWords={["Weak", "Fair", "Good", "Strong", "Very Strong"]}
+            />
+            <Typography color="text.secondary" variant="body2">
+              Use 8 or more characters with a mix of letters, numbers & symbols.
+            </Typography>
+          </Stack>
+        </Grid>
+        <Grid size={{ xs: 12 }}>
+          <Controller
+            name="confirmPassword"
+            control={control}
+            render={({ field }) => (
               <TextField
+                {...field}
                 fullWidth
                 type={isConfirmPasswordVisible ? "text" : "password"}
                 name="confirmPassword"
                 placeholder="Repeat Password"
-                value={values.confirmPassword}
                 error={Boolean(errors.confirmPassword)}
-                helperText={errors.confirmPassword}
-                onChange={handleChange}
-                onBlur={() => void validateField("confirmPassword")}
+                helperText={errors.confirmPassword?.message}
                 slotProps={{
                   input: {
                     endAdornment: (
@@ -143,7 +158,7 @@ export const SignUpForm = ({ onNext }: Props) => {
                           onClick={handleShowConfirmPassword}
                           edge="end"
                         >
-                          {isPasswordVisible ? (
+                          {isConfirmPasswordVisible ? (
                             <Visibility />
                           ) : (
                             <VisibilityOff color="disabled" />
@@ -154,32 +169,33 @@ export const SignUpForm = ({ onNext }: Props) => {
                   },
                 }}
               />
-            </Grid>
-            <Grid size={{ xs: 12 }} sx={{ pl: 1 }}>
-              <FormControlLabel
-                control={<CheckBox color="info" />}
-                name="terms"
-                label={
-                  <Typography variant="body2">
-                    By clicking signup, you agree to Airbridge&nbsp;
-                    <Link to="/">terms & condition policy</Link>
-                  </Typography>
-                }
-              />
-            </Grid>
-            <Grid size={{ xs: 12 }}>
-              <Button
-                fullWidth
-                variant="contained"
-                color="primary"
-                type="submit"
-              >
-                Sign Up
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-      )}
-    </Formik>
+            )}
+          />
+        </Grid>
+        <Grid size={{ xs: 12 }} sx={{ pl: 1 }}>
+          <FormControlLabel
+            control={<Checkbox color="info" />}
+            name="terms"
+            label={
+              <Typography variant="body2">
+                By clicking signup, you agree to Airbridge&nbsp;
+                <Link to="/">terms & condition policy</Link>
+              </Typography>
+            }
+          />
+        </Grid>
+        <Grid size={{ xs: 12 }}>
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={isSubmitting}
+          >
+            Sign Up
+          </Button>
+        </Grid>
+      </Grid>
+    </form>
   );
 };

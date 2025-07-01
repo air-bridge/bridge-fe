@@ -28,7 +28,9 @@ export const register = async (payload: RegistrationPayload) => {
       message: string;
     };
 
-    throw new Error(errorData.message || "Registration failed");
+    throw new Error(
+      errorData.message || "Registration failed, please try again!",
+    );
   }
 
   const response: {

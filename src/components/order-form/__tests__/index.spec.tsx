@@ -60,4 +60,25 @@ describe("OrderForm", () => {
       screen.queryByText(/luggage type is required/i),
     ).not.toBeInTheDocument();
   });
+
+  it("changes luggage type selection and color", () => {
+    render(<OrderForm />);
+    const documentsButton = screen.getByRole("button", { name: "Documents" });
+    fireEvent.click(documentsButton);
+    // After click, Documents should be primary, Box should be secondary
+    expect(documentsButton).toHaveClass("MuiButton-outlinedPrimary");
+    const boxButton = screen.getByRole("button", { name: "Box" });
+    expect(boxButton).toHaveClass("MuiButton-outlinedSecondary");
+  });
+
+  it("shows error for negative weight", async () => {
+    render(<OrderForm />);
+    fireEvent.change(screen.getByLabelText(/package weight/i), {
+      target: { value: "-5" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: /submit/i }));
+    expect(
+      await screen.findByText(/Weight must be a number/i),
+    ).toBeInTheDocument();
+  });
 });

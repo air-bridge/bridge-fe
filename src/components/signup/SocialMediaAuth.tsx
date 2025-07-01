@@ -3,13 +3,10 @@ import { Apple } from "@mui/icons-material";
 import GoogleIconSvg from "../../assets/icons/google.svg?react";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-type Props = {
-  mobile?: boolean;
-};
-
-export const SocialMediaAuth = ({ mobile }: Props) => {
-  const isMobile =
-    mobile || useMediaQuery<Theme>((theme) => theme.breakpoints.down("lg"));
+export const SocialMediaAuth = () => {
+  const isMobile = useMediaQuery<Theme>((theme) =>
+    theme.breakpoints.down("lg"),
+  );
 
   return (
     <Stack direction="row" justifyContent="center" gap={{ xs: 1, lg: 3 }}>

@@ -9,6 +9,7 @@ import { RegistrationPayload } from "../../../types/user.ts";
 import { ACCOUNT_TYPE } from "../../../context/registration/constant.ts";
 import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
 import { mockUserAuth } from "../../../mocks/user.ts";
+import * as api from "../../../api/auth.ts";
 
 vi.mock("../../../api/auth.ts", () => ({
   register: vi.fn(() => Promise.resolve({ data: mockUserAuth })),
@@ -179,6 +180,32 @@ describe("Profile form component", () => {
 
     await waitFor(() => {
       expect(mockOnNext).toHaveBeenCalledOnce();
+    });
+  });
+
+  it("should error for failed API request form", async () => {
+    vi.mocked(api.register).mockRejectedValue(
+      new Error("Registration failed, please try again!"),
+    );
+
+    renderComponent({
+      email: "test@mail.com",
+      firstname: "Alex",
+      lastname: "Alex",
+      role: ACCOUNT_TYPE.Sender,
+      password: "Pas@1093093mdk",
+      confirmPassword: "Pas@1093093mdk",
+      phone: "1234455",
+      country_code: "Germany",
+      state: "Berlin",
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Registration failed, please try again!"),
+      ).toBeInTheDocument();
     });
   });
 });

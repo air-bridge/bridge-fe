@@ -27,4 +27,36 @@ describe("Account Type Screen", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Submit" }));
   });
+
+  it("should show error when email is empty and form is submitted", async () => {
+    fireEvent.change(screen.getByPlaceholderText("Email"), {
+      target: { value: "" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+    expect(await screen.findByText("Email is required")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Email")).toHaveAttribute(
+      "aria-invalid",
+      "true",
+    );
+  });
+
+  it("should show error when email is invalid and form is submitted", async () => {
+    fireEvent.change(screen.getByPlaceholderText("Email"), {
+      target: { value: "invalid-email" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+    expect(await screen.findByText("Provide valid email")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Email")).toHaveAttribute(
+      "aria-invalid",
+      "true",
+    );
+  });
+
+  it("should call onSubmit with correct values", () => {
+    fireEvent.change(screen.getByPlaceholderText("Email"), {
+      target: { value: "test@mail.com" },
+    });
+
+    // TODO mock onSubmit handler
+  });
 });

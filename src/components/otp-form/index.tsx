@@ -81,16 +81,14 @@ export const OTPForm = ({ mobile, onNext }: Props) => {
       </Box>
 
       {userAuth?.email && (
-        <Typography variant="h3" textAlign="center">
+        <Typography variant="h3" textAlign="center" data-testid="user-email">
           {shadowEmailString(userAuth.email)}
         </Typography>
       )}
 
-      <Box>
-        <Typography variant="subtitle2" textAlign="center">
-          Type you 6 digit security code
-        </Typography>
-      </Box>
+      <Typography variant="subtitle2" textAlign="center">
+        Type you 6 digit security code
+      </Typography>
 
       {isError && (
         <Alert severity="error" variant="filled">

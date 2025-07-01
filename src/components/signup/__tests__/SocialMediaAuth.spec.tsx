@@ -1,6 +1,7 @@
-import { describe, expect, it, beforeEach } from "vitest";
+import { describe, expect, it, beforeEach, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { SocialMediaAuth } from "../SocialMediaAuth.tsx";
+import * as useMediaQueryModule from "@mui/material/useMediaQuery";
 
 describe("Social Media Auth Signup", () => {
   beforeEach(() => {
@@ -15,14 +16,16 @@ describe("Social Media Auth Signup", () => {
       name: "Sign up with Apple",
     });
 
-    expect(googleButton).toBeInTheDocument();
-    expect(appleButton).toBeInTheDocument();
+    expect(googleButton).toHaveClass("MuiButton-sizeLarge");
+    expect(appleButton).toHaveClass("MuiButton-sizeLarge");
   });
 });
 
 describe("Social Media Auth Signup (mobile)", () => {
   beforeEach(() => {
-    render(<SocialMediaAuth mobile />);
+    vi.spyOn(useMediaQueryModule, "default").mockReturnValue(true);
+
+    render(<SocialMediaAuth />);
   });
 
   it("should render buttons", () => {
@@ -33,7 +36,7 @@ describe("Social Media Auth Signup (mobile)", () => {
       name: "Sign up with Apple",
     });
 
-    expect(googleButton).toBeInTheDocument();
-    expect(appleButton).toBeInTheDocument();
+    expect(googleButton).toHaveClass("MuiButton-sizeMedium");
+    expect(appleButton).toHaveClass("MuiButton-sizeMedium");
   });
 });

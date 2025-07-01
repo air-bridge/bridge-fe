@@ -1,7 +1,14 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { ComponentTestWrapper } from "../../../../config/tests/utils.tsx";
 import Account from "../index.tsx";
+import { mockUserAuth } from "../../../../mocks/user.ts";
+
+vi.mock("../../../../api/auth.ts", () => ({
+  login: vi.fn(() => Promise.resolve({ data: mockUserAuth })),
+  register: vi.fn(() => Promise.resolve({ data: mockUserAuth })),
+  verifyOTP: vi.fn(() => Promise.resolve({ isSuccess: true })),
+}));
 
 describe("Account Component", () => {
   beforeEach(() => {
@@ -108,6 +115,18 @@ describe("Account Component", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Continue" }));
 
+    // OTP screen
+    await waitFor(() => {
+      expect(screen.getByText("OTP Verification ?")).toBeInTheDocument();
+    });
+
+    const inputs = screen.getAllByRole("textbox");
+    inputs.forEach((input, index) =>
+      fireEvent.change(input, { target: { value: `${index + 1}` } }),
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+
+    // Profile completed
     await waitFor(() => {
       expect(screen.getByText("Profile Created")).toBeInTheDocument();
     });

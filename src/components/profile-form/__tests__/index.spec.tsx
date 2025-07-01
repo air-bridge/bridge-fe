@@ -7,6 +7,12 @@ import {
 } from "../../../context/registration/util.ts";
 import { RegistrationPayload } from "../../../types/user.ts";
 import { ACCOUNT_TYPE } from "../../../context/registration/constant.ts";
+import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
+import { mockUserAuth } from "../../../mocks/user.ts";
+
+vi.mock("../../../api/auth.ts", () => ({
+  register: vi.fn(() => Promise.resolve({ data: mockUserAuth })),
+}));
 
 describe("Profile form component", () => {
   const mockOnNext = vi.fn();
@@ -14,14 +20,16 @@ describe("Profile form component", () => {
 
   const renderComponent = (payload: RegistrationPayload) => {
     render(
-      <RegistrationContext.Provider
-        value={{
-          payload,
-          setRegistrationInfo: mockSetRegistrationInfo,
-        }}
-      >
-        <ProfileForm onNext={mockOnNext} />
-      </RegistrationContext.Provider>,
+      <ComponentTestWrapper>
+        <RegistrationContext.Provider
+          value={{
+            payload,
+            setRegistrationInfo: mockSetRegistrationInfo,
+          }}
+        >
+          <ProfileForm onNext={mockOnNext} />
+        </RegistrationContext.Provider>
+      </ComponentTestWrapper>,
     );
   };
 

@@ -1,10 +1,15 @@
 import { describe, expect, it, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { ForgotPasswordForm } from "../index.tsx";
+import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
 
 describe("Account Type Screen", () => {
   beforeEach(() => {
-    render(<ForgotPasswordForm />);
+    render(
+      <ComponentTestWrapper>
+        <ForgotPasswordForm />
+      </ComponentTestWrapper>,
+    );
   });
 
   it("should update input fields correctly", () => {

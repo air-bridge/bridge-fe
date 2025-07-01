@@ -56,9 +56,8 @@ describe("Auth Utils", () => {
   it("getAccessToken returns access token from cookie", () => {
     (Cookies.get as any).mockReturnValue(JSON.stringify(mockUser));
 
-    //TODO: update when API is ready
     const token = getAccessToken();
-    expect(token).toBe(undefined);
+    expect(token).toBe("token");
   });
 
   it("getAuthUser returns undefined if cookie is missing", () => {

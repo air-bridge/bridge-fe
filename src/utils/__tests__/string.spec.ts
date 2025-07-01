@@ -19,7 +19,7 @@ describe("shadowEmailString", () => {
   });
 
   it("handles empty email strings gracefully", () => {
-    expect(shadowEmailString("")).toBe("***@");
+    expect(shadowEmailString("")).toBe("");
   });
 
   it("handles emails with special characters in the prefix", () => {

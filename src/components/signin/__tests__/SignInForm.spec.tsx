@@ -1,10 +1,20 @@
-import { describe, expect, it, beforeEach } from "vitest";
+import { describe, expect, it, beforeEach, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { SignInForm } from "../SignInForm.tsx";
+import { mockUserAuth } from "../../../mocks/user.ts";
+import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
+
+vi.mock("../../../api/auth.ts", () => ({
+  login: vi.fn(() => Promise.resolve({ data: mockUserAuth })),
+}));
 
 describe("Sign-In form component", () => {
   beforeEach(() => {
-    render(<SignInForm />);
+    render(
+      <ComponentTestWrapper>
+        <SignInForm />
+      </ComponentTestWrapper>,
+    );
   });
 
   it("should update sign-in input fields correctly", () => {

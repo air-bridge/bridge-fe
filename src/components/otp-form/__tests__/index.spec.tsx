@@ -1,11 +1,15 @@
 import { describe, expect, it, beforeEach, vi } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { OTPForm } from "../index.tsx";
-import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
+import {
+  ComponentTestWrapper,
+  spyOnMediaQuery,
+} from "../../../config/tests/utils.tsx";
 import * as ReactRouterDom from "react-router-dom";
 import * as userAuth from "../../../utils/userAuth.ts";
 import * as api from "../../../api/auth.ts";
 import { mockUserAuth } from "../../../mocks/user.ts";
+import * as useMediaQuery from "@mui/material/useMediaQuery";
 
 const mockedNavigate = vi.fn();
 vi.mock("react-router-dom", async () => {
@@ -157,10 +161,14 @@ describe("OTP Form Component", () => {
 
 describe("OTP Form Component - Mobile", () => {
   const mockOnNext = vi.fn();
+  beforeEach(() => {
+    vi.spyOn(useMediaQuery, "default").mockReturnValue(true);
+  });
+
   it("should update input fields correctly", () => {
     render(
       <ComponentTestWrapper>
-        <OTPForm onNext={mockOnNext} mobile />
+        <OTPForm onNext={mockOnNext} />
       </ComponentTestWrapper>,
     );
     const inputs = screen.getAllByRole("textbox");
@@ -169,5 +177,21 @@ describe("OTP Form Component - Mobile", () => {
 
     expect(inputs[0]).toHaveValue("4");
     expect(inputs[1]).toHaveValue("5");
+  });
+});
+
+describe("OTP Form Component useMediaQuery callback coverage", () => {
+  const mockOnNext = vi.fn();
+  it("should execute the useMediaQuery callback", () => {
+    const mockDown = vi.fn().mockReturnValue(false);
+    spyOnMediaQuery(mockDown);
+
+    render(
+      <ComponentTestWrapper>
+        <OTPForm onNext={mockOnNext} />
+      </ComponentTestWrapper>,
+    );
+
+    expect(mockDown).toHaveBeenCalledWith("lg");
   });
 });

@@ -6,13 +6,10 @@ import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import { ProfileCard } from "./ProfileCard.tsx";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-type Props = {
-  mobile?: boolean;
-};
-
-export const Header = ({ mobile }: Props) => {
-  const isMobile =
-    mobile || useMediaQuery<Theme>((theme) => theme.breakpoints.down("lg"));
+export const Header = () => {
+  const isMobile = useMediaQuery<Theme>((theme) =>
+    theme.breakpoints.down("lg"),
+  );
 
   return (
     <Stack

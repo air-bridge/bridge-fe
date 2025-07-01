@@ -3,6 +3,8 @@ import { MemoryRouter } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { vi } from "vitest";
+import * as useMediaQuery from "@mui/material/useMediaQuery";
 
 type ComponentTestWrapperProps = {
   children: React.ReactNode;
@@ -22,4 +24,13 @@ export const ComponentTestWrapper = ({
       </ThemeProvider>
     </MemoryRouter>
   );
+};
+
+export const spyOnMediaQuery = (mockDown: Function) => {
+  vi.spyOn(useMediaQuery, "default").mockImplementation((cb: unknown) => {
+    if (typeof cb === "function") {
+      return cb({ breakpoints: { down: mockDown } });
+    }
+    return false;
+  });
 };

@@ -14,7 +14,9 @@ export const login = async (payload: LoginFormValues) => {
       message: string;
     };
 
-    throw new Error(errorData.message || "Invalid credentials");
+    throw new Error(
+      errorData.message || "Invalid credentials, please try again.",
+    );
   }
 
   return (await res.json()) as { data: UserAuth };

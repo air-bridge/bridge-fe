@@ -1,9 +1,11 @@
 import { Stack, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import WestIcon from "@mui/icons-material/West";
 import { OTPForm } from "../../../components/otp-form";
 
 const OTPVerificationScreen = () => {
+  const navigate = useNavigate();
+
   return (
     <Stack gap={{ xs: 4, lg: 10 }}>
       <Stack
@@ -18,7 +20,7 @@ const OTPVerificationScreen = () => {
         <Typography variant="body2">Back</Typography>
       </Stack>
 
-      <OTPForm onNext={() => {}} />
+      <OTPForm onNext={() => navigate("/")} />
     </Stack>
   );
 };

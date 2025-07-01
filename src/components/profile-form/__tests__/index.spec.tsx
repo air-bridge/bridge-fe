@@ -183,6 +183,20 @@ describe("Profile form component", () => {
     });
   });
 
+  it("should show form validation errors", async () => {
+    renderComponent(initialPayload);
+
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+
+    await waitFor(() => {
+      expect(screen.getByText("First name is required")).toBeInTheDocument();
+      expect(screen.getByText("Last name is required")).toBeInTheDocument();
+      expect(screen.getByText("Phone number is required")).toBeInTheDocument();
+      expect(screen.getByText("Country is required")).toBeInTheDocument();
+      expect(screen.getByText("State is required")).toBeInTheDocument();
+    });
+  });
+
   it("should error for failed API request form", async () => {
     vi.mocked(api.register).mockRejectedValue(
       new Error("Registration failed, please try again!"),

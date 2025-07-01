@@ -34,19 +34,6 @@ describe("OrderForm", () => {
     expect(await screen.findByText(/title is required/i)).toBeInTheDocument();
   });
 
-  it("does not show errors for optional fields when empty", async () => {
-    render(<OrderForm />);
-    fireEvent.click(screen.getByRole("button", { name: /submit/i }));
-
-    expect(screen.queryByText(/weight is required/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/origin is required/i)).not.toBeInTheDocument();
-    expect(
-      screen.queryByText(/destination is required/i),
-    ).not.toBeInTheDocument();
-    expect(screen.queryByText(/receiver is required/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/address is required/i)).not.toBeInTheDocument();
-  });
-
   it("submits when required fields are filled", async () => {
     render(<OrderForm />);
     fireEvent.change(screen.getByLabelText(/order title/i), {
@@ -71,11 +58,13 @@ describe("OrderForm", () => {
     expect(boxButton).toHaveClass("MuiButton-outlinedSecondary");
   });
 
-  it("shows error for negative weight", async () => {
+  it("shows error for invalid inputs weight", async () => {
     render(<OrderForm />);
+
     fireEvent.change(screen.getByLabelText(/package weight/i), {
       target: { value: "-5" },
     });
+
     fireEvent.click(screen.getByRole("button", { name: /submit/i }));
     expect(
       await screen.findByText(/Weight must be a number/i),

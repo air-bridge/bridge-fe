@@ -3,13 +3,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useNavigate } from "react-router-dom";
 
-type Props = {
-  mobile?: boolean;
-};
-
-export const CreateOrderHeading = ({ mobile }: Props) => {
-  const isMobile =
-    mobile || useMediaQuery<Theme>((theme) => theme.breakpoints.down("lg"));
+export const CreateOrderHeading = () => {
+  const isMobile = useMediaQuery<Theme>((theme) =>
+    theme.breakpoints.down("lg"),
+  );
   const navigate = useNavigate();
 
   return (
@@ -22,7 +19,7 @@ export const CreateOrderHeading = ({ mobile }: Props) => {
       sx={{ borderBottom: "solid 1px", borderBottomColor: "grey.200" }}
     >
       <Stack gap={1} alignItems="center" direction="row">
-        <IconButton onClick={() => navigate(-1)}>
+        <IconButton onClick={() => navigate(-1)} data-testid="close-button">
           <CloseIcon fontSize="small" />
         </IconButton>
 

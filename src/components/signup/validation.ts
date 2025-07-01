@@ -1,4 +1,4 @@
-import { object, string } from "yup";
+import { object, string, ref } from "yup";
 
 export const validationSchema = () =>
   object({
@@ -15,13 +15,7 @@ export const validationSchema = () =>
         /[@$!%*?&^#_~-]/,
         "Password must contain at least one special character",
       ),
-    confirmPassword: string().when("newPassword", {
-      is: () => true,
-      then: (schema) =>
-        schema
-          .required("Confirm Password is required")
-          .test("passwordsMatch", "Password does not match", function (value) {
-            return value === this.parent.password;
-          }),
-    }),
+    confirmPassword: string()
+      .required("Confirm Password is required")
+      .oneOf([ref("password")], "Password does not match"),
   });

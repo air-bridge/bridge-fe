@@ -366,8 +366,8 @@ export const ComponentsScreen = () => {
           />
         </Grid>
         <Grid size={{ xs: 12, lg: 6 }}>
-          <InputLabel htmlFor="lastName">Last Name</InputLabel>
-          <TextField fullWidth name="lastName" placeholder="Last name" />
+          <InputLabel htmlFor="lastname">Last Name</InputLabel>
+          <TextField fullWidth name="lastname" placeholder="Last name" />
         </Grid>
         <Grid size={{ xs: 12, lg: 6 }}>
           <InputLabel htmlFor="email">Email</InputLabel>

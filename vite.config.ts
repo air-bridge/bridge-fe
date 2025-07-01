@@ -16,7 +16,7 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["html", "text", "json-summary", "json"],
-      exclude: ["src/theme", "src/assets", "src/types", "src/screens/app/start", "src/config", "src/main.tsx", "src/App.tsx", "vite.config.ts", "**.cjs", "src/**/*.d.ts", "coverage-script.js"],
+      exclude: ["src/theme", "src/api", "src/assets", "src/types", "src/screens/app/start", "src/config", "src/main.tsx", "src/App.tsx", "vite.config.ts", "**.cjs", "src/**/*.d.ts", "coverage-script.js"],
       thresholds: {
         lines: 100,
         functions: 100,

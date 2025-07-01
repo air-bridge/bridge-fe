@@ -7,7 +7,6 @@ import {
   removeAccessToken,
   AUTH_KEY,
 } from "../userAuth.ts";
-import { initialPayload } from "../../context/registration/util.ts";
 
 const mockHostname = "example.com";
 
@@ -23,7 +22,17 @@ vi.mock("js-cookie", () => ({
   },
 }));
 
-const mockUser = initialPayload;
+const mockUser = {
+  refresh_token: "refresh_token",
+  token: "token",
+  firstname: "Max",
+  lastname: "Alex",
+  phone: "12345678",
+  country_code: "Germany",
+  state: "Berlin",
+  email: "test@mail.com",
+  role: "sender",
+};
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -47,9 +56,8 @@ describe("Auth Utils", () => {
   it("getAccessToken returns access token from cookie", () => {
     (Cookies.get as any).mockReturnValue(JSON.stringify(mockUser));
 
-    //TODO: update when API is ready
     const token = getAccessToken();
-    expect(token).toBe(undefined);
+    expect(token).toBe("token");
   });
 
   it("getAuthUser returns undefined if cookie is missing", () => {

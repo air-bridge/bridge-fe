@@ -3,11 +3,22 @@ import { Country, IState, State } from "country-state-city";
 import Autocomplete from "@mui/material/Autocomplete";
 import Grid from "@mui/material/Grid2";
 import { MuiTelInput } from "mui-tel-input";
-import { Button, TextField, MenuItem, InputLabel } from "@mui/material";
-import { Formik } from "formik";
+import {
+  Button,
+  TextField,
+  MenuItem,
+  InputLabel,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { validationSchema } from "./validation.ts";
 import { ProfileFormValues } from "../../types/user.ts";
 import { useRegistrationContext } from "../../context/registration/util.ts";
+import { useMutation } from "@tanstack/react-query";
+import { register } from "../../api/auth.ts";
+import { setUserAuth } from "../../utils/userAuth.ts";
 
 type Props = {
   onNext: () => void;
@@ -27,118 +38,156 @@ export const ProfileForm = ({ onNext }: Props) => {
     }
   };
 
-  useEffect(() => {
-    if (payload.country) {
-      const country = countries.find((c) => c.name === payload.country);
-      if (country) getStates(country.isoCode);
-    }
-  }, [payload.country]);
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors, isSubmitting },
+    watch,
+  } = useForm<ProfileFormValues>({
+    resolver: yupResolver(validationSchema()),
+    defaultValues: {
+      firstname: payload.firstname || "",
+      lastname: payload.lastname || "",
+      phone: payload.phone || "",
+      country_code: payload.country_code || "",
+      state: payload.state || "",
+    },
+  });
 
-  const initialValues: ProfileFormValues = {
-    firstName: payload.firstName || "",
-    lastName: payload.lastName || "",
-    phoneNumber: payload.phoneNumber || "",
-    country: payload.country || "",
-    state: payload.state || "",
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationFn: register,
+    onSuccess: (data) => {
+      setUserAuth(data);
+      onNext();
+    },
+  });
+
+  // Watch for country changes to update state options
+  const selectedCountry = watch("country_code");
+  useEffect(() => {
+    if (selectedCountry) {
+      const country = countries.find((c) => c.name === selectedCountry);
+      if (country) getStates(country.isoCode);
+    } else {
+      setStateOptions([]);
+    }
+  }, [selectedCountry]);
+
+  const onSubmit = (values: ProfileFormValues) => {
+    setRegistrationInfo(values);
+    mutate({ ...payload, ...values });
   };
 
+  const isLoading = isSubmitting || isPending;
+
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      validateOnBlur
-      validateOnChange={false}
-      onSubmit={(values) => {
-        setRegistrationInfo(values);
-        onNext();
-      }}
-    >
-      {({
-        handleChange,
-        handleSubmit,
-        setFieldValue,
-        validateField,
-        values,
-        errors,
-      }) => (
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={2.5}>
-            <Grid size={{ xs: 12 }}>
-              <InputLabel htmlFor="firstName">First Name</InputLabel>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Grid container spacing={2.5}>
+        {isError && (
+          <Grid size={{ xs: 12 }}>
+            <Alert severity="error" variant="filled">
+              {error?.message}
+            </Alert>
+          </Grid>
+        )}
+        <Grid size={{ xs: 12 }}>
+          <InputLabel htmlFor="firstname">First Name</InputLabel>
+          <Controller
+            name="firstname"
+            control={control}
+            render={({ field }) => (
               <TextField
-                id="firstName"
-                name="firstName"
+                {...field}
+                id="firstname"
+                name="firstname"
                 fullWidth
                 placeholder="First Name"
-                value={values.firstName}
-                onChange={handleChange}
-                error={Boolean(errors.firstName)}
-                helperText={errors.firstName}
-                onBlur={() => void validateField("firstName")}
+                error={Boolean(errors.firstname)}
+                helperText={errors.firstname?.message}
               />
-            </Grid>
+            )}
+          />
+        </Grid>
 
-            <Grid size={{ xs: 12 }}>
-              <InputLabel htmlFor="lastName">Last Name</InputLabel>
+        <Grid size={{ xs: 12 }}>
+          <InputLabel htmlFor="lastname">Last Name</InputLabel>
+          <Controller
+            name="lastname"
+            control={control}
+            render={({ field }) => (
               <TextField
-                id="lastName"
-                name="lastName"
+                {...field}
+                id="lastname"
+                name="lastname"
                 fullWidth
                 placeholder="Last Name"
-                value={values.lastName}
-                onChange={handleChange}
-                error={Boolean(errors.lastName)}
-                helperText={errors.lastName}
-                onBlur={() => void validateField("lastName")}
+                error={Boolean(errors.lastname)}
+                helperText={errors.lastname?.message}
               />
-            </Grid>
+            )}
+          />
+        </Grid>
 
-            <Grid size={{ xs: 12 }}>
-              <InputLabel htmlFor="phoneNumber">Phone Number</InputLabel>
+        <Grid size={{ xs: 12 }}>
+          <InputLabel htmlFor="phoneNumber">Phone Number</InputLabel>
+          <Controller
+            name="phone"
+            control={control}
+            render={({ field }) => (
               <MuiTelInput
-                id="phoneNumber"
+                {...field}
+                id="phone"
                 fullWidth
-                name="phoneNumber"
+                name="phone"
                 forceCallingCode
                 defaultCountry="NG"
                 preferredCountries={["NG", "DE", "GB"]}
                 placeholder="Phone Number"
-                value={values.phoneNumber}
-                onChange={(value) => {
-                  void setFieldValue("phoneNumber", value);
-                }}
-                error={Boolean(errors.phoneNumber)}
-                helperText={errors.phoneNumber}
-                onBlur={() => void validateField("phoneNumber")}
+                error={Boolean(errors.phone)}
+                helperText={errors.phone?.message}
+                onChange={field.onChange}
               />
-            </Grid>
+            )}
+          />
+        </Grid>
 
-            <Grid size={{ xs: 12 }}>
-              <InputLabel htmlFor="country">Country of Residence</InputLabel>
+        <Grid size={{ xs: 12 }}>
+          <InputLabel htmlFor="country_code">Country of Residence</InputLabel>
+          <Controller
+            name="country_code"
+            control={control}
+            render={({ field }) => (
               <Autocomplete
                 id="country"
                 options={countries}
                 getOptionLabel={(option) => option.name}
-                value={countries.find((c) => c.name === values.country) || null}
+                value={countries.find((c) => c.name === field.value) || null}
                 onChange={(_, value) => {
-                  getStates(value?.isoCode);
-                  void setFieldValue("country", value?.name || "");
-                  void setFieldValue("state", "");
+                  setValue("country_code", value?.name || "");
+                  setValue("state", "");
                 }}
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     placeholder="Select country"
-                    error={Boolean(errors.country)}
-                    helperText={errors.country}
+                    error={Boolean(errors.country_code)}
+                    helperText={errors.country_code?.message}
                   />
                 )}
               />
-            </Grid>
+            )}
+          />
+        </Grid>
 
-            <Grid size={{ xs: 12 }}>
-              <InputLabel htmlFor="state">State of Residence</InputLabel>
+        <Grid size={{ xs: 12 }}>
+          <InputLabel htmlFor="state">State of Residence</InputLabel>
+          <Controller
+            name="state"
+            control={control}
+            render={({ field }) => (
               <TextField
+                {...field}
                 id="state"
                 name="state"
                 select
@@ -149,11 +198,8 @@ export const ProfileForm = ({ onNext }: Props) => {
                     "aria-label": "State of Residence",
                   },
                 }}
-                value={values.state}
-                onChange={handleChange}
                 error={Boolean(errors.state)}
-                helperText={errors.state}
-                onBlur={() => void validateField("state")}
+                helperText={errors.state?.message}
               >
                 {stateOptions.map((option) => (
                   <MenuItem key={option.isoCode} value={option.name}>
@@ -161,21 +207,24 @@ export const ProfileForm = ({ onNext }: Props) => {
                   </MenuItem>
                 ))}
               </TextField>
-            </Grid>
+            )}
+          />
+        </Grid>
 
-            <Grid size={{ xs: 12 }}>
-              <Button
-                fullWidth
-                variant="contained"
-                color="primary"
-                type="submit"
-              >
-                Continue
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-      )}
-    </Formik>
+        <Grid size={{ xs: 12 }}>
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={isLoading}
+            loading={isLoading}
+            loadingIndicator={<CircularProgress color="inherit" size={16} />}
+          >
+            Continue
+          </Button>
+        </Grid>
+      </Grid>
+    </form>
   );
 };

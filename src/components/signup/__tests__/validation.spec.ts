@@ -53,7 +53,7 @@ describe("Signup Form Validation", () => {
   it("should return error when confirm password is missing", async () => {
     const invalidFormValues = {
       email: "test@mail.com",
-      password: "Password@1",
+      password: "",
       confirmPassword: "",
     };
 

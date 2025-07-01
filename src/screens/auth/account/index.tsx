@@ -8,6 +8,7 @@ import { ProfileSetup } from "../../../components/profile-setup";
 import { AccountLayout } from "./AccountLayout.tsx";
 import { ProfileSetupCompleted } from "../../../components/profile-setup/ProfileSetupCompleted.tsx";
 import { RegistrationContextProvider } from "../../../context/registration";
+import { OTPForm } from "../../../components/otp-form";
 
 const tabWithBackground = [AccountTabState.LOGIN, AccountTabState.REGISTER];
 const Account = () => {
@@ -59,6 +60,9 @@ const Account = () => {
             )}
             {activeTab === AccountTabState.PROFILE_DATA && (
               <ProfileSetup onNext={(step) => setActiveTab(step)} />
+            )}
+            {activeTab === AccountTabState.OTP_VERIFICATION && (
+              <OTPForm onNext={() => setActiveTab(AccountTabState.COMPLETED)} />
             )}
             {activeTab === AccountTabState.COMPLETED && (
               <ProfileSetupCompleted />

@@ -1,10 +1,32 @@
-import { describe, expect, it, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, expect, it, beforeEach, vi } from "vitest";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { SignInForm } from "../SignInForm.tsx";
+import { mockUserAuth } from "../../../mocks/user.ts";
+import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
+import * as ReactRouterDom from "react-router-dom";
+import * as api from "../../../api/auth.ts";
+
+vi.mock("../../../api/auth.ts", () => ({
+  login: vi.fn(() => Promise.resolve({ data: mockUserAuth })),
+}));
+
+const mockedNavigate = vi.fn();
+vi.mock("react-router-dom", async () => {
+  const actual: typeof ReactRouterDom =
+    await vi.importActual("react-router-dom");
+  return {
+    ...actual,
+    useNavigate: () => mockedNavigate,
+  };
+});
 
 describe("Sign-In form component", () => {
   beforeEach(() => {
-    render(<SignInForm />);
+    render(
+      <ComponentTestWrapper>
+        <SignInForm />
+      </ComponentTestWrapper>,
+    );
   });
 
   it("should update sign-in input fields correctly", () => {
@@ -19,7 +41,16 @@ describe("Sign-In form component", () => {
     expect(screen.getByPlaceholderText("Password")).toHaveValue("password");
   });
 
-  it("should submit form", () => {
+  it("should show form validation errors", async () => {
+    fireEvent.click(screen.getByRole("button", { name: "Sign In" }));
+
+    await waitFor(() => {
+      expect(screen.getByText("Email is required")).toBeInTheDocument();
+      expect(screen.getByText("Password is required")).toBeInTheDocument();
+    });
+  });
+
+  it("should submit form", async () => {
     fireEvent.change(screen.getByPlaceholderText("Email"), {
       target: { value: "test@mail.com" },
     });
@@ -28,6 +59,31 @@ describe("Sign-In form component", () => {
     });
 
     fireEvent.click(screen.getByRole("button", { name: "Sign In" }));
+
+    await waitFor(() => {
+      expect(mockedNavigate).toHaveBeenCalledWith("/");
+    });
+  });
+
+  it("show error for failed API request", async () => {
+    vi.mocked(api.login).mockRejectedValue(
+      new Error("Invalid credentials, please try again."),
+    );
+
+    fireEvent.change(screen.getByPlaceholderText("Email"), {
+      target: { value: "test@mail.com" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Password"), {
+      target: { value: "password" },
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: "Sign In" }));
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Invalid credentials, please try again."),
+      ).toBeInTheDocument();
+    });
   });
 
   it("should toggle password text visibility", () => {

@@ -19,9 +19,9 @@ export interface Order {
 export type OrderFormValues = {
   title: string;
   luggageType: string;
-  weight: number;
-  destination?: string;
-  origin?: string;
-  receiver?: string;
-  address?: string;
+  weight?: number | null;
+  destination?: string | null;
+  origin?: string | null;
+  receiver?: string | null;
+  address?: string | null;
 };

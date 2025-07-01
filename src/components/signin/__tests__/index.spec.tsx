@@ -2,6 +2,11 @@ import { describe, expect, it, beforeEach, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { SignIn } from "../index.tsx";
 import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
+import { mockUserAuth } from "../../../mocks/user.ts";
+
+vi.mock("../../../api/auth.ts", () => ({
+  login: vi.fn(() => Promise.resolve({ data: mockUserAuth })),
+}));
 
 describe("Sign-In component", () => {
   const mockOnNext = vi.fn();

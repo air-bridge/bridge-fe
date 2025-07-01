@@ -1,8 +1,8 @@
 export type ProfileFormValues = {
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  country: string;
+  firstname: string;
+  lastname: string;
+  phone: string;
+  country_code: string;
   state: string;
 };
 
@@ -10,7 +10,7 @@ export type RegistrationPayload = {
   email: string;
   password: string;
   confirmPassword: string;
-  accountType: string;
+  role: string;
 } & ProfileFormValues;
 
 export type RegistrationInput = Partial<

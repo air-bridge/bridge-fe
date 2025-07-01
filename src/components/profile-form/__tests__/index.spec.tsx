@@ -7,6 +7,13 @@ import {
 } from "../../../context/registration/util.ts";
 import { RegistrationPayload } from "../../../types/user.ts";
 import { ACCOUNT_TYPE } from "../../../context/registration/constant.ts";
+import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
+import { mockUserAuth } from "../../../mocks/user.ts";
+import * as api from "../../../api/auth.ts";
+
+vi.mock("../../../api/auth.ts", () => ({
+  register: vi.fn(() => Promise.resolve({ data: mockUserAuth })),
+}));
 
 describe("Profile form component", () => {
   const mockOnNext = vi.fn();
@@ -14,14 +21,16 @@ describe("Profile form component", () => {
 
   const renderComponent = (payload: RegistrationPayload) => {
     render(
-      <RegistrationContext.Provider
-        value={{
-          payload,
-          setRegistrationInfo: mockSetRegistrationInfo,
-        }}
-      >
-        <ProfileForm onNext={mockOnNext} />
-      </RegistrationContext.Provider>,
+      <ComponentTestWrapper>
+        <RegistrationContext.Provider
+          value={{
+            payload,
+            setRegistrationInfo: mockSetRegistrationInfo,
+          }}
+        >
+          <ProfileForm onNext={mockOnNext} />
+        </RegistrationContext.Provider>
+      </ComponentTestWrapper>,
     );
   };
 
@@ -34,11 +43,11 @@ describe("Profile form component", () => {
     });
     fireEvent.blur(firstNameInput);
 
-    const lastNameInput = screen.getByPlaceholderText("Last Name");
-    fireEvent.change(lastNameInput, {
+    const lastnameInput = screen.getByPlaceholderText("Last Name");
+    fireEvent.change(lastnameInput, {
       target: { value: "Max" },
     });
-    fireEvent.blur(lastNameInput);
+    fireEvent.blur(lastnameInput);
 
     const phoneInput = screen.getByPlaceholderText("Phone Number");
     fireEvent.change(phoneInput, {
@@ -79,12 +88,12 @@ describe("Profile form component", () => {
       email: "test@mail.com",
       password: "Password@1",
       confirmPassword: "Password@1",
-      firstName: "Test",
-      lastName: "User",
-      phoneNumber: "01293893894",
-      country: "Nigeria",
+      firstname: "Test",
+      lastname: "User",
+      phone: "01293893894",
+      country_code: "Nigeria",
       state: "",
-      accountType: ACCOUNT_TYPE.Sender,
+      role: ACCOUNT_TYPE.Sender,
     });
 
     expect(screen.getByPlaceholderText("First Name")).toHaveValue("Test");
@@ -103,12 +112,12 @@ describe("Profile form component", () => {
       email: "test@mail.com",
       password: "Password@1",
       confirmPassword: "Password@1",
-      firstName: "Test",
-      lastName: "User",
-      phoneNumber: "",
-      country: "Nigeria",
+      firstname: "Test",
+      lastname: "User",
+      phone: "",
+      country_code: "Nigeria",
       state: "",
-      accountType: ACCOUNT_TYPE.Sender,
+      role: ACCOUNT_TYPE.Sender,
     });
 
     expect(screen.getByPlaceholderText("Select country")).toHaveValue(
@@ -171,6 +180,46 @@ describe("Profile form component", () => {
 
     await waitFor(() => {
       expect(mockOnNext).toHaveBeenCalledOnce();
+    });
+  });
+
+  it("should show form validation errors", async () => {
+    renderComponent(initialPayload);
+
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+
+    await waitFor(() => {
+      expect(screen.getByText("First name is required")).toBeInTheDocument();
+      expect(screen.getByText("Last name is required")).toBeInTheDocument();
+      expect(screen.getByText("Phone number is required")).toBeInTheDocument();
+      expect(screen.getByText("Country is required")).toBeInTheDocument();
+      expect(screen.getByText("State is required")).toBeInTheDocument();
+    });
+  });
+
+  it("should error for failed API request form", async () => {
+    vi.mocked(api.register).mockRejectedValue(
+      new Error("Registration failed, please try again!"),
+    );
+
+    renderComponent({
+      email: "test@mail.com",
+      firstname: "Alex",
+      lastname: "Alex",
+      role: ACCOUNT_TYPE.Sender,
+      password: "Pas@1093093mdk",
+      confirmPassword: "Pas@1093093mdk",
+      phone: "1234455",
+      country_code: "Germany",
+      state: "Berlin",
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Registration failed, please try again!"),
+      ).toBeInTheDocument();
     });
   });
 });

@@ -1,4 +1,10 @@
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { Box } from "@mui/material";
 import { Signup } from "../../../components/signup";
 import { SignIn } from "../../../components/signin";
@@ -9,6 +15,7 @@ import { AccountLayout } from "./AccountLayout.tsx";
 import { ProfileSetupCompleted } from "../../../components/profile-setup/ProfileSetupCompleted.tsx";
 import { RegistrationContextProvider } from "../../../context/registration";
 import { OTPForm } from "../../../components/otp-form";
+import { removeAccessToken } from "../../../utils/userAuth.ts";
 
 const tabWithBackground = [AccountTabState.LOGIN, AccountTabState.REGISTER];
 const Account = () => {
@@ -37,6 +44,10 @@ const Account = () => {
       resizeObserver.disconnect();
     };
   }, [activeTab, updateHeight]);
+
+  useEffect(() => {
+    removeAccessToken();
+  }, []);
 
   return (
     <RegistrationContextProvider>

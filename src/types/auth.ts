@@ -13,6 +13,11 @@ export type ForgotPasswordFormValues = {
   email: string;
 };
 
+export type SetPasswordFormValues = {
+  password: string;
+  confirmPassword: string;
+};
+
 export type UserAuth = {
   refresh_token: string;
   token: string;

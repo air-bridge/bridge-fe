@@ -98,6 +98,13 @@ export const OTPForm = ({ onNext }: Props) => {
 
       <Stack gap={2}>
         <Grid container spacing={2}>
+          {isError && (
+            <Grid size={{ xs: 12 }}>
+              <Alert severity="error" variant="filled">
+                {error?.message}
+              </Alert>
+            </Grid>
+          )}
           <Grid size={{ xs: 12 }}>
             <Box display="flex" gap={1}>
               {otp.map((digit, index) => (

@@ -204,7 +204,7 @@ export const SignUpForm = ({ onNext }: Props) => {
             type="submit"
             disabled={isSubmitting}
           >
-            Sign Up
+            Sign Up 12
           </Button>
         </Grid>
       </Grid>

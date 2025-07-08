@@ -1,6 +1,7 @@
 import {
   ForgotPasswordFormValues,
   LoginFormValues,
+  SetPasswordFormValues,
   UserAuth,
 } from "../types/auth.ts";
 import { postAPI } from "./api.ts";
@@ -51,6 +52,22 @@ export const register = async (payload: RegistrationPayload) => {
 
 export const resetPassword = async (payload: ForgotPasswordFormValues) => {
   const res = await postAPI("users/forgot-password", payload);
+
+  if (!res.ok) {
+    const errorData = (await res.json()) as {
+      message: string;
+    };
+
+    throw new Error(
+      errorData.message || "Password reset failed. Please try again!",
+    );
+  }
+
+  return (await res.json()) as { isSuccess: boolean };
+};
+
+export const setNewPassword = async (payload: SetPasswordFormValues) => {
+  const res = await postAPI("users/set-password", payload);
 
   if (!res.ok) {
     const errorData = (await res.json()) as {

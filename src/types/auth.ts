@@ -1,4 +1,5 @@
 export type RegistrationFormValues = {
+  terms: boolean;
   email: string;
   password: string;
   confirmPassword: string;
@@ -11,6 +12,11 @@ export type LoginFormValues = {
 
 export type ForgotPasswordFormValues = {
   email: string;
+};
+
+export type SetPasswordFormValues = {
+  password: string;
+  confirmPassword: string;
 };
 
 export type UserAuth = {

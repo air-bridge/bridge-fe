@@ -2,8 +2,14 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import { ForgotPasswordForm } from "../../../components/forgot-password-form";
 import { Link } from "react-router-dom";
 import WestIcon from "@mui/icons-material/West";
+import { useState } from "react";
+import { ChangePasswordTabState } from "./constant.ts";
+import { OTPForm } from "../../../components/otp-form";
+import { SetPasswordForm } from "../../../components/set-password-form";
 
 const ForgotPasswordScreen = () => {
+  const [activeTab, setActiveTab] = useState(ChangePasswordTabState.REQUEST);
+
   return (
     <Stack gap={{ xs: 4, lg: 10 }}>
       <Stack
@@ -31,7 +37,25 @@ const ForgotPasswordScreen = () => {
         </Box>
 
         <Stack gap={{ xs: 1, lg: 2 }}>
-          <ForgotPasswordForm />
+          {activeTab === ChangePasswordTabState.REQUEST && (
+            <ForgotPasswordForm
+              onNext={() =>
+                setActiveTab(ChangePasswordTabState.OTP_VERIFICATION)
+              }
+            />
+          )}
+
+          {activeTab === ChangePasswordTabState.OTP_VERIFICATION && (
+            <OTPForm
+              onNext={() => setActiveTab(ChangePasswordTabState.SET_PASSWORD)}
+            />
+          )}
+
+          {activeTab === ChangePasswordTabState.SET_PASSWORD && (
+            <SetPasswordForm
+              onNext={() => setActiveTab(ChangePasswordTabState.COMPLETED)}
+            />
+          )}
 
           <Button
             fullWidth

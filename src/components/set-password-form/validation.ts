@@ -1,13 +1,7 @@
-import { object, string, ref, boolean } from "yup";
+import { object, ref, string } from "yup";
 
 export const validationSchema = () =>
   object({
-    terms: boolean()
-      .required("You need to agree to our terms & condition to continue")
-      .oneOf([true], "You need to agree to our terms & condition to continue"),
-    email: string()
-      .required("Email is required")
-      .email("Provide a valid email address"),
     password: string()
       .required("Password is required")
       .min(8, "Password must be at least 8 characters")

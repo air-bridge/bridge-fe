@@ -1,4 +1,5 @@
 export type RegistrationFormValues = {
+  terms: boolean;
   email: string;
   password: string;
   confirmPassword: string;

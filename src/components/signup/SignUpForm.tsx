@@ -11,6 +11,7 @@ import {
   TextField,
   Typography,
   Checkbox,
+  FormHelperText,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useForm, Controller } from "react-hook-form";
@@ -42,6 +43,7 @@ export const SignUpForm = ({ onNext }: Props) => {
   } = useForm<RegistrationFormValues>({
     resolver: yupResolver(validationSchema()),
     defaultValues: {
+      terms: false,
       email: payload.email || "",
       password: payload.password || "",
       confirmPassword: payload.confirmPassword || "",
@@ -173,16 +175,26 @@ export const SignUpForm = ({ onNext }: Props) => {
           />
         </Grid>
         <Grid size={{ xs: 12 }} sx={{ pl: 1 }}>
-          <FormControlLabel
-            control={<Checkbox color="info" />}
+          <Controller
             name="terms"
-            label={
-              <Typography variant="body2">
-                By clicking signup, you agree to Airbridge&nbsp;
-                <Link to="/">terms & condition policy</Link>
-              </Typography>
-            }
+            control={control}
+            render={({ field }) => (
+              <FormControlLabel
+                {...field}
+                control={<Checkbox color="info" />}
+                label={
+                  <Typography variant="body2">
+                    By clicking signup, you agree to Airbridge&nbsp;
+                    <Link to="/">terms & condition policy</Link>
+                  </Typography>
+                }
+              />
+            )}
           />
+
+          {errors.terms && (
+            <FormHelperText error>{errors.terms?.message}</FormHelperText>
+          )}
         </Grid>
         <Grid size={{ xs: 12 }}>
           <Button

@@ -17,7 +17,7 @@ describe("Screen Header", () => {
 
     expect(getByAltText("logo")).toBeInTheDocument();
     expect(
-      getByRole("button", { name: "Switch to Passenger" }),
+      getByRole("button", { name: "Switch to Sender" }),
     ).toBeInTheDocument();
   });
 });

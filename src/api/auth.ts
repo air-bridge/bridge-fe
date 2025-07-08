@@ -23,7 +23,7 @@ export const login = async (payload: LoginFormValues) => {
 };
 
 export const register = async (payload: RegistrationPayload) => {
-  const res = await postAPI("Entity/signup", payload, false);
+  const res = await postAPI("users/signup", payload, false);
 
   if (!res.ok) {
     const errorData = (await res.json()) as {

@@ -5,6 +5,7 @@ import theme from "../../theme";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { vi } from "vitest";
 import * as useMediaQuery from "@mui/material/useMediaQuery";
+import { UserContextProvider } from "../../context/user";
 
 type ComponentTestWrapperProps = {
   children: React.ReactNode;
@@ -19,7 +20,7 @@ export const ComponentTestWrapper = ({
     <MemoryRouter initialEntries={["/"]}>
       <ThemeProvider theme={theme}>
         <QueryClientProvider client={queryClient}>
-          {props.children}
+          <UserContextProvider>{props.children}</UserContextProvider>
         </QueryClientProvider>
       </ThemeProvider>
     </MemoryRouter>

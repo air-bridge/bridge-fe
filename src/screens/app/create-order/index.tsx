@@ -8,7 +8,11 @@ export const CreateOrderScreen = () => {
       <CreateOrderHeading />
 
       <Container
-        sx={{ maxWidth: { xs: "100%", lg: "600px" }, px: { xs: 2, lg: 0 } }}
+        sx={{
+          maxWidth: { xs: "100%", lg: "600px" },
+          px: { xs: 2, lg: 0 },
+          py: 3,
+        }}
       >
         <OrderForm />
       </Container>

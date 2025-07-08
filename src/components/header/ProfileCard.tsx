@@ -7,7 +7,7 @@ import OutsideClickHandler from "../../hooks/useOutsideClickHandler.tsx";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link } from "react-router-dom";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { getAuthUser } from "../../utils/userAuth.ts";
+import { useUserContext } from "../../context/user/util.ts";
 
 const menuItems = [
   {
@@ -31,7 +31,7 @@ export const ProfileCard = () => {
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
   );
-  const userAuth = getAuthUser();
+  const { currentUser } = useUserContext();
 
   const [expanded, setExpanded] = useState(false);
   return (
@@ -55,10 +55,10 @@ export const ProfileCard = () => {
           }}
         >
           <img src={profileAvatar} alt="profile" width={40} />
-          {!isMobile && userAuth && (
+          {!isMobile && currentUser && (
             <Box>
-              <Typography variant="subtitle2">{`${userAuth?.firstname} ${userAuth?.lastname}`}</Typography>
-              <Typography variant="caption">{`Hey ${userAuth?.firstname}`}</Typography>
+              <Typography variant="subtitle2">{`${currentUser?.firstname} ${currentUser?.lastname}`}</Typography>
+              <Typography variant="caption">{`Hey ${currentUser?.firstname}`}</Typography>
             </Box>
           )}
 

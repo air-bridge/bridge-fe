@@ -199,7 +199,7 @@ export const OrderForm = () => {
         <FileUploadIcon sx={{ color: "text.primary" }} />
       </Stack>
 
-      <Grid2 container spacing={0.5}>
+      <Grid2 container spacing={1}>
         <Grid2 size={{ xs: 12, lg: 4 }}>
           <PhotoInput />
         </Grid2>

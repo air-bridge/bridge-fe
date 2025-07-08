@@ -34,3 +34,16 @@ export const spyOnMediaQuery = (mockDown: Function) => {
     return false;
   });
 };
+
+export const createMockFileList = (files: File[]) => {
+  length = files.length;
+  const fileList = {
+    item: (index: number) => files[index] || null,
+    ...files,
+    length: files.length,
+  };
+
+  Object.setPrototypeOf(fileList, FileList.prototype);
+
+  return fileList;
+};

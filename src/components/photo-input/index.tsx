@@ -37,7 +37,8 @@ export const PhotoInput = () => {
 
   return (
     <StyledUploadContainer
-      filled={Boolean(photoSource)}
+      filled={photoSource ? "true" : "false"}
+      data-testid="upload-container"
       onClick={() => {
         if (!photoSource) {
           inputRef.current?.click();
@@ -66,7 +67,7 @@ export const PhotoInput = () => {
           />
         </Box>
       ) : (
-        <ImageIcon sx={{ fontSize: 40 }} />
+        <ImageIcon sx={{ fontSize: 60 }} />
       )}
 
       <input
@@ -80,15 +81,17 @@ export const PhotoInput = () => {
   );
 };
 
-export const StyledUploadContainer = styled(Stack)<{ filled?: boolean }>(
+export const StyledUploadContainer = styled(Stack)<{ filled?: string }>(
   ({ theme, filled }) => ({
-    padding: filled ? 0 : theme.spacing(4, 3),
     border: "dashed 1px",
     borderColor: "grey.900",
     borderRadius: theme.shape.borderRadius * 2,
     justifyContent: "center",
     alignItems: "center",
     cursor: "pointer",
+    height: "150px",
+    maxHeight: "150px",
+    overflow: "hidden",
     "& input[type='file']": {
       position: "absolute",
       top: 0,
@@ -98,8 +101,9 @@ export const StyledUploadContainer = styled(Stack)<{ filled?: boolean }>(
       height: "100%",
       pointerEvents: "none",
     },
-    ...(filled && {
+    ...(filled === "true" && {
       borderColor: "transparent",
+      height: "unset",
     }),
   }),
 );

@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "lint": "eslint src/ --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:check": "eslint 'src/**/*.{ts,tsx}'",
-    "test": "vitest",
+    "test": "vitest src/components/photo-input/__tests__/index.spec.tsx",
     "test:coverage": "vitest run --coverage",
     "type:check": "tsc --noEmit",
     "format:check": "prettier --check 'src/**/*.{ts,tsx}'",

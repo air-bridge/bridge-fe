@@ -5,11 +5,13 @@ import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import { ProfileCard } from "./ProfileCard.tsx";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useUserContext } from "../../context/user/util.ts";
 
 export const Header = () => {
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
   );
+  const { isSender } = useUserContext();
 
   return (
     <Stack
@@ -55,7 +57,7 @@ export const Header = () => {
             size="large"
             startIcon={<SwapHorizIcon />}
           >
-            Switch to Passenger
+            {isSender ? "Switch to Passenger" : "Switch to Sender"}
           </Button>
         )}
 

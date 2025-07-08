@@ -3,6 +3,7 @@ import { Box } from "@mui/material";
 import { useEffect } from "react";
 import { getAuthUser } from "../../utils/userAuth.ts";
 import { Header } from "../header";
+import { UserContextProvider } from "../../context/user";
 
 const fullScreenPaths = ["create-order"];
 const AppLayout = () => {
@@ -19,15 +20,19 @@ const AppLayout = () => {
     }
   }, []);
 
-  return isFullScreen ? (
-    <Outlet />
-  ) : (
-    <>
-      <Header />
-      <Box py={2} px={{ xs: 2, lg: 5 }}>
+  return (
+    <UserContextProvider>
+      {isFullScreen ? (
         <Outlet />
-      </Box>
-    </>
+      ) : (
+        <>
+          <Header />
+          <Box py={2} px={{ xs: 2, lg: 5 }}>
+            <Outlet />
+          </Box>
+        </>
+      )}
+    </UserContextProvider>
   );
 };
 

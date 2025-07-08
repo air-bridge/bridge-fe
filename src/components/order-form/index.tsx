@@ -5,12 +5,15 @@ import {
   InputLabel,
   Stack,
   Typography,
+  Grid2,
 } from "@mui/material";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { luggageCategories } from "./util.ts";
 import { OrderFormValues } from "../../types/order.ts";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+import { PhotoInput } from "../photo-input";
 
 const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
   title: yup.string().required("Title is required"),
@@ -170,6 +173,43 @@ export const OrderForm = () => {
           </Box>
         )}
       />
+
+      <Typography variant="subtitle2" color="text.secondary" fontWeight="300">
+        Upload Information
+      </Typography>
+
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{
+          border: "solid 1px",
+          borderColor: "grey.300",
+          borderRadius: 2,
+          px: 2.5,
+          py: 2,
+        }}
+      >
+        <Stack alignItems="center" gap={0.75} direction="row">
+          <Typography color="text.secondary">Picture</Typography>
+
+          <Typography sx={{ color: "grey.900" }}>Attach File</Typography>
+        </Stack>
+
+        <FileUploadIcon sx={{ color: "text.primary" }} />
+      </Stack>
+
+      <Grid2 container spacing={1}>
+        <Grid2 size={{ xs: 12, lg: 4 }}>
+          <PhotoInput />
+        </Grid2>
+        <Grid2 size={{ xs: 12, lg: 4 }}>
+          <PhotoInput />
+        </Grid2>
+        <Grid2 size={{ xs: 12, lg: 4 }}>
+          <PhotoInput />
+        </Grid2>
+      </Grid2>
 
       <Button type="submit" variant="contained" color="primary">
         Submit

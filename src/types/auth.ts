@@ -21,3 +21,5 @@ export type UserAuth = {
   email: string;
   role: string;
 };
+
+export type UserAuthField = Record<keyof UserAuth, string>;

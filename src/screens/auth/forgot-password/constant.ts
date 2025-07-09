@@ -1,0 +1,6 @@
+export enum ChangePasswordTabState {
+  REQUEST = "REQUEST",
+  OTP_VERIFICATION = "OTP_VERIFICATION",
+  SET_PASSWORD = "SET_PASSWORD",
+  COMPLETED = "COMPLETED",
+}

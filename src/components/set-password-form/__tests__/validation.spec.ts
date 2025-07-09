@@ -4,7 +4,8 @@ import { validationSchema } from "../validation";
 describe("Forgot Password Form Validation", () => {
   const schema = validationSchema();
   const validFormValues = {
-    email: "test@mail.com",
+    password: "Password@1",
+    confirmPassword: "Password@1",
   };
 
   it("should validate a correct form", async () => {
@@ -13,23 +14,36 @@ describe("Forgot Password Form Validation", () => {
     );
   });
 
-  it("should return error when email is missing", async () => {
+  it("should return error when password is missing", async () => {
     const invalidFormValues = {
-      email: "",
+      password: "",
+      confirmPassword: "",
     };
 
     await expect(schema.validate(invalidFormValues)).rejects.toThrow(
-      "Email is required",
+        "Password is required",
     );
   });
 
-  it("should return error when email is invalid", async () => {
+  it("should return error when confirm password is missing", async () => {
     const invalidFormValues = {
-      email: "invalid-email",
+      password: "",
+      confirmPassword: "",
     };
 
     await expect(schema.validate(invalidFormValues)).rejects.toThrow(
-      "Provide valid email",
+        "Confirm Password is required",
+    );
+  });
+
+  it("should return error when confirm password does not match password", async () => {
+    const invalidFormValues = {
+      password: "Password@1",
+      confirmPassword: "drowssap",
+    };
+
+    await expect(schema.validate(invalidFormValues)).rejects.toThrow(
+        "Password does not match",
     );
   });
 });

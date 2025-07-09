@@ -49,10 +49,15 @@ describe("Signup form component", () => {
       expect(
         screen.getByText("Confirm Password is required"),
       ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          "You need to agree to our terms & condition to continue",
+        ),
+      ).toBeInTheDocument();
     });
   });
 
-  it("should submit form", () => {
+  it("should submit form", async () => {
     fireEvent.change(screen.getByPlaceholderText("Email"), {
       target: { value: "test@mail.com" },
     });
@@ -63,7 +68,15 @@ describe("Signup form component", () => {
       target: { value: "Password@1" },
     });
 
+    fireEvent.click(
+      screen.getByLabelText(/By clicking signup, you agree to Airbridge/i),
+    );
+
     fireEvent.click(screen.getByRole("button", { name: "Sign Up" }));
+
+    await waitFor(() => {
+      expect(mockOnNext).toHaveBeenCalled();
+    });
   });
 
   it("should toggle password text visibility", () => {

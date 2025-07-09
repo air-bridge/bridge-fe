@@ -1,41 +1,48 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import { ForgotPasswordForm } from "../../../components/forgot-password-form";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import WestIcon from "@mui/icons-material/West";
 import { useState } from "react";
 import { ChangePasswordTabState } from "./constant.ts";
 import { OTPForm } from "../../../components/otp-form";
 import { SetPasswordForm } from "../../../components/set-password-form";
+import { PasswordChangedCompleted } from "../../../components/forgot-password-form/PasswordChangedCompleted.tsx";
 
 const ForgotPasswordScreen = () => {
   const [activeTab, setActiveTab] = useState(ChangePasswordTabState.REQUEST);
+  const navigate = useNavigate();
+
+  const handleGoBack = () => {
+    if (activeTab === ChangePasswordTabState.REQUEST) {
+      navigate("/account");
+    } else if (activeTab === ChangePasswordTabState.OTP_VERIFICATION) {
+      setActiveTab(ChangePasswordTabState.REQUEST);
+    } else if (activeTab === ChangePasswordTabState.SET_PASSWORD) {
+      setActiveTab(ChangePasswordTabState.OTP_VERIFICATION);
+    } else {
+      setActiveTab(ChangePasswordTabState.REQUEST);
+    }
+  };
 
   return (
-    <Stack gap={{ xs: 4, lg: 10 }}>
-      <Stack
-        gap={0.5}
-        direction="row"
-        alignItems="center"
-        component={Link}
-        to="/account"
-        sx={{ color: "text.primary", "&:hover": { color: "text.primary" } }}
-      >
-        <WestIcon fontSize="small" />
-        <Typography variant="body2">Back</Typography>
+    <Stack gap={{ xs: 4, lg: 10 }} pb={{ xs: 2, lg: 6 }}>
+      <Stack gap={0.5} direction="row" alignItems="center">
+        {activeTab !== ChangePasswordTabState.COMPLETED && (
+          <Button
+            size="small"
+            variant="text"
+            color="inherit"
+            startIcon={<WestIcon fontSize="small" />}
+            onClick={handleGoBack}
+          >
+            Back
+          </Button>
+        )}
       </Stack>
       <Stack
         gap={{ xs: 2, lg: 3 }}
-        sx={{ width: { xs: "90%", lg: 400 }, m: "auto" }}
+        sx={{ width: { xs: "90%", lg: 450 }, m: "auto" }}
       >
-        <Box>
-          <Typography variant="h3" textAlign="center">
-            Forgot Password ?
-          </Typography>
-          <Typography variant="body2" textAlign="center" color="text.secondary">
-            Enter your email to reset your password
-          </Typography>
-        </Box>
-
         <Stack gap={{ xs: 1, lg: 2 }}>
           {activeTab === ChangePasswordTabState.REQUEST && (
             <ForgotPasswordForm
@@ -57,15 +64,9 @@ const ForgotPasswordScreen = () => {
             />
           )}
 
-          <Button
-            fullWidth
-            component={Link}
-            to="/account"
-            variant="text"
-            color="secondary"
-          >
-            Back
-          </Button>
+          {activeTab === ChangePasswordTabState.COMPLETED && (
+            <PasswordChangedCompleted />
+          )}
         </Stack>
       </Stack>
     </Stack>

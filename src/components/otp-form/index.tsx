@@ -90,12 +90,6 @@ export const OTPForm = ({ onNext }: Props) => {
         Type you 6 digit security code
       </Typography>
 
-      {isError && (
-        <Alert severity="error" variant="filled">
-          {error?.message}
-        </Alert>
-      )}
-
       <Stack gap={2}>
         <Grid container spacing={2}>
           {isError && (

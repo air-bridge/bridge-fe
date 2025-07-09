@@ -78,6 +78,9 @@ describe("Account Component", () => {
     fireEvent.change(screen.getByPlaceholderText("Repeat Password"), {
       target: { value: "Password@1" },
     });
+    fireEvent.click(
+      screen.getByLabelText(/By clicking signup, you agree to Airbridge/i),
+    );
     fireEvent.click(screen.getByRole("button", { name: "Sign Up" }));
 
     // Account type

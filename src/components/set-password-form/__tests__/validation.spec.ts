@@ -21,7 +21,7 @@ describe("Forgot Password Form Validation", () => {
     };
 
     await expect(schema.validate(invalidFormValues)).rejects.toThrow(
-        "Password is required",
+      "Password is required",
     );
   });
 
@@ -32,7 +32,7 @@ describe("Forgot Password Form Validation", () => {
     };
 
     await expect(schema.validate(invalidFormValues)).rejects.toThrow(
-        "Confirm Password is required",
+      "Confirm Password is required",
     );
   });
 
@@ -43,7 +43,7 @@ describe("Forgot Password Form Validation", () => {
     };
 
     await expect(schema.validate(invalidFormValues)).rejects.toThrow(
-        "Password does not match",
+      "Password does not match",
     );
   });
 });

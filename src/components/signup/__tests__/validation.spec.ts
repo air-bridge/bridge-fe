@@ -7,6 +7,7 @@ describe("Signup Form Validation", () => {
     email: "test@mail.com",
     password: "Password@1",
     confirmPassword: "Password@1",
+    terms: true,
   };
 
   it("should validate a correct form", async () => {

@@ -19,8 +19,6 @@ const ForgotPasswordScreen = () => {
       setActiveTab(ChangePasswordTabState.REQUEST);
     } else if (activeTab === ChangePasswordTabState.SET_PASSWORD) {
       setActiveTab(ChangePasswordTabState.OTP_VERIFICATION);
-    } else {
-      setActiveTab(ChangePasswordTabState.REQUEST);
     }
   };
 

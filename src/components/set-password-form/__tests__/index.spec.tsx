@@ -91,4 +91,32 @@ describe("Set Password Form", () => {
       expect(mockOnNext).not.toHaveBeenCalled();
     });
   });
+
+  it("toggle password text visibility", () => {
+    expect(screen.getByPlaceholderText("Password")).toHaveAttribute(
+      "type",
+      "password",
+    );
+
+    fireEvent.click(screen.getByTestId("toggle-password-visibility"));
+
+    expect(screen.getByPlaceholderText("Password")).toHaveAttribute(
+      "type",
+      "text",
+    );
+  });
+
+  it("toggle confirm password text visibility", () => {
+    expect(screen.getByPlaceholderText("Repeat Password")).toHaveAttribute(
+      "type",
+      "password",
+    );
+
+    fireEvent.click(screen.getByTestId("toggle-confirm-password-visibility"));
+
+    expect(screen.getByPlaceholderText("Repeat Password")).toHaveAttribute(
+      "type",
+      "text",
+    );
+  });
 });

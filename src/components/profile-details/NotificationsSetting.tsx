@@ -101,7 +101,7 @@ export const NotificationsSetting = () => {
                     {...field}
                     control={<Switch checked={Boolean(inAppWatch)} />}
                     label={
-                      <Typography sx={{ minWidth: isMobile ? "unset" : 400 }}>
+                      <Typography sx={{ minWidth: isMobile ? 200 : 400 }}>
                         In app Notification
                       </Typography>
                     }
@@ -120,7 +120,7 @@ export const NotificationsSetting = () => {
                     {...field}
                     control={<Switch checked={Boolean(emailWatch)} />}
                     label={
-                      <Typography sx={{ minWidth: isMobile ? "unset" : 400 }}>
+                      <Typography sx={{ minWidth: isMobile ? 200 : 400 }}>
                         Email Notification
                       </Typography>
                     }
@@ -139,7 +139,7 @@ export const NotificationsSetting = () => {
                     {...field}
                     control={<Switch checked={Boolean(smsWatch)} />}
                     label={
-                      <Typography sx={{ minWidth: isMobile ? "unset" : 400 }}>
+                      <Typography sx={{ minWidth: isMobile ? 200 : 400 }}>
                         SMS Notification
                       </Typography>
                     }

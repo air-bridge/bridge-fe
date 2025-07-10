@@ -1,0 +1,172 @@
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  FormControlLabel,
+  Grid2,
+  Stack,
+  Switch,
+  Theme,
+  Typography,
+} from "@mui/material";
+import {
+  NotificationsFormValues,
+  ProfileFormValues,
+} from "../../types/user.ts";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { validationSchema } from "../profile-form/validation.ts";
+import { useMutation } from "@tanstack/react-query";
+import Grid from "@mui/material/Grid2";
+import { setNotifications } from "../../api/user.ts";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
+export const NotificationsSetting = () => {
+  const isMobile = useMediaQuery<Theme>((theme) =>
+    theme.breakpoints.down("lg"),
+  );
+  const { control, handleSubmit, watch } = useForm<NotificationsFormValues>({
+    resolver: yupResolver(validationSchema()),
+    defaultValues: {
+      inApp: true,
+      email: true,
+      sms: false,
+    },
+  });
+
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationFn: setNotifications,
+    onSuccess: (data) => {
+      console.log(data);
+    },
+  });
+
+  const onSubmit = (values: ProfileFormValues) => {
+    mutate(values);
+  };
+
+  const inAppWatch = watch("inApp");
+  const emailWatch = watch("email");
+  const smsWatch = watch("sms");
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Grid2 container spacing={2}>
+        <Grid2 size={{ xs: 12, lg: 3 }}>
+          <Stack gap={3}>
+            <Stack gap={1.5}>
+              <Typography variant="subtitle2">Notification</Typography>
+              <Typography variant="body2" color="text.secondary">
+                Set up notifications for your account
+              </Typography>
+            </Stack>
+
+            {!isMobile && (
+              <Box>
+                <Button
+                  variant="contained"
+                  disabled={isPending}
+                  loading={isPending}
+                  loadingIndicator={
+                    <CircularProgress color="inherit" size={16} />
+                  }
+                >
+                  Save Changes
+                </Button>
+              </Box>
+            )}
+          </Stack>
+        </Grid2>
+
+        <Grid2
+          size={{ xs: 12, lg: 7 }}
+          offset={{ xs: 0, lg: 2 }}
+          order={{ xs: 1, lg: 2 }}
+        >
+          <Grid container spacing={1.5}>
+            {isError && (
+              <Grid size={{ xs: 12 }}>
+                <Alert severity="error" variant="filled">
+                  {error?.message}
+                </Alert>
+              </Grid>
+            )}
+            <Grid size={{ xs: 12, lg: 6 }}>
+              <Controller
+                name="inApp"
+                control={control}
+                render={({ field }) => (
+                  <FormControlLabel
+                    {...field}
+                    control={<Switch checked={Boolean(inAppWatch)} />}
+                    label={
+                      <Typography sx={{ minWidth: isMobile ? "unset" : 400 }}>
+                        In app Notification
+                      </Typography>
+                    }
+                    labelPlacement="start"
+                  />
+                )}
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12 }}>
+              <Controller
+                name="email"
+                control={control}
+                render={({ field }) => (
+                  <FormControlLabel
+                    {...field}
+                    control={<Switch checked={Boolean(emailWatch)} />}
+                    label={
+                      <Typography sx={{ minWidth: isMobile ? "unset" : 400 }}>
+                        Email Notification
+                      </Typography>
+                    }
+                    labelPlacement="start"
+                  />
+                )}
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12 }}>
+              <Controller
+                name="sms"
+                control={control}
+                render={({ field }) => (
+                  <FormControlLabel
+                    {...field}
+                    control={<Switch checked={Boolean(smsWatch)} />}
+                    label={
+                      <Typography sx={{ minWidth: isMobile ? "unset" : 400 }}>
+                        SMS Notification
+                      </Typography>
+                    }
+                    labelPlacement="start"
+                  />
+                )}
+              />
+            </Grid>
+
+            {isMobile && (
+              <Grid size={{ xs: 12 }}>
+                <Button
+                  variant="contained"
+                  disabled={isPending}
+                  loading={isPending}
+                  loadingIndicator={
+                    <CircularProgress color="inherit" size={16} />
+                  }
+                  sx={{ mt: 1 }}
+                >
+                  Save Changes
+                </Button>
+              </Grid>
+            )}
+          </Grid>
+        </Grid2>
+      </Grid2>
+    </form>
+  );
+};

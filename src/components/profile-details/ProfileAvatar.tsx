@@ -1,12 +1,5 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Grid2,
-  Stack,
-  Theme,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Button, Stack, Theme, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import ImageIcon from "@mui/icons-material/Image";
 import { useUserContext } from "../../context/user/util.ts";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -20,8 +13,8 @@ export const ProfileAvatar = () => {
   const name = `${currentUser?.firstname} ${currentUser?.lastname}`;
 
   return (
-    <Grid2 container spacing={2}>
-      <Grid2 size={{ xs: 12, lg: 3 }} order={{ xs: 2, lg: 1 }}>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12, lg: 3 }}>
         <Stack gap={3}>
           <Stack gap={1.5}>
             <Typography variant="subtitle2">Profile photo</Typography>
@@ -30,19 +23,21 @@ export const ProfileAvatar = () => {
             </Typography>
           </Stack>
 
-          <Box>
-            <Button variant="outlined" color="error" startIcon={<ImageIcon />}>
-              Change Photo
-            </Button>
-          </Box>
+          {!isMobile && (
+            <Box>
+              <Button
+                variant="outlined"
+                color="error"
+                startIcon={<ImageIcon />}
+              >
+                Change Photo
+              </Button>
+            </Box>
+          )}
         </Stack>
-      </Grid2>
+      </Grid>
 
-      <Grid2
-        size={{ xs: 12, lg: 7 }}
-        offset={{ xs: 0, lg: 2 }}
-        order={{ xs: 1, lg: 2 }}
-      >
+      <Grid size={{ xs: 12, lg: 7 }} offset={{ xs: 0, lg: 2 }}>
         <Avatar
           sx={{
             width: isMobile ? "65px" : "130px",
@@ -52,7 +47,18 @@ export const ProfileAvatar = () => {
         >
           {`${name.split(" ")[0][0]}${name.split(" ")[1][0]}`}
         </Avatar>
-      </Grid2>
-    </Grid2>
+
+        {isMobile && (
+          <Button
+            variant="outlined"
+            color="error"
+            startIcon={<ImageIcon />}
+            sx={{ mt: 1.5 }}
+          >
+            Change Photo
+          </Button>
+        )}
+      </Grid>
+    </Grid>
   );
 };

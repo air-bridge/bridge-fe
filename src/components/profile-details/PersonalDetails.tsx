@@ -9,6 +9,7 @@ import {
   MenuItem,
   Stack,
   TextField,
+  Theme,
   Typography,
 } from "@mui/material";
 import { useUserContext } from "../../context/user/util.ts";
@@ -22,9 +23,13 @@ import Grid from "@mui/material/Grid2";
 import { MuiTelInput } from "mui-tel-input";
 import Autocomplete from "@mui/material/Autocomplete";
 import { updateUser } from "../../api/user.ts";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export const PersonalDetails = () => {
   const { currentUser } = useUserContext();
+  const isMobile = useMediaQuery<Theme>((theme) =>
+    theme.breakpoints.down("lg"),
+  );
   const countries = Country.getAllCountries();
   const [stateOptions, setStateOptions] = useState<IState[]>([]);
   // TODO: use userId
@@ -80,7 +85,7 @@ export const PersonalDetails = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid2 container spacing={2}>
-        <Grid2 size={{ xs: 12, lg: 3 }} order={{ xs: 2, lg: 1 }}>
+        <Grid2 size={{ xs: 12, lg: 3 }}>
           <Stack gap={3}>
             <Stack gap={1.5}>
               <Typography variant="subtitle2">Personal Information</Typography>
@@ -89,18 +94,20 @@ export const PersonalDetails = () => {
               </Typography>
             </Stack>
 
-            <Box>
-              <Button
-                variant="contained"
-                disabled={isPending}
-                loading={isPending}
-                loadingIndicator={
-                  <CircularProgress color="inherit" size={16} />
-                }
-              >
-                Save Changes
-              </Button>
-            </Box>
+            {!isMobile && (
+              <Box>
+                <Button
+                  variant="contained"
+                  disabled={isPending}
+                  loading={isPending}
+                  loadingIndicator={
+                    <CircularProgress color="inherit" size={16} />
+                  }
+                >
+                  Save Changes
+                </Button>
+              </Box>
+            )}
           </Stack>
         </Grid2>
 
@@ -109,7 +116,7 @@ export const PersonalDetails = () => {
           offset={{ xs: 0, lg: 2 }}
           order={{ xs: 1, lg: 2 }}
         >
-          <Grid container spacing={2.5}>
+          <Grid container spacing={1.5}>
             {isError && (
               <Grid size={{ xs: 12 }}>
                 <Alert severity="error" variant="filled">
@@ -118,7 +125,9 @@ export const PersonalDetails = () => {
               </Grid>
             )}
             <Grid size={{ xs: 12, lg: 6 }}>
-              <InputLabel htmlFor="firstname">First Name</InputLabel>
+              <InputLabel htmlFor="firstname" size="small">
+                First Name
+              </InputLabel>
               <Controller
                 name="firstname"
                 control={control}
@@ -138,7 +147,9 @@ export const PersonalDetails = () => {
             </Grid>
 
             <Grid size={{ xs: 12, lg: 6 }}>
-              <InputLabel htmlFor="lastname">Last Name</InputLabel>
+              <InputLabel htmlFor="lastname" size="small">
+                Last Name
+              </InputLabel>
               <Controller
                 name="lastname"
                 control={control}
@@ -158,10 +169,13 @@ export const PersonalDetails = () => {
             </Grid>
 
             <Grid size={{ xs: 12, lg: 6 }}>
-              <InputLabel htmlFor="lastname">Email</InputLabel>
+              <InputLabel htmlFor="email" size="small">
+                Email
+              </InputLabel>
               <TextField
                 id="email"
                 name="email"
+                size="small"
                 fullWidth
                 placeholder="Email"
                 disabled
@@ -170,7 +184,9 @@ export const PersonalDetails = () => {
             </Grid>
 
             <Grid size={{ xs: 12, lg: 6 }}>
-              <InputLabel htmlFor="phoneNumber">Phone Number</InputLabel>
+              <InputLabel htmlFor="phoneNumber" size="small">
+                Phone Number
+              </InputLabel>
               <Controller
                 name="phone"
                 control={control}
@@ -179,6 +195,7 @@ export const PersonalDetails = () => {
                     {...field}
                     id="phone"
                     fullWidth
+                    size="small"
                     name="phone"
                     forceCallingCode
                     defaultCountry="NG"
@@ -193,7 +210,7 @@ export const PersonalDetails = () => {
             </Grid>
 
             <Grid size={{ xs: 12 }}>
-              <InputLabel htmlFor="country_code">
+              <InputLabel htmlFor="country_code" size="small">
                 Country of Residence
               </InputLabel>
               <Controller
@@ -214,6 +231,7 @@ export const PersonalDetails = () => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
+                        size="small"
                         placeholder="Select country"
                         error={Boolean(errors.country_code)}
                         helperText={errors.country_code?.message}
@@ -225,7 +243,9 @@ export const PersonalDetails = () => {
             </Grid>
 
             <Grid size={{ xs: 12 }}>
-              <InputLabel htmlFor="state">State of Residence</InputLabel>
+              <InputLabel htmlFor="state" size="small">
+                State of Residence
+              </InputLabel>
               <Controller
                 name="state"
                 control={control}
@@ -233,6 +253,7 @@ export const PersonalDetails = () => {
                   <TextField
                     {...field}
                     id="state"
+                    size="small"
                     name="state"
                     select
                     fullWidth
@@ -254,6 +275,22 @@ export const PersonalDetails = () => {
                 )}
               />
             </Grid>
+
+            {isMobile && (
+              <Grid size={{ xs: 12 }}>
+                <Button
+                  variant="contained"
+                  disabled={isPending}
+                  loading={isPending}
+                  loadingIndicator={
+                    <CircularProgress color="inherit" size={16} />
+                  }
+                  sx={{ mt: 1 }}
+                >
+                  Save Changes
+                </Button>
+              </Grid>
+            )}
           </Grid>
         </Grid2>
       </Grid2>

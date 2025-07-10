@@ -12,13 +12,15 @@ import WestIcon from "@mui/icons-material/West";
 import { Link } from "react-router-dom";
 import { ProfileAvatar } from "../../../components/profile-details/ProfileAvatar.tsx";
 import { PersonalDetails } from "../../../components/profile-details/PersonalDetails.tsx";
+import { SetNewPassword } from "../../../components/profile-details/SetNewPassword.tsx";
+import { NotificationsSetting } from "../../../components/profile-details/NotificationsSetting.tsx";
 
 export const ProfileScreen = () => {
   return (
     <Stack gap={{ xs: 1, lg: 2 }}>
       <Box
         sx={{ borderBottom: "solid 1px", borderBottomColor: "divider" }}
-        py={{ xs: 0.5, lg: 1.5 }}
+        py={{ xs: 1, lg: 1.5 }}
       >
         <Button
           component={Link}
@@ -32,8 +34,10 @@ export const ProfileScreen = () => {
         </Button>
       </Box>
 
-      <Container fixed sx={{ px: 0, py: { xs: 1, lg: 2 } }}>
-        <Typography variant="h4">Profile Information</Typography>
+      <Container fixed sx={{ px: 0, py: { xs: 2, lg: 3 } }}>
+        <Typography variant="h4" sx={{ pb: 2 }}>
+          Profile Information
+        </Typography>
 
         <Card
           sx={{
@@ -43,12 +47,17 @@ export const ProfileScreen = () => {
           }}
         >
           <CardContent>
-            <Stack gap={{ xs: 2, lg: 4 }}>
+            <Stack gap={{ xs: 3, lg: 6 }}>
               <ProfileAvatar />
               <Divider />
 
               <PersonalDetails />
               <Divider />
+
+              <SetNewPassword />
+              <Divider />
+
+              <NotificationsSetting />
             </Stack>
           </CardContent>
         </Card>

@@ -52,8 +52,8 @@ export const PersonalDetails = () => {
   } = useForm<ProfileFormValues>({
     resolver: yupResolver(validationSchema()),
     defaultValues: {
-      firstname: currentUser?.firstname || "",
-      lastname: currentUser?.lastname || "",
+      firstname: currentUser?.firstname,
+      lastname: currentUser?.lastname,
       phone: "",
       state: "",
       country_code: "",

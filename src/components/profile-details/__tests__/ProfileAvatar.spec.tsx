@@ -27,7 +27,7 @@ describe("Profile Avatar", () => {
       screen.getByText("This image will be displayed on your profile"),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Change Photo" }),
+      screen.getByRole("button", { name: "Change photo" }),
     ).toBeInTheDocument();
   });
 
@@ -38,7 +38,7 @@ describe("Profile Avatar", () => {
   it("uploads and displays an image", async () => {
     expect(screen.getByText("AM")).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Change Photo" }));
+    fireEvent.click(screen.getByRole("button", { name: "Change photo" }));
     const input = screen.getByTestId("avatar-input") as HTMLInputElement;
     const mockFile = new File([""], "chucknorris.png", {});
     const mockFileList = createMockFileList([mockFile]);
@@ -56,7 +56,7 @@ describe("Profile Avatar", () => {
   });
 
   it("should select image and can change image", async () => {
-    fireEvent.click(screen.getByRole("button", { name: "Change Photo" }));
+    fireEvent.click(screen.getByRole("button", { name: "Change photo" }));
     const input = screen.getByTestId("avatar-input") as HTMLInputElement;
     const mockFile = new File([""], "chucknorris.png", {});
     const mockFileList = createMockFileList([mockFile]);

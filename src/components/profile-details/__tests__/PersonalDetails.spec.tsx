@@ -9,6 +9,10 @@ import * as userAuth from "../../../utils/userAuth.ts";
 import { PersonalDetails } from "../PersonalDetails.tsx";
 import * as useMediaQuery from "@mui/material/useMediaQuery";
 
+vi.mock("../../../api/user.ts", () => ({
+  updateUser: vi.fn(() => Promise.resolve({ isSuccess: true })),
+}));
+
 describe("Personal Details", () => {
   beforeEach(() => {
     vi.spyOn(userAuth, "getAuthUser").mockReturnValue(mockUserAuth);
@@ -101,6 +105,47 @@ describe("Personal Details", () => {
     expect(screen.getByPlaceholderText("State of Residence")).toHaveValue(
       "Abuja",
     );
+  });
+
+  it("should submit form", async () => {
+    const firstNameInput = screen.getByPlaceholderText("First Name");
+    fireEvent.change(firstNameInput, {
+      target: { value: "Alex" },
+    });
+    fireEvent.blur(firstNameInput);
+
+    const lastnameInput = screen.getByPlaceholderText("Last Name");
+    fireEvent.change(lastnameInput, {
+      target: { value: "Max" },
+    });
+    fireEvent.blur(lastnameInput);
+
+    const phoneInput = screen.getByPlaceholderText("Phone Number");
+    fireEvent.change(phoneInput, {
+      target: { value: "1234567890" },
+    });
+    fireEvent.blur(phoneInput);
+
+    const countrySelect = screen.getByPlaceholderText("Select country");
+    fireEvent.change(countrySelect, {
+      target: { value: "Nigeria" },
+    });
+    fireEvent.keyDown(countrySelect, { key: "ArrowDown" });
+    fireEvent.keyDown(countrySelect, { key: "Enter" });
+
+    const stateSelect = screen.getByRole("combobox", {
+      name: "State of Residence",
+    });
+    fireEvent.mouseDown(stateSelect);
+    const stateOption = screen.getByRole("option", { name: "Abuja" });
+    fireEvent.click(stateOption);
+    fireEvent.blur(stateSelect);
+
+    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
+
+    await waitFor(() => {
+      // TODO: mockOnSubmit after action
+    });
   });
 
   it("should handle country deselect", () => {

@@ -61,7 +61,7 @@ export const ProfileAvatar = () => {
                   startIcon={<ImageIcon />}
                   onClick={selectPhoto}
                 >
-                  Change Photo
+                  Change photo
                 </Button>
               </Box>
             )}
@@ -89,7 +89,7 @@ export const ProfileAvatar = () => {
               sx={{ mt: 1.5 }}
               onClick={selectPhoto}
             >
-              Change Photo
+              Change photo
             </Button>
           )}
         </Grid>

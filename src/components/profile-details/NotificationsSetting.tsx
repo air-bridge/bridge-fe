@@ -10,13 +10,8 @@ import {
   Theme,
   Typography,
 } from "@mui/material";
-import {
-  NotificationsFormValues,
-  ProfileFormValues,
-} from "../../types/user.ts";
+import { NotificationsFormValues } from "../../types/user.ts";
 import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { validationSchema } from "../profile-form/validation.ts";
 import { useMutation } from "@tanstack/react-query";
 import Grid from "@mui/material/Grid2";
 import { setNotifications } from "../../api/user.ts";
@@ -27,7 +22,6 @@ export const NotificationsSetting = () => {
     theme.breakpoints.down("lg"),
   );
   const { control, handleSubmit, watch } = useForm<NotificationsFormValues>({
-    resolver: yupResolver(validationSchema()),
     defaultValues: {
       inApp: true,
       email: true,
@@ -42,7 +36,7 @@ export const NotificationsSetting = () => {
     },
   });
 
-  const onSubmit = (values: ProfileFormValues) => {
+  const onSubmit = (values: NotificationsFormValues) => {
     mutate(values);
   };
 

@@ -55,6 +55,7 @@ export const ProfileAvatar = () => {
             {!isMobile && (
               <Box>
                 <Button
+                  data-testid="lg-button"
                   variant="outlined"
                   color="error"
                   startIcon={<ImageIcon />}
@@ -81,6 +82,7 @@ export const ProfileAvatar = () => {
 
           {isMobile && (
             <Button
+              data-testid="mobile-button"
               variant="outlined"
               color="error"
               startIcon={<ImageIcon />}

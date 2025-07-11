@@ -3,10 +3,12 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import {
   ComponentTestWrapper,
   createMockFileList,
+  testMediaQueryCallback,
 } from "../../../config/tests/utils.tsx";
 import { ProfileAvatar } from "../ProfileAvatar.tsx";
 import { mockUserAuth } from "../../../mocks/user.ts";
 import * as userAuth from "../../../utils/userAuth.ts";
+import * as useMediaQuery from "@mui/material/useMediaQuery";
 
 describe("Profile Avatar", () => {
   beforeEach(() => {
@@ -100,3 +102,22 @@ describe("Profile Avatar", () => {
     });
   });
 });
+
+describe("Profile Avatar Mobile", () => {
+  beforeEach(() => {
+    vi.spyOn(useMediaQuery, "default").mockReturnValue(true);
+    render(
+      <ComponentTestWrapper>
+        <ProfileAvatar />
+      </ComponentTestWrapper>,
+    );
+  });
+
+  it("renders empty component in mobile", () => {
+    expect(screen.getByTestId("mobile-button")).toBeInTheDocument();
+    expect(screen.queryByTestId("lg-button")).not.toBeInTheDocument();
+  });
+});
+
+// INFO: Needed coverage for media breakpoints
+testMediaQueryCallback(<ProfileAvatar />);

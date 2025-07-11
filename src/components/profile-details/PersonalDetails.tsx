@@ -100,11 +100,13 @@ export const PersonalDetails = () => {
                   variant="contained"
                   disabled={isPending}
                   loading={isPending}
+                  type="submit"
+                  data-testid="lg-button"
                   loadingIndicator={
                     <CircularProgress color="inherit" size={16} />
                   }
                 >
-                  Save Changes
+                  Save changes
                 </Button>
               </Box>
             )}
@@ -286,8 +288,10 @@ export const PersonalDetails = () => {
                     <CircularProgress color="inherit" size={16} />
                   }
                   sx={{ mt: 1 }}
+                  type="submit"
+                  data-testid="mobile-button"
                 >
-                  Save Changes
+                  Save changes
                 </Button>
               </Grid>
             )}

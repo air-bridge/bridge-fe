@@ -85,14 +85,16 @@ export const SetNewPassword = () => {
             {!isMobile && (
               <Box>
                 <Button
+                  data-testid="lg-button"
                   variant="contained"
                   disabled={isPending}
                   loading={isPending}
+                  type="submit"
                   loadingIndicator={
                     <CircularProgress color="inherit" size={16} />
                   }
                 >
-                  Save Changes
+                  Save changes
                 </Button>
               </Box>
             )}
@@ -279,15 +281,17 @@ export const SetNewPassword = () => {
             {isMobile && (
               <Grid size={{ xs: 12 }}>
                 <Button
+                  data-testid="mobile-button"
                   variant="contained"
                   disabled={isPending}
                   loading={isPending}
+                  type="submit"
                   loadingIndicator={
                     <CircularProgress color="inherit" size={16} />
                   }
                   sx={{ mt: 2 }}
                 >
-                  Save Changes
+                  Save changes
                 </Button>
               </Grid>
             )}

@@ -11,7 +11,7 @@ export const validationSchema = () =>
 
 export const passwordValidationSchema = () =>
   object({
-    currentPassword: string().required("Password is required"),
+    currentPassword: string().required("Current password is required"),
     password: string()
       .required("Password is required")
       .min(8, "Password must be at least 8 characters")

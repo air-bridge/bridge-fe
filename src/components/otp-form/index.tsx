@@ -14,22 +14,23 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import MobileIcon from "@mui/icons-material/PhoneAndroid";
 import { useMutation } from "@tanstack/react-query";
 import { verifyOTP } from "../../api/auth.ts";
-import { getAuthUser } from "../../utils/userAuth.ts";
 import { shadowEmailString } from "../../utils/string.ts";
+import { useRegistrationContext } from "../../context/registration/util.ts";
 
 type Props = {
   onNext: () => void;
 };
 export const OTPForm = ({ onNext }: Props) => {
-  const userAuth = getAuthUser();
+  const { payload } = useRegistrationContext();
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
   );
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [otp, setOtp] = useState(new Array(6).fill(""));
+  const userEmail = payload.email;
 
   const { mutate, isPending, isError, error } = useMutation({
-    mutationFn: verifyOTP,
+    mutationFn: (code: string) => verifyOTP(code, userEmail),
     onSuccess: () => {
       onNext();
     },
@@ -54,6 +55,8 @@ export const OTPForm = ({ onNext }: Props) => {
       inputRefs.current[index + 1]?.focus();
     }
   };
+
+  console.log("email", payload.email);
 
   const handleKeyDown = (
     e: KeyboardEvent<HTMLInputElement | HTMLDivElement>,
@@ -80,9 +83,9 @@ export const OTPForm = ({ onNext }: Props) => {
         </Typography>
       </Box>
 
-      {userAuth?.email && (
+      {userEmail && (
         <Typography variant="h3" textAlign="center" data-testid="user-email">
-          {shadowEmailString(userAuth.email)}
+          {shadowEmailString(userEmail)}
         </Typography>
       )}
 

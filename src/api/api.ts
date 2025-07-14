@@ -5,7 +5,8 @@ import {
   setUserAuth,
 } from "../utils/userAuth.ts";
 import Cookies from "js-cookie";
-import { UserAuth } from "../types/auth.ts";
+import { APIResponse, UserAuth } from "../types/auth.ts";
+import { ErrorCodes } from "../components/signin/constant.ts";
 
 const handleLogout = () => {
   removeAccessToken();
@@ -76,6 +77,16 @@ const fetchWithRetry = async (
       ...(tokenIsRequired && { Authorization: `Bearer ${getAccessToken()}` }),
     },
   });
+
+  const resClone = res.clone();
+
+  const data: APIResponse = await resClone.json();
+  if (
+    resClone.status === 401 &&
+    data?.error?.code === ErrorCodes.EMAIL_NOT_VERIFIED
+  ) {
+    return res;
+  }
 
   if (res.status === 401) {
     const refreshToken = await getRefreshToken();

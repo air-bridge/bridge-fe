@@ -7,6 +7,7 @@ import { ChangePasswordTabState } from "./constant.ts";
 import { OTPForm } from "../../../components/otp-form";
 import { SetPasswordForm } from "../../../components/set-password-form";
 import { PasswordChangedCompleted } from "../../../components/forgot-password-form/PasswordChangedCompleted.tsx";
+import { RegistrationContextProvider } from "../../../context/registration";
 
 const ForgotPasswordScreen = () => {
   const [activeTab, setActiveTab] = useState(ChangePasswordTabState.REQUEST);
@@ -23,51 +24,53 @@ const ForgotPasswordScreen = () => {
   };
 
   return (
-    <Stack gap={{ xs: 4, lg: 10 }} pb={{ xs: 2, lg: 6 }}>
-      <Stack gap={0.5} direction="row" alignItems="center">
-        {activeTab !== ChangePasswordTabState.COMPLETED && (
-          <Button
-            size="small"
-            variant="text"
-            color="inherit"
-            startIcon={<WestIcon fontSize="small" />}
-            onClick={handleGoBack}
-          >
-            Back
-          </Button>
-        )}
-      </Stack>
-      <Stack
-        gap={{ xs: 2, lg: 3 }}
-        sx={{ width: { xs: "90%", lg: 450 }, m: "auto" }}
-      >
-        <Stack gap={{ xs: 1, lg: 2 }}>
-          {activeTab === ChangePasswordTabState.REQUEST && (
-            <ForgotPasswordForm
-              onNext={() =>
-                setActiveTab(ChangePasswordTabState.OTP_VERIFICATION)
-              }
-            />
-          )}
-
-          {activeTab === ChangePasswordTabState.OTP_VERIFICATION && (
-            <OTPForm
-              onNext={() => setActiveTab(ChangePasswordTabState.SET_PASSWORD)}
-            />
-          )}
-
-          {activeTab === ChangePasswordTabState.SET_PASSWORD && (
-            <SetPasswordForm
-              onNext={() => setActiveTab(ChangePasswordTabState.COMPLETED)}
-            />
-          )}
-
-          {activeTab === ChangePasswordTabState.COMPLETED && (
-            <PasswordChangedCompleted />
+    <RegistrationContextProvider>
+      <Stack gap={{ xs: 4, lg: 10 }} pb={{ xs: 2, lg: 6 }}>
+        <Stack gap={0.5} direction="row" alignItems="center">
+          {activeTab !== ChangePasswordTabState.COMPLETED && (
+            <Button
+              size="small"
+              variant="text"
+              color="inherit"
+              startIcon={<WestIcon fontSize="small" />}
+              onClick={handleGoBack}
+            >
+              Back
+            </Button>
           )}
         </Stack>
+        <Stack
+          gap={{ xs: 2, lg: 3 }}
+          sx={{ width: { xs: "90%", lg: 450 }, m: "auto" }}
+        >
+          <Stack gap={{ xs: 1, lg: 2 }}>
+            {activeTab === ChangePasswordTabState.REQUEST && (
+              <ForgotPasswordForm
+                onNext={() => {
+                  setActiveTab(ChangePasswordTabState.OTP_VERIFICATION);
+                }}
+              />
+            )}
+
+            {activeTab === ChangePasswordTabState.OTP_VERIFICATION && (
+              <OTPForm
+                onNext={() => setActiveTab(ChangePasswordTabState.SET_PASSWORD)}
+              />
+            )}
+
+            {activeTab === ChangePasswordTabState.SET_PASSWORD && (
+              <SetPasswordForm
+                onNext={() => setActiveTab(ChangePasswordTabState.COMPLETED)}
+              />
+            )}
+
+            {activeTab === ChangePasswordTabState.COMPLETED && (
+              <PasswordChangedCompleted />
+            )}
+          </Stack>
+        </Stack>
       </Stack>
-    </Stack>
+    </RegistrationContextProvider>
   );
 };
 

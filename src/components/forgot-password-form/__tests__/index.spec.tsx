@@ -5,7 +5,7 @@ import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
 import * as api from "../../../api/auth.ts";
 
 vi.mock("../../../api/auth.ts", () => ({
-  resetPassword: vi.fn(() => Promise.resolve({ isSuccess: true })),
+  sendOtp: vi.fn(() => Promise.resolve({ isSuccess: true })),
 }));
 
 describe("Forgot Password Form", () => {
@@ -79,7 +79,7 @@ describe("Forgot Password Form", () => {
   });
 
   it("shows error when API failed", async () => {
-    vi.mocked(api.resetPassword).mockRejectedValue(
+    vi.mocked(api.sendOTP).mockRejectedValue(
       new Error("Password reset failed. Please try again!"),
     );
 

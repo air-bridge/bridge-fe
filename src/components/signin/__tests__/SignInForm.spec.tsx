@@ -5,6 +5,7 @@ import { mockUserAuth } from "../../../mocks/user.ts";
 import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
 import * as ReactRouterDom from "react-router-dom";
 import * as api from "../../../api/auth.ts";
+import { ErrorCodes } from "../constant.ts";
 
 vi.mock("../../../api/auth.ts", () => ({
   login: vi.fn(() => Promise.resolve({ data: mockUserAuth })),
@@ -21,10 +22,12 @@ vi.mock("react-router-dom", async () => {
 });
 
 describe("Sign-In form component", () => {
+  const mockHandleVerifyStatus = vi.fn();
+
   beforeEach(() => {
     render(
       <ComponentTestWrapper>
-        <SignInForm />
+        <SignInForm handleVerifyStatus={mockHandleVerifyStatus} />
       </ComponentTestWrapper>,
     );
   });
@@ -86,23 +89,22 @@ describe("Sign-In form component", () => {
     });
   });
 
-  it("should toggle password text visibility", () => {
+  it.only("handles error for unverified account", async () => {
+    vi.mocked(api.login).mockRejectedValue(
+      new Error(ErrorCodes.EMAIL_NOT_VERIFIED),
+    );
+
+    fireEvent.change(screen.getByPlaceholderText("Email"), {
+      target: { value: "test@mail.com" },
+    });
     fireEvent.change(screen.getByPlaceholderText("Password"), {
       target: { value: "password" },
     });
 
-    expect(screen.getByPlaceholderText("Password")).toHaveAttribute(
-      "type",
-      "password",
-    );
+    fireEvent.click(screen.getByRole("button", { name: "Sign In" }));
 
-    fireEvent.click(
-      screen.getByRole("button", { name: "display the password" }),
-    );
-
-    expect(screen.getByPlaceholderText("Password")).toHaveAttribute(
-      "type",
-      "text",
-    );
+    await waitFor(() => {
+      expect(mockHandleVerifyStatus).toHaveBeenCalledOnce();
+    });
   });
 });

@@ -28,9 +28,10 @@ export const OTPForm = ({ email, onNext }: Props) => {
   );
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [otp, setOtp] = useState(new Array(6).fill(""));
+  const userEmail = email || userAuth?.email;
 
   const { mutate, isPending, isError, error } = useMutation({
-    mutationFn: verifyOTP,
+    mutationFn: (code: string) => verifyOTP(code, email),
     onSuccess: () => {
       onNext();
     },
@@ -64,8 +65,6 @@ export const OTPForm = ({ email, onNext }: Props) => {
       inputRefs.current[index - 1]?.focus();
     }
   };
-
-  const userEmail = email || userAuth?.email;
 
   return (
     <Stack

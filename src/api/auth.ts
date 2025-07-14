@@ -85,8 +85,8 @@ export const sendOTP = async (email: string) => {
   return (await res.json()) as { isSuccess: boolean };
 };
 
-export const verifyOTP = async (code: string) => {
-  const res = await postAPI("users/verify-otp", { code });
+export const verifyOTP = async (code: string, email: string | undefined) => {
+  const res = await postAPI("users/verify-otp", { code, email });
 
   if (!res.ok) {
     const errorData = (await res.json()) as {

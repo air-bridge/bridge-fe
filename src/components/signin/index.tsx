@@ -6,7 +6,7 @@ import { useState } from "react";
 import { SendOTP } from "./SendOTP.tsx";
 import { OTPForm } from "../otp-form";
 import { useRegistrationContext } from "../../context/registration/util.ts";
-import { useNavigate } from "react-router-dom";
+import { useNotificationContext } from "../../context/notification/util.ts";
 
 type Props = {
   onNext: (arg: AccountTabState) => void;
@@ -14,11 +14,7 @@ type Props = {
 export const SignIn = ({ onNext }: Props) => {
   const [activeTab, setActiveTab] = useState(LoginTabState.LOGIN);
   const { payload } = useRegistrationContext();
-  const navigate = useNavigate();
-
-  const handleOnVerified = () => {
-    navigate("/account");
-  };
+  const { openNotification } = useNotificationContext();
 
   return (
     <Stack gap={2}>
@@ -33,7 +29,15 @@ export const SignIn = ({ onNext }: Props) => {
       )}
 
       {activeTab === LoginTabState.OTP_VERIFICATION && (
-        <OTPForm email={payload.email} onNext={handleOnVerified} />
+        <OTPForm
+          email={payload.email}
+          onNext={() => {
+            openNotification(
+              "Account verified. Please login with your credentials",
+            );
+            setActiveTab(LoginTabState.LOGIN);
+          }}
+        />
       )}
 
       <Typography variant="body1" color="text.secondary" textAlign="center">

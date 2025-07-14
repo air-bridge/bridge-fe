@@ -56,8 +56,6 @@ export const OTPForm = ({ onNext }: Props) => {
     }
   };
 
-  console.log("email", payload.email);
-
   const handleKeyDown = (
     e: KeyboardEvent<HTMLInputElement | HTMLDivElement>,
     index: number,
@@ -83,11 +81,9 @@ export const OTPForm = ({ onNext }: Props) => {
         </Typography>
       </Box>
 
-      {userEmail && (
-        <Typography variant="h3" textAlign="center" data-testid="user-email">
-          {shadowEmailString(userEmail)}
-        </Typography>
-      )}
+      <Typography variant="h3" textAlign="center" data-testid="user-email">
+        {shadowEmailString(userEmail)}
+      </Typography>
 
       <Typography variant="subtitle2" textAlign="center">
         Type you 6 digit security code

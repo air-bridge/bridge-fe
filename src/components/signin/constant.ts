@@ -6,3 +6,13 @@ export enum AccountTabState {
   OTP_VERIFICATION = "OTP_VERIFICATION",
   COMPLETED = "COMPLETED",
 }
+
+export enum LoginTabState {
+  LOGIN = "LOGIN",
+  UNVERIFIED = "UNVERIFIED",
+  OTP_VERIFICATION = "OTP_VERIFICATION",
+}
+
+export enum ErrorCodes {
+  EMAIL_NOT_VERIFIED = "EMAIL_NOT_VERIFIED",
+}

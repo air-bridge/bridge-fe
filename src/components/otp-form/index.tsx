@@ -18,9 +18,10 @@ import { getAuthUser } from "../../utils/userAuth.ts";
 import { shadowEmailString } from "../../utils/string.ts";
 
 type Props = {
+  email?: string;
   onNext: () => void;
 };
-export const OTPForm = ({ onNext }: Props) => {
+export const OTPForm = ({ email, onNext }: Props) => {
   const userAuth = getAuthUser();
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
@@ -64,6 +65,8 @@ export const OTPForm = ({ onNext }: Props) => {
     }
   };
 
+  const userEmail = email || userAuth?.email;
+
   return (
     <Stack
       gap={{ xs: 2, lg: 3 }}
@@ -80,9 +83,9 @@ export const OTPForm = ({ onNext }: Props) => {
         </Typography>
       </Box>
 
-      {userAuth?.email && (
+      {userEmail && (
         <Typography variant="h3" textAlign="center" data-testid="user-email">
-          {shadowEmailString(userAuth.email)}
+          {shadowEmailString(userEmail)}
         </Typography>
       )}
 

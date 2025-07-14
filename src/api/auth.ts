@@ -1,23 +1,26 @@
 import {
-  ForgotPasswordFormValues,
+  APIResponse,
   LoginFormValues,
   SetPasswordFormValues,
   UserAuth,
 } from "../types/auth.ts";
 import { postAPI } from "./api.ts";
 import { RegistrationPayload } from "../types/user.ts";
+import { ErrorCodes } from "../components/signin/constant.ts";
 
 export const login = async (payload: LoginFormValues) => {
   const res = await postAPI("users/login", payload, false);
 
   if (!res.ok) {
-    const errorData = (await res.json()) as {
-      message: string;
-    };
+    const errorData = (await res.json()) as APIResponse;
 
-    throw new Error(
-      errorData.message || "Invalid credentials, please try again.",
-    );
+    if (errorData.error?.code === ErrorCodes.EMAIL_NOT_VERIFIED) {
+      throw new Error(ErrorCodes.EMAIL_NOT_VERIFIED);
+    } else {
+      throw new Error(
+        errorData.message || "Invalid credentials, please try again.",
+      );
+    }
   }
 
   return (await res.json()) as { data: UserAuth };
@@ -50,8 +53,8 @@ export const register = async (payload: RegistrationPayload) => {
   };
 };
 
-export const resetPassword = async (payload: ForgotPasswordFormValues) => {
-  const res = await postAPI("users/forgot-password", payload);
+export const setNewPassword = async (payload: SetPasswordFormValues) => {
+  const res = await postAPI("users/set-password", payload);
 
   if (!res.ok) {
     const errorData = (await res.json()) as {
@@ -66,8 +69,8 @@ export const resetPassword = async (payload: ForgotPasswordFormValues) => {
   return (await res.json()) as { isSuccess: boolean };
 };
 
-export const setNewPassword = async (payload: SetPasswordFormValues) => {
-  const res = await postAPI("users/set-password", payload);
+export const sendOTP = async (email: string) => {
+  const res = await postAPI("users/send-otp", { email });
 
   if (!res.ok) {
     const errorData = (await res.json()) as {
@@ -75,7 +78,7 @@ export const setNewPassword = async (payload: SetPasswordFormValues) => {
     };
 
     throw new Error(
-      errorData.message || "Password reset failed. Please try again!",
+      errorData.message || "Unable to send OTP. Please try again!",
     );
   }
 

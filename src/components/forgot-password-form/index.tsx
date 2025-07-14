@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { ForgotPasswordFormValues } from "../../types/auth.ts";
 import { validationSchema } from "./validation.ts";
 import { useMutation } from "@tanstack/react-query";
-import { resetPassword } from "../../api/auth.ts";
+import { sendOTP } from "../../api/auth.ts";
 import { Link } from "react-router-dom";
 
 type Props = {
@@ -22,14 +22,14 @@ export const ForgotPasswordForm = ({ onNext }: Props) => {
   });
 
   const { mutate, isPending, isError, error } = useMutation({
-    mutationFn: resetPassword,
+    mutationFn: sendOTP,
     onSuccess: () => {
       onNext();
     },
   });
 
   const onSubmit = (values: ForgotPasswordFormValues) => {
-    mutate(values);
+    mutate(values.email);
   };
 
   return (

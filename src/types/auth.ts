@@ -17,8 +17,10 @@ export type ForgotPasswordFormValues = {
 };
 
 export type SetPasswordFormValues = {
-  password: string;
-  confirmPassword: string;
+  email: string;
+  new_password: string;
+  confirm_new_password: string;
+  current_password?: string | null;
 };
 
 export type UserAuth = {

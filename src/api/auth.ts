@@ -54,7 +54,7 @@ export const register = async (payload: RegistrationPayload) => {
 };
 
 export const setNewPassword = async (payload: SetPasswordFormValues) => {
-  const res = await postAPI("users/set-password", payload);
+  const res = await postAPI("users/reset-password", payload);
 
   if (!res.ok) {
     const errorData = (await res.json()) as {

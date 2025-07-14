@@ -5,15 +5,14 @@ import { AccountTabState, LoginTabState } from "./constant.ts";
 import { useState } from "react";
 import { SendOTP } from "./SendOTP.tsx";
 import { OTPForm } from "../otp-form";
-import { useRegistrationContext } from "../../context/registration/util.ts";
 import { useNotificationContext } from "../../context/notification/util.ts";
 
 type Props = {
   onNext: (arg: AccountTabState) => void;
 };
+
 export const SignIn = ({ onNext }: Props) => {
   const [activeTab, setActiveTab] = useState(LoginTabState.LOGIN);
-  const { payload } = useRegistrationContext();
   const { openNotification } = useNotificationContext();
 
   return (
@@ -30,7 +29,6 @@ export const SignIn = ({ onNext }: Props) => {
 
       {activeTab === LoginTabState.OTP_VERIFICATION && (
         <OTPForm
-          email={payload.email}
           onNext={() => {
             openNotification(
               "Account verified. Please login with your credentials",

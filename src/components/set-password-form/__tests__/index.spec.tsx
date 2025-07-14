@@ -3,6 +3,8 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { SetPasswordForm } from "../index.tsx";
 import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
 import * as api from "../../../api/auth.ts";
+import { ACCOUNT_TYPE } from "../../../context/registration/constant.ts";
+import { RegistrationContext } from "../../../context/registration/util.ts";
 
 vi.mock("../../../api/auth.ts", () => ({
   setNewPassword: vi.fn(() => Promise.resolve({ isSuccess: true })),
@@ -10,11 +12,31 @@ vi.mock("../../../api/auth.ts", () => ({
 
 describe("Set Password Form", () => {
   const mockOnNext = vi.fn();
+  const mockPayload = {
+    email: "test@mail.com",
+    password: "",
+    confirmPassword: "",
+    firstname: "",
+    lastname: "",
+    phone: "",
+    country_code: "",
+    state: "",
+    role: ACCOUNT_TYPE.Sender,
+  };
+
+  const mockHandlePayload = vi.fn();
 
   beforeEach(() => {
     render(
       <ComponentTestWrapper>
-        <SetPasswordForm onNext={mockOnNext} />
+        <RegistrationContext.Provider
+          value={{
+            payload: mockPayload,
+            setRegistrationInfo: mockHandlePayload,
+          }}
+        >
+          <SetPasswordForm onNext={mockOnNext} />
+        </RegistrationContext.Provider>
       </ComponentTestWrapper>,
     );
   });

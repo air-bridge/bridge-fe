@@ -5,13 +5,15 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { ForgotPasswordFormValues } from "../../types/auth.ts";
 import { validationSchema } from "./validation.ts";
 import { useMutation } from "@tanstack/react-query";
-import { resetPassword } from "../../api/auth.ts";
+import { sendOTP } from "../../api/auth.ts";
 import { Link } from "react-router-dom";
+import { useRegistrationContext } from "../../context/registration/util.ts";
 
 type Props = {
   onNext: () => void;
 };
 export const ForgotPasswordForm = ({ onNext }: Props) => {
+  const { setRegistrationInfo } = useRegistrationContext();
   const {
     control,
     handleSubmit,
@@ -22,14 +24,15 @@ export const ForgotPasswordForm = ({ onNext }: Props) => {
   });
 
   const { mutate, isPending, isError, error } = useMutation({
-    mutationFn: resetPassword,
+    mutationFn: sendOTP,
     onSuccess: () => {
       onNext();
     },
   });
 
   const onSubmit = (values: ForgotPasswordFormValues) => {
-    mutate(values);
+    setRegistrationInfo({ email: values.email });
+    mutate(values.email);
   };
 
   return (

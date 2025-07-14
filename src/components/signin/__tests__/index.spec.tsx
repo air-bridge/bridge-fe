@@ -1,11 +1,15 @@
 import { describe, expect, it, beforeEach, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { SignIn } from "../index.tsx";
 import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
 import { mockUserAuth } from "../../../mocks/user.ts";
+import * as api from "../../../api/auth.ts";
+import { ErrorCodes } from "../constant.ts";
 
 vi.mock("../../../api/auth.ts", () => ({
   login: vi.fn(() => Promise.resolve({ data: mockUserAuth })),
+  sendOTP: vi.fn(() => Promise.resolve({ isSuccess: true })),
+  verifyOTP: vi.fn(() => Promise.resolve({ isSuccess: true })),
 }));
 
 describe("Sign-In component", () => {
@@ -39,5 +43,53 @@ describe("Sign-In component", () => {
     const signupButton = screen.getByRole("link", { name: "Sign Up" });
     fireEvent.click(signupButton);
     expect(mockOnNext).toHaveBeenCalledOnce();
+  });
+
+  it("should switch to unverified account tab", async () => {
+    vi.mocked(api.login).mockRejectedValue(
+      new Error(ErrorCodes.EMAIL_NOT_VERIFIED),
+    );
+
+    fireEvent.change(screen.getByPlaceholderText("Email"), {
+      target: { value: "test@mail.com" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Password"), {
+      target: { value: "password" },
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: "Sign In" }));
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: "Send OTP" }),
+      ).toBeInTheDocument();
+      expect(screen.getByText("Unverified Account")).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          "Please verify your account to gain full access to your account",
+        ),
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("should switch to OTP verification tab", async () => {
+    vi.mocked(api.login).mockRejectedValue(
+      new Error(ErrorCodes.EMAIL_NOT_VERIFIED),
+    );
+
+    fireEvent.change(screen.getByPlaceholderText("Email"), {
+      target: { value: "test@mail.com" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Password"), {
+      target: { value: "password" },
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: "Sign In" }));
+
+    await waitFor(() => {
+      fireEvent.click(screen.getByRole("button", { name: "Send OTP" }));
+    });
+
+    expect(screen.getByText("OTP Verification ?")).toBeInTheDocument();
   });
 });

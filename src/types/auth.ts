@@ -1,3 +1,5 @@
+import { ErrorCodes } from "../components/signin/constant.ts";
+
 export type RegistrationFormValues = {
   terms: boolean;
   email: string;
@@ -15,8 +17,10 @@ export type ForgotPasswordFormValues = {
 };
 
 export type SetPasswordFormValues = {
-  password: string;
-  confirmPassword: string;
+  email: string;
+  new_password: string;
+  confirm_new_password: string;
+  current_password?: string | null;
 };
 
 export type UserAuth = {
@@ -29,3 +33,12 @@ export type UserAuth = {
 };
 
 export type UserAuthField = Record<keyof UserAuth, string>;
+
+export type APIResponse = {
+  data: unknown;
+  message: string;
+  error?: {
+    code: ErrorCodes;
+    message: string;
+  };
+};

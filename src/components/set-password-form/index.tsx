@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { SetPasswordFormValues } from "../../types/auth.ts";
 import { validationSchema } from "./validation.ts";
 import { useMutation } from "@tanstack/react-query";
 import { setNewPassword } from "../../api/auth.ts";
@@ -20,12 +19,16 @@ import PasswordStrengthBar from "react-password-strength-bar";
 import { useState } from "react";
 import useTheme from "@mui/material/styles/useTheme";
 import { Link } from "react-router-dom";
+import { useRegistrationContext } from "../../context/registration/util.ts";
+import { SetPasswordFormValues } from "../../types/auth.ts";
 
 type Props = {
   onNext: () => void;
 };
+
 export const SetPasswordForm = ({ onNext }: Props) => {
   const theme = useTheme();
+  const { payload } = useRegistrationContext();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
@@ -35,8 +38,12 @@ export const SetPasswordForm = ({ onNext }: Props) => {
     formState: { errors },
     watch,
   } = useForm<SetPasswordFormValues>({
-    resolver: yupResolver(validationSchema()),
-    defaultValues: { password: "", confirmPassword: "" },
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      email: payload.email,
+      new_password: "",
+      confirm_new_password: "",
+    },
   });
 
   const { mutate, isPending, isError, error } = useMutation({
@@ -54,7 +61,7 @@ export const SetPasswordForm = ({ onNext }: Props) => {
     mutate(values);
   };
 
-  const passwordValue = watch("password");
+  const passwordValue = watch("new_password");
 
   return (
     <Stack gap={4}>
@@ -80,17 +87,17 @@ export const SetPasswordForm = ({ onNext }: Props) => {
           <Grid size={{ xs: 12 }}>
             <Stack gap={1}>
               <Controller
-                name="password"
+                name="new_password"
                 control={control}
                 render={({ field }) => (
                   <TextField
                     {...field}
                     type={isPasswordVisible ? "text" : "password"}
                     fullWidth
-                    name="password"
+                    name="new_password"
                     placeholder="Password"
-                    error={Boolean(errors.password)}
-                    helperText={errors.password?.message}
+                    error={Boolean(errors.new_password)}
+                    helperText={errors.new_password?.message}
                     slotProps={{
                       input: {
                         endAdornment: (
@@ -137,17 +144,17 @@ export const SetPasswordForm = ({ onNext }: Props) => {
 
           <Grid size={{ xs: 12 }}>
             <Controller
-              name="confirmPassword"
+              name="confirm_new_password"
               control={control}
               render={({ field }) => (
                 <TextField
                   {...field}
                   fullWidth
                   type={isConfirmPasswordVisible ? "text" : "password"}
-                  name="confirmPassword"
+                  name="confirm_new_password"
                   placeholder="Repeat Password"
-                  error={Boolean(errors.confirmPassword)}
-                  helperText={errors.confirmPassword?.message}
+                  error={Boolean(errors.confirm_new_password)}
+                  helperText={errors.confirm_new_password?.message}
                   slotProps={{
                     input: {
                       endAdornment: (

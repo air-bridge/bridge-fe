@@ -2,10 +2,11 @@ import { describe, it, expect } from "vitest";
 import { validationSchema } from "../validation";
 
 describe("Forgot Password Form Validation", () => {
-  const schema = validationSchema();
+  const schema = validationSchema;
   const validFormValues = {
-    password: "Password@1",
-    confirmPassword: "Password@1",
+    email: "test@mail.com",
+    new_password: "Password@1",
+    confirm_new_password: "Password@1",
   };
 
   it("should validate a correct form", async () => {
@@ -16,8 +17,8 @@ describe("Forgot Password Form Validation", () => {
 
   it("should return error when password is missing", async () => {
     const invalidFormValues = {
-      password: "",
-      confirmPassword: "",
+      new_password: "",
+      confirm_new_password: "",
     };
 
     await expect(schema.validate(invalidFormValues)).rejects.toThrow(
@@ -27,8 +28,8 @@ describe("Forgot Password Form Validation", () => {
 
   it("should return error when confirm password is missing", async () => {
     const invalidFormValues = {
-      password: "",
-      confirmPassword: "",
+      new_password: "",
+      confirm_new_password: "",
     };
 
     await expect(schema.validate(invalidFormValues)).rejects.toThrow(
@@ -38,8 +39,8 @@ describe("Forgot Password Form Validation", () => {
 
   it("should return error when confirm password does not match password", async () => {
     const invalidFormValues = {
-      password: "Password@1",
-      confirmPassword: "drowssap",
+      new_password: "Password@1",
+      confirm_new_password: "drowssap",
     };
 
     await expect(schema.validate(invalidFormValues)).rejects.toThrow(

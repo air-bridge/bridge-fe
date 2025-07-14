@@ -2,11 +2,14 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import ForgotPasswordScreen from "../index.tsx";
 import { ComponentTestWrapper } from "../../../../config/tests/utils.tsx";
+import { ACCOUNT_TYPE } from "../../../../context/registration/constant.ts";
+import { RegistrationContext } from "../../../../context/registration/util.ts";
 
 vi.mock("../../../../api/auth.ts", () => ({
   setNewPassword: vi.fn(() => Promise.resolve({ isSuccess: true })),
   resetPassword: vi.fn(() => Promise.resolve({ isSuccess: true })),
   verifyOTP: vi.fn(() => Promise.resolve({ isSuccess: true })),
+  sendOTP: vi.fn(() => Promise.resolve({ isSuccess: true })),
 }));
 
 const mockedUseNavigate = vi.fn();
@@ -21,10 +24,31 @@ vi.mock("react-router-dom", async () => {
 });
 
 describe("ForgotPasswordScreen Component", () => {
+  const mockPayload = {
+    email: "test@mail.com",
+    password: "",
+    confirmPassword: "",
+    firstname: "",
+    lastname: "",
+    phone: "",
+    country_code: "",
+    state: "",
+    role: ACCOUNT_TYPE.Sender,
+  };
+
+  const mockHandlePayload = vi.fn();
+
   beforeEach(() => {
     render(
       <ComponentTestWrapper>
-        <ForgotPasswordScreen />
+        <RegistrationContext.Provider
+          value={{
+            payload: mockPayload,
+            setRegistrationInfo: mockHandlePayload,
+          }}
+        >
+          <ForgotPasswordScreen />
+        </RegistrationContext.Provider>
       </ComponentTestWrapper>,
     );
   });
@@ -110,10 +134,31 @@ describe("ForgotPasswordScreen Component", () => {
 });
 
 describe("ForgotPasswordScreen Back Button", () => {
+  const mockPayload = {
+    email: "test@mail.com",
+    password: "",
+    confirmPassword: "",
+    firstname: "",
+    lastname: "",
+    phone: "",
+    country_code: "",
+    state: "",
+    role: ACCOUNT_TYPE.Sender,
+  };
+
+  const mockHandlePayload = vi.fn();
+
   beforeEach(() => {
     render(
       <ComponentTestWrapper>
-        <ForgotPasswordScreen />
+        <RegistrationContext.Provider
+          value={{
+            payload: mockPayload,
+            setRegistrationInfo: mockHandlePayload,
+          }}
+        >
+          <ForgotPasswordScreen />
+        </RegistrationContext.Provider>
       </ComponentTestWrapper>,
     );
   });

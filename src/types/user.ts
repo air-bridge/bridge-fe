@@ -28,3 +28,15 @@ export type NotificationsFormValues = {
   email: boolean;
   sms: boolean;
 };
+
+export type Profile = {
+  id: number;
+  email: string;
+  firstname: string;
+  lastname: string;
+  image: string;
+  phone: string;
+  country_code: string;
+  state: string;
+  role: string;
+};

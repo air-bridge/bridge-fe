@@ -4,7 +4,7 @@ import {
   ComponentTestWrapper,
   testMediaQueryCallback,
 } from "../../../config/tests/utils.tsx";
-import { mockUserAuth } from "../../../mocks/user.ts";
+import { mockUserAuth, mockUserProfile } from "../../../mocks/user.ts";
 import * as userAuth from "../../../utils/userAuth.ts";
 import * as api from "../../../api/user.ts";
 import { PersonalDetails } from "../PersonalDetails.tsx";
@@ -20,7 +20,7 @@ describe("Personal Details", () => {
 
     render(
       <ComponentTestWrapper>
-        <PersonalDetails />
+        <PersonalDetails data={mockUserProfile} />
       </ComponentTestWrapper>,
     );
   });
@@ -258,7 +258,7 @@ describe("Personal Details Mobile", () => {
     vi.spyOn(useMediaQuery, "default").mockReturnValue(true);
     render(
       <ComponentTestWrapper>
-        <PersonalDetails />
+        <PersonalDetails data={mockUserProfile} />
       </ComponentTestWrapper>,
     );
   });
@@ -270,4 +270,4 @@ describe("Personal Details Mobile", () => {
 });
 
 // INFO: Needed coverage for media breakpoints
-testMediaQueryCallback(<PersonalDetails />);
+testMediaQueryCallback(<PersonalDetails data={mockUserProfile} />);

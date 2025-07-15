@@ -12,8 +12,7 @@ import {
   Theme,
   Typography,
 } from "@mui/material";
-import { useUserContext } from "../../context/user/util.ts";
-import { ProfileFormValues } from "../../types/user.ts";
+import { Profile, ProfileFormValues } from "../../types/user.ts";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validationSchema } from "../profile-form/validation.ts";
@@ -24,16 +23,19 @@ import { MuiTelInput } from "mui-tel-input";
 import Autocomplete from "@mui/material/Autocomplete";
 import { updateUser } from "../../api/user.ts";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useUserContext } from "../../context/user/util.ts";
 
-export const PersonalDetails = () => {
-  const { currentUser } = useUserContext();
+type Props = {
+  data: Profile;
+};
+
+export const PersonalDetails = ({ data }: Props) => {
+  const { refetchProfile } = useUserContext();
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
   );
   const countries = Country.getAllCountries();
   const [stateOptions, setStateOptions] = useState<IState[]>([]);
-  // TODO: use userId
-  const userId = "1";
 
   const getStates = (countryIsoCode?: string | null) => {
     if (countryIsoCode) {
@@ -52,18 +54,19 @@ export const PersonalDetails = () => {
   } = useForm<ProfileFormValues>({
     resolver: yupResolver(validationSchema()),
     defaultValues: {
-      firstname: currentUser?.firstname,
-      lastname: currentUser?.lastname,
-      phone: "",
-      state: "",
-      country_code: "",
+      firstname: data.firstname,
+      lastname: data.lastname,
+      phone: data.phone,
+      state: data.state,
+      country_code: data.country_code,
     },
   });
 
   const { mutate, isPending, isError, error } = useMutation({
-    mutationFn: (payload: ProfileFormValues) => updateUser(userId, payload),
-    onSuccess: (data) => {
-      console.log(data);
+    mutationFn: (payload: ProfileFormValues) => updateUser(data.id, payload),
+    onSuccess: () => {
+      // TODO: use notification
+      refetchProfile();
     },
   });
 
@@ -181,7 +184,7 @@ export const PersonalDetails = () => {
                 fullWidth
                 placeholder="Email"
                 disabled
-                value={currentUser?.email}
+                value={data.email}
               />
             </Grid>
 

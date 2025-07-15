@@ -14,8 +14,22 @@ import { ProfileAvatar } from "../../../components/profile-details/ProfileAvatar
 import { PersonalDetails } from "../../../components/profile-details/PersonalDetails.tsx";
 import { SetNewPassword } from "../../../components/profile-details/SetNewPassword.tsx";
 import { NotificationsSetting } from "../../../components/profile-details/NotificationsSetting.tsx";
+import { useQuery } from "@tanstack/react-query";
+import { getProfile } from "../../../api/user.ts";
+import { ErrorInfo } from "../../../components/error-info";
+import { Loading } from "../../../components/loading";
 
 export const ProfileScreen = () => {
+  const {
+    data: profileData,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["user-profile"],
+    queryFn: getProfile,
+  });
+
   return (
     <Stack gap={{ xs: 1, lg: 2 }}>
       <Box
@@ -39,6 +53,9 @@ export const ProfileScreen = () => {
           Profile Information
         </Typography>
 
+        {isLoading && <Loading />}
+        {isError && <ErrorInfo message={error?.message} />}
+
         <Card
           sx={{
             px: { xs: 2, lg: 4 },
@@ -51,8 +68,12 @@ export const ProfileScreen = () => {
               <ProfileAvatar />
               <Divider />
 
-              <PersonalDetails />
-              <Divider />
+              {profileData && (
+                <>
+                  <PersonalDetails data={profileData} />
+                  <Divider />
+                </>
+              )}
 
               <SetNewPassword />
               <Divider />

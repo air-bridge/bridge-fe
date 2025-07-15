@@ -1,11 +1,12 @@
-import { putAPI } from "./api.ts";
+import { getAPI, putAPI } from "./api.ts";
 import {
   NotificationsFormValues,
+  Profile,
   ProfileFormValues,
   SetNewPasswordValues,
 } from "../types/user.ts";
 
-export const updateUser = async (id: string, payload: ProfileFormValues) => {
+export const updateUser = async (id: number, payload: ProfileFormValues) => {
   const res = await putAPI(`users/${id}`, payload);
 
   if (!res.ok) {
@@ -47,9 +48,29 @@ export const setNotifications = async (payload: NotificationsFormValues) => {
     };
 
     throw new Error(
-      errorData.message || "notifications settings failed, please try again!",
+      errorData.message || "Notifications settings failed, please try again!",
     );
   }
 
   return (await res.json()) as { isSuccess: boolean };
+};
+
+export const getProfile = async () => {
+  const res = await getAPI(`users/profile`);
+
+  if (!res.ok) {
+    const errorData = (await res.json()) as {
+      message: string;
+    };
+
+    throw new Error(
+      errorData.message || "Fail to fetch profile, please try again!",
+    );
+  }
+
+  const response: {
+    data: Profile;
+  } = await res.json();
+
+  return response.data;
 };

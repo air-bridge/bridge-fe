@@ -1,15 +1,15 @@
 import { createContext, useContext } from "react";
-import { UserAuth, UserAuthField } from "../../types/auth.ts";
+import { Profile } from "../../types/user.ts";
 
 type Props = {
-  currentUser?: UserAuth;
+  currentUser?: Profile;
   isSender: boolean;
-  updateUserAuthInfo: (arg: UserAuthField) => void;
+  refetchProfile: () => void;
 };
 
 export const UserContext = createContext<Props>({
   isSender: true,
-  updateUserAuthInfo: () => {},
+  refetchProfile: () => {},
 });
 
 export const useUserContext = () => useContext(UserContext);

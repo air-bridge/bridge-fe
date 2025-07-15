@@ -16,3 +16,21 @@ export type RegistrationPayload = {
 export type RegistrationInput = Partial<
   Record<keyof RegistrationPayload, string>
 >;
+
+export type NotificationsFormValues = {
+  inApp: boolean;
+  email: boolean;
+  sms: boolean;
+};
+
+export type Profile = {
+  id: number;
+  email: string;
+  firstname: string;
+  lastname: string;
+  image: string;
+  phone: string;
+  country_code: string;
+  state: string;
+  role: string;
+};

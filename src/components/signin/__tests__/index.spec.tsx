@@ -132,6 +132,8 @@ describe("Sign-In component", () => {
           "You have successfully verify your account, dive in to start exploring",
         ),
       ).toBeInTheDocument();
+
+      fireEvent.click(screen.getByRole("button", { name: "Start Exploring" }));
     });
   });
 });

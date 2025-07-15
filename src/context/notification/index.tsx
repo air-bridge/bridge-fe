@@ -16,6 +16,7 @@ export const NotificationContextProvider = ({
     setMessage(message);
   };
 
+  console.log(open, { open });
   return (
     <NotificationContext.Provider
       value={{
@@ -28,7 +29,9 @@ export const NotificationContextProvider = ({
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         open={open}
         autoHideDuration={5000}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setOpen(false);
+        }}
       >
         <Alert
           onClose={() => setOpen(false)}

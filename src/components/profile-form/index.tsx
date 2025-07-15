@@ -18,7 +18,6 @@ import { ProfileFormValues } from "../../types/user.ts";
 import { useRegistrationContext } from "../../context/registration/util.ts";
 import { useMutation } from "@tanstack/react-query";
 import { register } from "../../api/auth.ts";
-import { setUserAuth } from "../../utils/userAuth.ts";
 
 type Props = {
   onNext: () => void;
@@ -57,8 +56,7 @@ export const ProfileForm = ({ onNext }: Props) => {
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: register,
-    onSuccess: (data) => {
-      setUserAuth(data);
+    onSuccess: () => {
       onNext();
     },
   });

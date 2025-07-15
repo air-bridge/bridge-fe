@@ -101,6 +101,10 @@ export const ProfileCard = () => {
                     bgcolor: "grey.200",
                   },
                 }}
+                onClick={() => {
+                  setExpanded(false);
+                  console.log("mooo");
+                }}
               >
                 <Typography
                   variant="body2"

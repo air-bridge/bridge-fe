@@ -6,14 +6,15 @@ import {
   testMediaQueryCallback,
 } from "../../../config/tests/utils.tsx";
 import { ProfileAvatar } from "../ProfileAvatar.tsx";
-import { mockUserAuth } from "../../../mocks/user.ts";
-import * as userAuth from "../../../utils/userAuth.ts";
+import { mockUserProfile } from "../../../mocks/user.ts";
 import * as useMediaQuery from "@mui/material/useMediaQuery";
+
+vi.mock("../../../api/user.ts", () => ({
+  getProfile: vi.fn(() => Promise.resolve(mockUserProfile)),
+}));
 
 describe("Profile Avatar", () => {
   beforeEach(() => {
-    vi.spyOn(userAuth, "getAuthUser").mockReturnValue(mockUserAuth);
-
     render(
       <ComponentTestWrapper>
         <ProfileAvatar />
@@ -31,13 +32,13 @@ describe("Profile Avatar", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders fallback text for Avatar", () => {
-    expect(screen.getByText("AM")).toBeInTheDocument();
+  it("renders fallback text for Avatar", async () => {
+    await waitFor(() => {
+      expect(screen.getByText("AM")).toBeInTheDocument();
+    });
   });
 
   it("uploads and displays an image", async () => {
-    expect(screen.getByText("AM")).toBeInTheDocument();
-
     fireEvent.click(screen.getByRole("button", { name: "Change photo" }));
     const input = screen.getByTestId("avatar-input") as HTMLInputElement;
     const mockFile = new File([""], "chucknorris.png", {});

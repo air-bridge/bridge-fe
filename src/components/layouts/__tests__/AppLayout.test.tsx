@@ -5,6 +5,7 @@ import AppLayout from "../AppLayout.tsx";
 import * as ReactRouterDom from "react-router-dom";
 import * as userAuth from "../../../utils/userAuth";
 import { mockUserAuth } from "../../../mocks/user.ts";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const mockedUseNavigate = vi.fn();
 
@@ -29,6 +30,8 @@ const makeLocation = (pathname: string) => ({
   hash: "",
 });
 
+const queryClient = new QueryClient();
+
 describe("AppLayout", () => {
   const mockedUseLocation = vi.mocked(ReactRouterDom.useLocation);
   const mockedGetAuthUser = vi.mocked(userAuth.getAuthUser);
@@ -41,11 +44,13 @@ describe("AppLayout", () => {
   it("renders the Outlet content with Header for normal path", () => {
     render(
       <MemoryRouter initialEntries={["/"]}>
-        <Routes>
-          <Route element={<AppLayout />}>
-            <Route path="/" element={<div>Screen Component</div>} />
-          </Route>
-        </Routes>
+        <QueryClientProvider client={queryClient}>
+          <Routes>
+            <Route element={<AppLayout />}>
+              <Route path="/" element={<div>Screen Component</div>} />
+            </Route>
+          </Routes>
+        </QueryClientProvider>
       </MemoryRouter>,
     );
 
@@ -58,11 +63,16 @@ describe("AppLayout", () => {
 
     render(
       <MemoryRouter initialEntries={["/create-order"]}>
-        <Routes>
-          <Route element={<AppLayout />}>
-            <Route path="/create-order" element={<div>Screen Component</div>} />
-          </Route>
-        </Routes>
+        <QueryClientProvider client={queryClient}>
+          <Routes>
+            <Route element={<AppLayout />}>
+              <Route
+                path="/create-order"
+                element={<div>Screen Component</div>}
+              />
+            </Route>
+          </Routes>
+        </QueryClientProvider>
       </MemoryRouter>,
     );
 
@@ -75,11 +85,13 @@ describe("AppLayout", () => {
 
     render(
       <MemoryRouter initialEntries={["/"]}>
-        <Routes>
-          <Route element={<AppLayout />}>
-            <Route path="/" element={<div>Screen Component</div>} />
-          </Route>
-        </Routes>
+        <QueryClientProvider client={queryClient}>
+          <Routes>
+            <Route element={<AppLayout />}>
+              <Route path="/" element={<div>Screen Component</div>} />
+            </Route>
+          </Routes>
+        </QueryClientProvider>
       </MemoryRouter>,
     );
 

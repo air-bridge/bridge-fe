@@ -4,23 +4,24 @@ import {
   ComponentTestWrapper,
   testMediaQueryCallback,
 } from "../../../config/tests/utils.tsx";
-import { mockUserAuth } from "../../../mocks/user.ts";
-import * as userAuth from "../../../utils/userAuth.ts";
+import { mockUserProfile } from "../../../mocks/user.ts";
 import { SetNewPassword } from "../SetNewPassword.tsx";
 import * as useMediaQuery from "@mui/material/useMediaQuery";
-import * as api from "../../../api/user.ts";
+import * as api from "../../../api/auth.ts";
 
 vi.mock("../../../api/user.ts", () => ({
+  getProfile: vi.fn(() => Promise.resolve(mockUserProfile)),
+}));
+
+vi.mock("../../../api/auth.ts", () => ({
   setNewPassword: vi.fn(() => Promise.resolve({ isSuccess: true })),
 }));
 
-describe("Personal Details", () => {
+describe("SetNewPassword Component", () => {
   beforeEach(() => {
-    vi.spyOn(userAuth, "getAuthUser").mockReturnValue(mockUserAuth);
-
     render(
       <ComponentTestWrapper>
-        <SetNewPassword />
+        <SetNewPassword email="test@mail.com" />
       </ComponentTestWrapper>,
     );
   });
@@ -37,25 +38,29 @@ describe("Personal Details", () => {
 
   it("should populate fields with initial values", () => {
     expect(screen.getByPlaceholderText("Current Password")).toHaveValue("");
-    expect(screen.getByPlaceholderText("Password")).toHaveValue("");
-    expect(screen.getByPlaceholderText("Repeat Password")).toHaveValue("");
+    expect(screen.getByPlaceholderText("New Password")).toHaveValue("");
+    expect(screen.getByPlaceholderText("Repeat New Password")).toHaveValue("");
   });
 
   it("should update input fields correctly", () => {
-    const passwordInput = screen.getByPlaceholderText("Password");
+    const passwordInput = screen.getByPlaceholderText("Current Password");
     fireEvent.change(passwordInput, {
       target: { value: "password" },
     });
     fireEvent.blur(passwordInput);
 
-    const confirmPasswordInput = screen.getByPlaceholderText("Repeat Password");
+    const confirmPasswordInput = screen.getByPlaceholderText(
+      "Repeat New Password",
+    );
     fireEvent.change(confirmPasswordInput, {
       target: { value: "password" },
     });
     fireEvent.blur(confirmPasswordInput);
 
-    expect(screen.getByPlaceholderText("Password")).toHaveValue("password");
-    expect(screen.getByPlaceholderText("Repeat Password")).toHaveValue(
+    expect(screen.getByPlaceholderText("Current Password")).toHaveValue(
+      "password",
+    );
+    expect(screen.getByPlaceholderText("Repeat New Password")).toHaveValue(
       "password",
     );
   });
@@ -65,11 +70,11 @@ describe("Personal Details", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText("Current password is required"),
+        screen.getByText("Current Password is required"),
       ).toBeInTheDocument();
-      expect(screen.getByText("Password is required")).toBeInTheDocument();
+      expect(screen.getByText("New Password is required")).toBeInTheDocument();
       expect(
-        screen.getByText("Confirm Password is required"),
+        screen.getByText("Confirm New Password is required"),
       ).toBeInTheDocument();
     });
   });
@@ -78,10 +83,10 @@ describe("Personal Details", () => {
     fireEvent.change(screen.getByPlaceholderText("Current Password"), {
       target: { value: "Password@1234" },
     });
-    fireEvent.change(screen.getByPlaceholderText("Password"), {
+    fireEvent.change(screen.getByPlaceholderText("New Password"), {
       target: { value: "Password@155" },
     });
-    fireEvent.change(screen.getByPlaceholderText("Repeat Password"), {
+    fireEvent.change(screen.getByPlaceholderText("Repeat New Password"), {
       target: { value: "Password@155" },
     });
 
@@ -89,28 +94,6 @@ describe("Personal Details", () => {
 
     await waitFor(() => {
       // TODO: mockOnSubmit after action
-    });
-  });
-
-  it("should show error when API fails", async () => {
-    vi.mocked(api.setNewPassword).mockRejectedValue(
-      new Error("Unable to save changes!"),
-    );
-
-    fireEvent.change(screen.getByPlaceholderText("Current Password"), {
-      target: { value: "Password@1234" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("Password"), {
-      target: { value: "Password@155" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("Repeat Password"), {
-      target: { value: "Password@155" },
-    });
-
-    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
-
-    await waitFor(() => {
-      expect(screen.getByText("Unable to save changes!")).toBeInTheDocument();
     });
   });
 
@@ -129,31 +112,67 @@ describe("Personal Details", () => {
   });
 
   it("should toggle password text visibility", () => {
-    expect(screen.getByPlaceholderText("Password")).toHaveAttribute(
+    expect(screen.getByPlaceholderText("Current Password")).toHaveAttribute(
+      "type",
+      "password",
+    );
+
+    fireEvent.click(screen.getByTestId("toggle-current-password-visibility"));
+
+    expect(screen.getByPlaceholderText("Current Password")).toHaveAttribute(
+      "type",
+      "text",
+    );
+  });
+
+  it("should toggle new password text visibility", () => {
+    expect(screen.getByPlaceholderText("New Password")).toHaveAttribute(
       "type",
       "password",
     );
 
     fireEvent.click(screen.getByTestId("toggle-password-visibility"));
 
-    expect(screen.getByPlaceholderText("Password")).toHaveAttribute(
+    expect(screen.getByPlaceholderText("New Password")).toHaveAttribute(
       "type",
       "text",
     );
   });
 
   it("should toggle confirm password text visibility", () => {
-    expect(screen.getByPlaceholderText("Repeat Password")).toHaveAttribute(
+    expect(screen.getByPlaceholderText("Repeat New Password")).toHaveAttribute(
       "type",
       "password",
     );
 
     fireEvent.click(screen.getByTestId("toggle-confirm-password-visibility"));
 
-    expect(screen.getByPlaceholderText("Repeat Password")).toHaveAttribute(
+    expect(screen.getByPlaceholderText("Repeat New Password")).toHaveAttribute(
       "type",
       "text",
     );
+  });
+
+  it("should show error when API fails", async () => {
+    vi.mocked(api.setNewPassword).mockRejectedValue(
+      new Error("Unable to save changes!"),
+    );
+
+    fireEvent.change(screen.getByPlaceholderText("Current Password"), {
+      target: { value: "Password@1234" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("New Password"), {
+      target: { value: "Password@155" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Repeat New Password"), {
+      target: { value: "Password@155" },
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
+
+    await waitFor(() => {
+      expect(screen.getByText("Unable to save changes!")).toBeInTheDocument();
+    });
   });
 });
 
@@ -162,7 +181,7 @@ describe("Set new Password Mobile", () => {
     vi.spyOn(useMediaQuery, "default").mockReturnValue(true);
     render(
       <ComponentTestWrapper>
-        <SetNewPassword />
+        <SetNewPassword email="test@mail.com" />
       </ComponentTestWrapper>,
     );
   });
@@ -174,4 +193,4 @@ describe("Set new Password Mobile", () => {
 });
 
 // INFO: Needed coverage for media breakpoints
-testMediaQueryCallback(<SetNewPassword />);
+testMediaQueryCallback(<SetNewPassword email="test@mail.com" />);

@@ -6,10 +6,12 @@ import {
 } from "../../../config/tests/utils.tsx";
 import * as useMediaQuery from "@mui/material/useMediaQuery";
 import { NotificationsSetting } from "../NotificationsSetting.tsx";
+import { mockUserProfile } from "../../../mocks/user.ts";
 import * as api from "../../../api/user.ts";
 
 vi.mock("../../../api/user.ts", () => ({
   setNotifications: vi.fn(() => Promise.resolve({ isSuccess: true })),
+  getProfile: vi.fn(() => Promise.resolve(mockUserProfile)),
 }));
 
 describe("Notifications Setting", () => {

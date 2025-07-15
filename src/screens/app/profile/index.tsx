@@ -72,13 +72,13 @@ export const ProfileScreen = () => {
                 <>
                   <PersonalDetails data={profileData} />
                   <Divider />
+
+                  <SetNewPassword email={profileData.email} />
+                  <Divider />
+
+                  <NotificationsSetting />
                 </>
               )}
-
-              <SetNewPassword />
-              <Divider />
-
-              <NotificationsSetting />
             </Stack>
           </CardContent>
         </Card>

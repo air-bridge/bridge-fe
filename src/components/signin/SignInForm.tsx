@@ -137,6 +137,7 @@ export const SignInForm = ({ handleVerifyStatus }: Props) => {
                       endAdornment: (
                         <InputAdornment position="end">
                           <IconButton
+                            data-testid="toggle-password-visibility"
                             aria-label={
                               isPasswordVisible
                                 ? "hide the password"

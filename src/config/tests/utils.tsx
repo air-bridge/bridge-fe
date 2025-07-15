@@ -13,11 +13,10 @@ type ComponentTestWrapperProps = {
   children: React.ReactNode;
 };
 
-const queryClient = new QueryClient();
-
 export const ComponentTestWrapper = ({
   ...props
 }: ComponentTestWrapperProps) => {
+  const queryClient = new QueryClient();
   return (
     <MemoryRouter initialEntries={["/"]}>
       <ThemeProvider theme={theme}>

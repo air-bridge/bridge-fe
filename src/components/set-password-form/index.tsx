@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { validationSchema } from "./validation.ts";
 import { useMutation } from "@tanstack/react-query";
 import { setNewPassword } from "../../api/auth.ts";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -21,6 +20,7 @@ import useTheme from "@mui/material/styles/useTheme";
 import { Link } from "react-router-dom";
 import { useRegistrationContext } from "../../context/registration/util.ts";
 import { SetPasswordFormValues } from "../../types/auth.ts";
+import { passwordValidationSchema } from "../profile-form/validation.ts";
 
 type Props = {
   onNext: () => void;
@@ -38,7 +38,7 @@ export const SetPasswordForm = ({ onNext }: Props) => {
     formState: { errors },
     watch,
   } = useForm<SetPasswordFormValues>({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(passwordValidationSchema),
     defaultValues: {
       email: payload.email,
       new_password: "",

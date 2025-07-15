@@ -4,20 +4,18 @@ import {
   ComponentTestWrapper,
   testMediaQueryCallback,
 } from "../../../config/tests/utils.tsx";
-import { mockUserAuth, mockUserProfile } from "../../../mocks/user.ts";
-import * as userAuth from "../../../utils/userAuth.ts";
+import { mockUserProfile } from "../../../mocks/user.ts";
 import * as api from "../../../api/user.ts";
 import { PersonalDetails } from "../PersonalDetails.tsx";
 import * as useMediaQuery from "@mui/material/useMediaQuery";
 
 vi.mock("../../../api/user.ts", () => ({
+  getProfile: vi.fn(() => Promise.resolve(mockUserProfile)),
   updateUser: vi.fn(() => Promise.resolve({ isSuccess: true })),
 }));
 
 describe("Personal Details", () => {
   beforeEach(() => {
-    vi.spyOn(userAuth, "getAuthUser").mockReturnValue(mockUserAuth);
-
     render(
       <ComponentTestWrapper>
         <PersonalDetails data={mockUserProfile} />
@@ -41,50 +39,20 @@ describe("Personal Details", () => {
 
   it("should populate fields with initial values", () => {
     expect(screen.getByPlaceholderText("First Name")).toHaveValue(
-      mockUserAuth.firstname,
+      mockUserProfile.firstname,
     );
     expect(screen.getByPlaceholderText("Last Name")).toHaveValue(
-      mockUserAuth.lastname,
+      mockUserProfile.lastname,
     );
-    expect(screen.getByPlaceholderText("Phone Number")).toHaveValue("");
-    expect(screen.getByPlaceholderText("Select country")).toHaveValue("");
-    expect(screen.getByPlaceholderText("State of Residence")).toHaveValue("");
-  });
-
-  it("should show validation errors", async () => {
-    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
-
-    await waitFor(() => {
-      expect(
-        screen.queryByText("First name is required"),
-      ).not.toBeInTheDocument();
-      expect(
-        screen.queryByText("Last name is required"),
-      ).not.toBeInTheDocument();
-      expect(screen.getByText("Phone number is required")).toBeInTheDocument();
-      expect(screen.getByText("Country is required")).toBeInTheDocument();
-      expect(screen.getByText("State is required")).toBeInTheDocument();
-    });
-
-    const firstNameInput = screen.getByPlaceholderText("First Name");
-    fireEvent.change(firstNameInput, {
-      target: { value: "" },
-    });
-    fireEvent.blur(firstNameInput);
-
-    const lastnameInput = screen.getByPlaceholderText("Last Name");
-    fireEvent.change(lastnameInput, {
-      target: { value: "" },
-    });
-    fireEvent.blur(lastnameInput);
-
-    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
-    await waitFor(() => {
-      expect(screen.getByText("First name is required")).toBeInTheDocument();
-      expect(screen.getByText("Last name is required")).toBeInTheDocument();
-      expect(screen.getByText("Country is required")).toBeInTheDocument();
-      expect(screen.getByText("State is required")).toBeInTheDocument();
-    });
+    expect(screen.getByPlaceholderText("Phone Number")).toHaveValue(
+      mockUserProfile.phone,
+    );
+    expect(screen.getByPlaceholderText("Select country")).toHaveValue(
+      mockUserProfile.country_code,
+    );
+    expect(screen.getByPlaceholderText("State of Residence")).toHaveValue(
+      mockUserProfile.state,
+    );
   });
 
   it("should update input fields correctly", () => {
@@ -250,6 +218,37 @@ describe("Personal Details", () => {
       "Indonesia",
     );
     expect(screen.getByPlaceholderText("State of Residence")).toHaveValue("");
+  });
+
+  it("should show validation errors", async () => {
+    fireEvent.change(screen.getByPlaceholderText("First Name"), {
+      target: { value: "" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Last Name"), {
+      target: { value: "" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Phone Number"), {
+      target: { value: "" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Select country"), {
+      target: { value: "" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Select country"), {
+      target: { value: "" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("State of Residence"), {
+      target: { value: "" },
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
+
+    await waitFor(() => {
+      expect(screen.queryByText("First name is required")).toBeInTheDocument();
+      expect(screen.queryByText("Last name is required")).toBeInTheDocument();
+      expect(screen.getByText("Phone number is required")).toBeInTheDocument();
+      expect(screen.getByText("Country is required")).toBeInTheDocument();
+      expect(screen.getByText("State is required")).toBeInTheDocument();
+    });
   });
 });
 

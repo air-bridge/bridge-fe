@@ -1,18 +1,20 @@
 import { describe, expect, it, beforeEach, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { ProfileCard } from "../ProfileCard.tsx";
 import {
   ComponentTestWrapper,
   spyOnMediaQuery,
 } from "../../../config/tests/utils.tsx";
-import * as userAuth from "../../../utils/userAuth.ts";
 import * as useMediaQuery from "@mui/material/useMediaQuery";
-import { mockUserAuth } from "../../../mocks/user.ts";
+import { mockUserProfile } from "../../../mocks/user.ts";
+
+vi.mock("../../../api/user.ts", () => ({
+  setNotifications: vi.fn(() => Promise.resolve({ isSuccess: true })),
+  getProfile: vi.fn(() => Promise.resolve(mockUserProfile)),
+}));
 
 describe("Profile Card", () => {
   beforeEach(() => {
-    vi.spyOn(userAuth, "getAuthUser").mockReturnValue(mockUserAuth);
-
     render(
       <ComponentTestWrapper>
         <ProfileCard />
@@ -21,14 +23,18 @@ describe("Profile Card", () => {
     );
   });
 
-  it("should render component", () => {
-    expect(screen.getByAltText("profile")).toBeInTheDocument();
-    expect(
-      screen.getByText(`${mockUserAuth.firstname} ${mockUserAuth.lastname}`),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(`Hey ${mockUserAuth.firstname}`),
-    ).toBeInTheDocument();
+  it("should render component", async () => {
+    await waitFor(() => {
+      expect(screen.getByAltText("profile")).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          `${mockUserProfile.firstname} ${mockUserProfile.lastname}`,
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(`Hey ${mockUserProfile.firstname}`),
+      ).toBeInTheDocument();
+    });
   });
 
   it("show menu items", () => {
@@ -61,8 +67,6 @@ describe("Profile Card", () => {
 describe("Profile Card - Mobile", () => {
   beforeEach(() => {
     vi.spyOn(useMediaQuery, "default").mockReturnValue(true);
-    vi.spyOn(userAuth, "getAuthUser").mockReturnValue(mockUserAuth);
-
     render(
       <ComponentTestWrapper>
         <ProfileCard />
@@ -74,10 +78,12 @@ describe("Profile Card - Mobile", () => {
   it("should render component on mobile", () => {
     expect(screen.getByAltText("profile")).toBeInTheDocument();
     expect(
-      screen.queryByText(`${mockUserAuth.firstname} ${mockUserAuth.lastname}`),
+      screen.queryByText(
+        `${mockUserProfile.firstname} ${mockUserProfile.lastname}`,
+      ),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByText(`Hey ${mockUserAuth.firstname}`),
+      screen.queryByText(`Hey ${mockUserProfile.firstname}`),
     ).not.toBeInTheDocument();
   });
 });

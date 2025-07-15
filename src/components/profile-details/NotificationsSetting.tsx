@@ -16,8 +16,10 @@ import { useMutation } from "@tanstack/react-query";
 import Grid from "@mui/material/Grid2";
 import { setNotifications } from "../../api/user.ts";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useNotificationContext } from "../../context/notification/util.ts";
 
 export const NotificationsSetting = () => {
+  const { openNotification } = useNotificationContext();
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
   );
@@ -31,8 +33,8 @@ export const NotificationsSetting = () => {
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: setNotifications,
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
+      openNotification("Changes saved successfully.");
     },
   });
 

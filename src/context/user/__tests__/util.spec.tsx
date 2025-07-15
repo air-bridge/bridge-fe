@@ -1,85 +1,75 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { useUserContext } from "../util.ts";
-import { renderHook, act } from "@testing-library/react";
-import { UserContextProvider } from "../index.tsx";
+import { renderHook, act, waitFor } from "@testing-library/react";
 import { PropsWithChildren } from "react";
 import { ACCOUNT_TYPE } from "../../registration/constant.ts";
+import * as api from "../../../api/user.ts";
+import { mockUserProfile } from "../../../mocks/user.ts";
+import { ComponentTestWrapper } from "../../../config/tests/utils.tsx";
 
 const wrapper = ({ children }: PropsWithChildren) => (
-  <UserContextProvider>{children}</UserContextProvider>
+  <ComponentTestWrapper>{children}</ComponentTestWrapper>
 );
 
-describe("useUserContext", () => {
-  it("should set the initial state", () => {
-    const {
-      result: {
-        current: { isSender },
-      },
-    } = renderHook(useUserContext);
+vi.mock("../../../api/user.ts", () => ({
+  getProfile: vi.fn(() => Promise.resolve(mockUserProfile)),
+}));
 
-    expect(isSender).toBe(true);
+describe("useUserContext", () => {
+  it("should set the initial state", async () => {
+    const { result } = renderHook(useUserContext, { wrapper });
+
+    await waitFor(() => {
+      expect(result.current.currentUser?.firstname).toBe(
+        mockUserProfile.firstname,
+      );
+      expect(result.current.currentUser?.lastname).toBe(
+        mockUserProfile.lastname,
+      );
+      expect(result.current.currentUser?.email).toBe(mockUserProfile.email);
+      expect(result.current.currentUser?.country_code).toBe(
+        mockUserProfile.country_code,
+      );
+      expect(result.current.currentUser?.state).toBe(mockUserProfile.state);
+      expect(result.current.currentUser?.role).toBe(ACCOUNT_TYPE.Sender);
+    });
   });
 
-  it("should update context state", () => {
+  it("should update context state", async () => {
+    vi.mocked(api.getProfile).mockResolvedValue({
+      ...mockUserProfile,
+      firstname: "Test",
+      lastname: "User",
+      email: "tests@mail.com",
+      role: ACCOUNT_TYPE.Passenger,
+    });
     const { result } = renderHook(useUserContext, { wrapper });
 
     act(() => {
-      result.current.updateUserAuthInfo({
-        firstname: "Test",
-        lastname: "User",
-        email: "test@mail.com",
-        refresh_token: "rfr_token",
-        token: "token",
-        role: ACCOUNT_TYPE.Passenger,
-      });
+      result.current.refetchProfile();
     });
 
-    expect(result.current?.currentUser?.firstname).toBe("Test");
-    expect(result.current?.currentUser?.lastname).toBe("User");
-    expect(result.current?.currentUser?.email).toBe("test@mail.com");
-    expect(result.current?.currentUser?.refresh_token).toBe("rfr_token");
-    expect(result.current?.currentUser?.token).toBe("token");
-    expect(result.current?.currentUser?.role).toBe(ACCOUNT_TYPE.Passenger);
-    expect(result.current.isSender).toBeFalsy();
+    await waitFor(() => {
+      expect(result.current?.currentUser?.firstname).toBe("Test");
+      expect(result.current?.currentUser?.lastname).toBe("User");
+      expect(result.current?.currentUser?.email).toBe("tests@mail.com");
+      expect(result.current?.currentUser?.role).toBe(ACCOUNT_TYPE.Passenger);
+      expect(result.current.isSender).toBeFalsy();
+    });
   });
 
-  it("should initialize with no user if getAuthUser returns undefined", () => {
+  it("should initialize with no user if API fails", async () => {
+    vi.mocked(api.getProfile).mockRejectedValue(
+      new Error("Unable to get user profile"),
+    );
     const { result } = renderHook(useUserContext, {
       wrapper,
     });
 
-    expect(result.current.currentUser).toBeUndefined();
-    expect(result.current.isSender).toBeFalsy();
-  });
-
-  it("should set user if updateUserAuthInfo is called when currentUser is undefined", () => {
-    const { result } = renderHook(useUserContext, {
-      wrapper,
+    await waitFor(() => {
+      expect(result.current.currentUser).toBeUndefined();
+      expect(result.current.isSender).toBeFalsy();
     });
-
-    act(() => {
-      result.current.updateUserAuthInfo({
-        firstname: "Jane",
-        lastname: "Doe",
-        email: "jane@mail.com",
-        refresh_token: "refresh",
-        token: "token",
-        role: ACCOUNT_TYPE.Sender,
-      });
-    });
-
-    expect(result.current.currentUser?.firstname).toBe("Jane");
-    expect(result.current.currentUser?.lastname).toBe("Doe");
-    expect(result.current.currentUser?.email).toBe("jane@mail.com");
-    expect(result.current.currentUser?.refresh_token).toBe("refresh");
-    expect(result.current.currentUser?.token).toBe("token");
-    expect(result.current.isSender).toBeTruthy();
-  });
-
-  it("should have undefined currentUser in default context value (outside provider)", () => {
-    const { result } = renderHook(useUserContext);
-    expect(result.current.currentUser).toBeUndefined();
-    expect(result.current.isSender).toBe(true);
   });
 });
 
@@ -88,14 +78,7 @@ describe("UserContextProvider direct function coverage", () => {
     const { result } = renderHook(useUserContext);
 
     act(() => {
-      result.current.updateUserAuthInfo({
-        firstname: "Jane",
-        lastname: "Doe",
-        email: "jane@mail.com",
-        refresh_token: "refresh",
-        token: "token",
-        role: ACCOUNT_TYPE.Sender,
-      });
+      result.current.refetchProfile();
     });
 
     // No assertion needed, just ensure the function is called for coverage

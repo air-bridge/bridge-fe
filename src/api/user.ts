@@ -3,7 +3,6 @@ import {
   NotificationsFormValues,
   Profile,
   ProfileFormValues,
-  SetNewPasswordValues,
 } from "../types/user.ts";
 
 export const updateUser = async (id: number, payload: ProfileFormValues) => {
@@ -16,23 +15,6 @@ export const updateUser = async (id: number, payload: ProfileFormValues) => {
 
     throw new Error(
       errorData.message || "Profile update failed, please try again!",
-    );
-  }
-
-  // TODO: Update user cookie details
-  return (await res.json()) as { isSuccess: boolean };
-};
-
-export const setNewPassword = async (payload: SetNewPasswordValues) => {
-  const res = await putAPI(`users/change-password`, payload);
-
-  if (!res.ok) {
-    const errorData = (await res.json()) as {
-      message: string;
-    };
-
-    throw new Error(
-      errorData.message || "Password update failed, please try again!",
     );
   }
 

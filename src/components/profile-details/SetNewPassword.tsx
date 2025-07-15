@@ -13,20 +13,25 @@ import {
   Typography,
   Theme,
 } from "@mui/material";
-import { SetNewPasswordValues } from "../../types/user.ts";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { passwordValidationSchema } from "../profile-form/validation.ts";
+import { updatePasswordValidationSchema } from "../profile-form/validation.ts";
 import { useMutation } from "@tanstack/react-query";
 import Grid from "@mui/material/Grid2";
-import { setNewPassword } from "../../api/user.ts";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import PasswordStrengthBar from "react-password-strength-bar";
 import useTheme from "@mui/material/styles/useTheme";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { setNewPassword } from "../../api/auth.ts";
+import { SetPasswordFormValues } from "../../types/auth.ts";
+import { useNotificationContext } from "../../context/notification/util.ts";
 
-export const SetNewPassword = () => {
+type Props = {
+  email: string;
+};
+export const SetNewPassword = ({ email }: Props) => {
   const theme = useTheme();
+  const { openNotification } = useNotificationContext();
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
   );
@@ -42,23 +47,24 @@ export const SetNewPassword = () => {
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<SetNewPasswordValues>({
-    resolver: yupResolver(passwordValidationSchema()),
+  } = useForm<SetPasswordFormValues>({
+    resolver: yupResolver(updatePasswordValidationSchema),
     defaultValues: {
-      currentPassword: "",
-      password: "",
-      confirmPassword: "",
+      email,
+      current_password: "",
+      new_password: "",
+      confirm_new_password: "",
     },
   });
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: setNewPassword,
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
+      openNotification("Password changed successfully.");
     },
   });
 
-  const onSubmit = (values: SetNewPasswordValues) => {
+  const onSubmit = (values: SetPasswordFormValues) => {
     mutate(values);
   };
 
@@ -68,7 +74,7 @@ export const SetNewPassword = () => {
   const handleShowCurrentPassword = () =>
     setIsCurrentPasswordVisible(!isCurrentPasswordVisible);
 
-  const passwordValue = watch("password");
+  const passwordValue = watch("new_password");
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -120,7 +126,7 @@ export const SetNewPassword = () => {
                 Current Password
               </InputLabel>
               <Controller
-                name="currentPassword"
+                name="current_password"
                 control={control}
                 render={({ field }) => (
                   <TextField
@@ -130,8 +136,8 @@ export const SetNewPassword = () => {
                     type={isCurrentPasswordVisible ? "text" : "password"}
                     name="currentPassword"
                     placeholder="Current Password"
-                    error={Boolean(errors.currentPassword)}
-                    helperText={errors.currentPassword?.message}
+                    error={Boolean(errors.current_password)}
+                    helperText={errors.current_password?.message}
                     slotProps={{
                       input: {
                         endAdornment: (
@@ -170,18 +176,18 @@ export const SetNewPassword = () => {
                   New Password
                 </InputLabel>
                 <Controller
-                  name="password"
+                  name="new_password"
                   control={control}
                   render={({ field }) => (
                     <TextField
                       {...field}
-                      type={isPasswordVisible ? "text" : "password"}
                       fullWidth
                       size="small"
-                      name="password"
-                      placeholder="Password"
-                      error={Boolean(errors.password)}
-                      helperText={errors.password?.message}
+                      type={isPasswordVisible ? "text" : "password"}
+                      name="new_password"
+                      placeholder="New Password"
+                      error={Boolean(errors.new_password)}
+                      helperText={errors.new_password?.message}
                       slotProps={{
                         input: {
                           endAdornment: (
@@ -197,12 +203,9 @@ export const SetNewPassword = () => {
                                 edge="end"
                               >
                                 {isPasswordVisible ? (
-                                  <Visibility fontSize="small" />
+                                  <Visibility />
                                 ) : (
-                                  <VisibilityOff
-                                    fontSize="small"
-                                    color="disabled"
-                                  />
+                                  <VisibilityOff color="disabled" />
                                 )}
                               </IconButton>
                             </InputAdornment>
@@ -234,7 +237,7 @@ export const SetNewPassword = () => {
                 Repeat New Password
               </InputLabel>
               <Controller
-                name="confirmPassword"
+                name="confirm_new_password"
                 control={control}
                 render={({ field }) => (
                   <TextField
@@ -243,9 +246,9 @@ export const SetNewPassword = () => {
                     size="small"
                     type={isConfirmPasswordVisible ? "text" : "password"}
                     name="confirmPassword"
-                    placeholder="Repeat Password"
-                    error={Boolean(errors.confirmPassword)}
-                    helperText={errors.confirmPassword?.message}
+                    placeholder="Repeat New Password"
+                    error={Boolean(errors.confirm_new_password)}
+                    helperText={errors.confirm_new_password?.message}
                     slotProps={{
                       input: {
                         endAdornment: (

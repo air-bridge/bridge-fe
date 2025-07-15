@@ -1,7 +1,7 @@
 import { Button, Stack, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import Lottie from "lottie-react";
-import animationJson from "../profile-setup/animation.json";
+import animationJson from "../../assets/animation/delivery.json";
 
 export const PasswordChangedCompleted = () => {
   return (

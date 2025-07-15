@@ -10,6 +10,7 @@ vi.mock("../../../../api/auth.ts", () => ({
   resetPassword: vi.fn(() => Promise.resolve({ isSuccess: true })),
   verifyOTP: vi.fn(() => Promise.resolve({ isSuccess: true })),
   sendOTP: vi.fn(() => Promise.resolve({ isSuccess: true })),
+  activateUser: vi.fn(() => Promise.resolve({ isSuccess: true })),
 }));
 
 const mockedUseNavigate = vi.fn();

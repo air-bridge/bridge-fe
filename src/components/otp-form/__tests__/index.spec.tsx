@@ -11,7 +11,10 @@ import * as api from "../../../api/auth.ts";
 import { mockUserAuth } from "../../../mocks/user.ts";
 import * as useMediaQuery from "@mui/material/useMediaQuery";
 import { RegistrationContext } from "../../../context/registration/util.ts";
-import { ACCOUNT_TYPE } from "../../../context/registration/constant.ts";
+import {
+  ACCOUNT_TYPE,
+  AccountAction,
+} from "../../../context/registration/constant.ts";
 
 const mockedNavigate = vi.fn();
 vi.mock("react-router-dom", async () => {
@@ -25,9 +28,10 @@ vi.mock("react-router-dom", async () => {
 
 vi.mock("../../../api/auth.ts", () => ({
   verifyOTP: vi.fn(() => Promise.resolve({ isSuccess: true })),
+  activateUser: vi.fn(() => Promise.resolve({ isSuccess: true })),
 }));
 
-describe("OTP Form Component", () => {
+describe("OTP Form Component - Verify Action", () => {
   const mockOnNext = vi.fn();
   const mockPayload = {
     email: "test@mail.com",
@@ -53,7 +57,7 @@ describe("OTP Form Component", () => {
             setRegistrationInfo: mockHandlePayload,
           }}
         >
-          <OTPForm onNext={mockOnNext} />
+          <OTPForm action={AccountAction.VERIFY_OTP} onNext={mockOnNext} />
         </RegistrationContext.Provider>
       </ComponentTestWrapper>,
     );
@@ -128,6 +132,77 @@ describe("OTP Form Component", () => {
   });
 });
 
+describe("OTP Form Component - Activate User", () => {
+  const mockOnNext = vi.fn();
+  const mockPayload = {
+    email: "test@mail.com",
+    password: "",
+    confirmPassword: "",
+    firstname: "",
+    lastname: "",
+    phone: "",
+    country_code: "",
+    state: "",
+    role: ACCOUNT_TYPE.Sender,
+  };
+
+  const mockHandlePayload = vi.fn();
+
+  beforeEach(() => {
+    vi.spyOn(userAuth, "getAuthUser").mockReturnValue(mockUserAuth);
+    render(
+      <ComponentTestWrapper>
+        <RegistrationContext.Provider
+          value={{
+            payload: mockPayload,
+            setRegistrationInfo: mockHandlePayload,
+          }}
+        >
+          <OTPForm action={AccountAction.ACTIVATE_USER} onNext={mockOnNext} />
+        </RegistrationContext.Provider>
+      </ComponentTestWrapper>,
+    );
+  });
+
+  it("should render correctly", () => {
+    expect(screen.getByText("OTP Verification ?")).toBeInTheDocument();
+    expect(
+      screen.getByText("Type you 6 digit security code"),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId("user-email")).toBeInTheDocument();
+  });
+
+  it("submits OTP form successfully", async () => {
+    const inputs = screen.getAllByRole("textbox");
+    inputs.forEach((input, index) =>
+      fireEvent.change(input, { target: { value: `${index + 1}` } }),
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+
+    await waitFor(() => {
+      expect(mockOnNext).toHaveBeenCalledOnce();
+    });
+  });
+
+  it("show error for failed API request", async () => {
+    vi.mocked(api.activateUser).mockRejectedValue(
+      new Error("Account activation failed. Please try again!"),
+    );
+
+    const inputs = screen.getAllByRole("textbox");
+    inputs.forEach((input, index) =>
+      fireEvent.change(input, { target: { value: `${index + 1}` } }),
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Account activation failed. Please try again!"),
+      ).toBeInTheDocument();
+    });
+  });
+});
+
 describe("OTP Form Component - Mobile", () => {
   const mockOnNext = vi.fn();
   beforeEach(() => {
@@ -137,7 +212,7 @@ describe("OTP Form Component - Mobile", () => {
   it("should update input fields correctly", () => {
     render(
       <ComponentTestWrapper>
-        <OTPForm onNext={mockOnNext} />
+        <OTPForm action={AccountAction.VERIFY_OTP} onNext={mockOnNext} />
       </ComponentTestWrapper>,
     );
     const inputs = screen.getAllByRole("textbox");
@@ -157,7 +232,7 @@ describe("OTP Form Component useMediaQuery callback coverage", () => {
 
     render(
       <ComponentTestWrapper>
-        <OTPForm onNext={mockOnNext} />
+        <OTPForm action={AccountAction.VERIFY_OTP} onNext={mockOnNext} />
       </ComponentTestWrapper>,
     );
 

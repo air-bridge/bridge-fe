@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { OrderList } from "../../../components/order-list";
 import { EmptyOrder } from "../../../components/order-list/EmptyOrder.tsx";
 import { orders } from "../../../mocks/order.ts";
+import { useNotificationContext } from "../../../context/notification/util.ts";
+import { useEffect } from "react";
 
 type Props = {
   count?: number;
@@ -12,6 +14,11 @@ type Props = {
 const HomeScreen = ({ count = 0 }: Props) => {
   // TODO: switch to api count
   const homeOrders = orders.slice(0, 2);
+  const { openNotification } = useNotificationContext();
+
+  useEffect(() => {
+    openNotification("soso");
+  }, []);
 
   return (
     <Stack gap={2}>

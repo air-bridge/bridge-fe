@@ -3,6 +3,7 @@ import { vi, afterEach } from "vitest";
 import { cleanup } from "@testing-library/react";
 import * as ReactRouterDom from "react-router-dom";
 import * as countryStateCity from "country-state-city";
+import * as reactQuery from "@tanstack/react-query";
 
 const mockedUseNavigate = vi.fn();
 const mockedUseLocation = vi.fn();
@@ -24,6 +25,17 @@ vi.mock("@mui/material/useMediaQuery", async () => {
     default: () => {
       return false;
     },
+  };
+});
+
+// Tanstack Query
+vi.mock("@tanstack/react-query", async () => {
+  const actual = await vi.importActual<typeof reactQuery>(
+    "@tanstack/react-query",
+  );
+  return {
+    ...actual,
+    useQuery: (options: any) => actual.useQuery({ ...options, retry: false }),
   };
 });
 

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { getAuthUser } from "../../utils/userAuth.ts";
 import { Header } from "../header";
 import { UserContextProvider } from "../../context/user";
+import { NotificationContextProvider } from "../../context/notification";
 
 const fullScreenPaths = ["create-order"];
 const AppLayout = () => {
@@ -21,18 +22,20 @@ const AppLayout = () => {
   }, []);
 
   return (
-    <UserContextProvider>
-      {isFullScreen ? (
-        <Outlet />
-      ) : (
-        <>
-          <Header />
-          <Box py={2} px={{ xs: 2, lg: 5 }}>
-            <Outlet />
-          </Box>
-        </>
-      )}
-    </UserContextProvider>
+    <NotificationContextProvider>
+      <UserContextProvider>
+        {isFullScreen ? (
+          <Outlet />
+        ) : (
+          <>
+            <Header />
+            <Box py={2} px={{ xs: 2, lg: 5 }}>
+              <Outlet />
+            </Box>
+          </>
+        )}
+      </UserContextProvider>
+    </NotificationContextProvider>
   );
 };
 

@@ -17,6 +17,7 @@ import { RegistrationContextProvider } from "../../../context/registration";
 import { OTPForm } from "../../../components/otp-form";
 import { removeAccessToken } from "../../../utils/userAuth.ts";
 import { NotificationContextProvider } from "../../../context/notification";
+import { AccountAction } from "../../../context/registration/constant.ts";
 
 const tabWithBackground = [AccountTabState.LOGIN, AccountTabState.REGISTER];
 const Account = () => {
@@ -76,6 +77,7 @@ const Account = () => {
               )}
               {activeTab === AccountTabState.OTP_VERIFICATION && (
                 <OTPForm
+                  action={AccountAction.ACTIVATE_USER}
                   onNext={() => setActiveTab(AccountTabState.COMPLETED)}
                 />
               )}

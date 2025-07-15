@@ -100,3 +100,19 @@ export const verifyOTP = async (code: string, email: string | undefined) => {
 
   return (await res.json()) as { isSuccess: boolean };
 };
+
+export const activateUser = async (code: string, email: string | undefined) => {
+  const res = await postAPI("users/activate", { code, email });
+
+  if (!res.ok) {
+    const errorData = (await res.json()) as {
+      message: string;
+    };
+
+    throw new Error(
+      errorData.message || "Account activation failed. Please try again!",
+    );
+  }
+
+  return (await res.json()) as { isSuccess: boolean };
+};

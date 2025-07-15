@@ -8,6 +8,7 @@ import { OTPForm } from "../../../components/otp-form";
 import { SetPasswordForm } from "../../../components/set-password-form";
 import { PasswordChangedCompleted } from "../../../components/forgot-password-form/PasswordChangedCompleted.tsx";
 import { RegistrationContextProvider } from "../../../context/registration";
+import { AccountAction } from "../../../context/registration/constant.ts";
 
 const ForgotPasswordScreen = () => {
   const [activeTab, setActiveTab] = useState(ChangePasswordTabState.REQUEST);
@@ -54,6 +55,7 @@ const ForgotPasswordScreen = () => {
 
             {activeTab === ChangePasswordTabState.OTP_VERIFICATION && (
               <OTPForm
+                action={AccountAction.VERIFY_OTP}
                 onNext={() => setActiveTab(ChangePasswordTabState.SET_PASSWORD)}
               />
             )}

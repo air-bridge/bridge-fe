@@ -93,4 +93,45 @@ describe("Sign-In component", () => {
 
     expect(screen.getByText("OTP Verification ?")).toBeInTheDocument();
   });
+
+  it("should show verified screen", async () => {
+    vi.mocked(api.login).mockRejectedValue(
+      new Error(ErrorCodes.EMAIL_NOT_VERIFIED),
+    );
+
+    fireEvent.change(screen.getByPlaceholderText("Email"), {
+      target: { value: "test@mail.com" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Password"), {
+      target: { value: "password" },
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: "Sign In" }));
+
+    await waitFor(() => {
+      fireEvent.click(screen.getByRole("button", { name: "Send OTP" }));
+    });
+
+    expect(screen.getByText("OTP Verification ?")).toBeInTheDocument();
+
+    const inputs = screen.getAllByRole("textbox");
+    inputs.forEach((input, index) =>
+      fireEvent.change(input, { target: { value: `${index + 1}` } }),
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+
+    await waitFor(() => {
+      expect(screen.getByText("Profile Verified")).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", {
+          name: "Start Exploring",
+        }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          "You have successfully verify your account, dive in to start exploring",
+        ),
+      ).toBeInTheDocument();
+    });
+  });
 });

@@ -1,6 +1,6 @@
 import { Button, Stack, Typography } from "@mui/material";
 import Lottie from "lottie-react";
-import animationJson from "../../assets/animation/profile.json";
+import animationJson from "../../assets/animation/delivery.json";
 
 type Props = {
   onNext: () => void;

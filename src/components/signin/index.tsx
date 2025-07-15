@@ -5,8 +5,8 @@ import { AccountTabState, LoginTabState } from "./constant.ts";
 import { useState } from "react";
 import { SendOTP } from "./SendOTP.tsx";
 import { OTPForm } from "../otp-form";
-import { useNotificationContext } from "../../context/notification/util.ts";
 import { AccountAction } from "../../context/registration/constant.ts";
+import { ProfileVerified } from "./ProfileVerified.tsx";
 
 type Props = {
   onNext: (arg: AccountTabState) => void;
@@ -14,7 +14,6 @@ type Props = {
 
 export const SignIn = ({ onNext }: Props) => {
   const [activeTab, setActiveTab] = useState(LoginTabState.LOGIN);
-  const { openNotification } = useNotificationContext();
 
   return (
     <Stack gap={2}>
@@ -32,26 +31,29 @@ export const SignIn = ({ onNext }: Props) => {
         <OTPForm
           action={AccountAction.VERIFY_OTP}
           onNext={() => {
-            openNotification(
-              "Account verified. Please login with your credentials",
-            );
-            setActiveTab(LoginTabState.LOGIN);
+            setActiveTab(LoginTabState.COMPLETED);
           }}
         />
       )}
 
-      <Typography variant="body1" color="text.secondary" textAlign="center">
-        Not a member yet?&nbsp;
-        <MUILink
-          href="/"
-          onClick={(e) => {
-            e.preventDefault();
-            onNext(AccountTabState.REGISTER);
-          }}
-        >
-          Sign Up
-        </MUILink>
-      </Typography>
+      {activeTab === LoginTabState.COMPLETED && (
+        <ProfileVerified onNext={() => setActiveTab(LoginTabState.LOGIN)} />
+      )}
+
+      {activeTab !== LoginTabState.COMPLETED && (
+        <Typography variant="body1" color="text.secondary" textAlign="center">
+          Not a member yet?&nbsp;
+          <MUILink
+            href="/"
+            onClick={(e) => {
+              e.preventDefault();
+              onNext(AccountTabState.REGISTER);
+            }}
+          >
+            Sign Up
+          </MUILink>
+        </Typography>
+      )}
     </Stack>
   );
 };

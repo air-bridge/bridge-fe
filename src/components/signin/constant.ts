@@ -11,6 +11,7 @@ export enum LoginTabState {
   LOGIN = "LOGIN",
   UNVERIFIED = "UNVERIFIED",
   OTP_VERIFICATION = "OTP_VERIFICATION",
+  COMPLETED = "COMPLETED",
 }
 
 export enum ErrorCodes {

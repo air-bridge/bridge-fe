@@ -1,9 +1,11 @@
 import { Button, Stack, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
 import Lottie from "lottie-react";
 import animationJson from "../../assets/animation/profile.json";
 
-export const ProfileSetupCompleted = () => {
+type Props = {
+  onNext: () => void;
+};
+export const ProfileVerified = ({ onNext }: Props) => {
   return (
     <Stack
       gap={{ xs: 2, lg: 3 }}
@@ -12,20 +14,14 @@ export const ProfileSetupCompleted = () => {
       <Lottie loop={false} animationData={animationJson} />
       <Stack gap={1}>
         <Typography variant="h3" textAlign="center">
-          Profile Created
+          Profile Verified
         </Typography>
         <Typography textAlign="center" variant="body2" color="text.secondary">
-          You have Successfully created your account, dive in to start exploring
+          You have successfully verify your account, dive in to start exploring
         </Typography>
       </Stack>
 
-      <Button
-        fullWidth
-        variant="contained"
-        color="primary"
-        component={Link}
-        to="/"
-      >
+      <Button fullWidth variant="contained" color="primary" onClick={onNext}>
         Start Exploring
       </Button>
     </Stack>

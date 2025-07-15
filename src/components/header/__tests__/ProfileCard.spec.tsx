@@ -51,6 +51,19 @@ describe("Profile Card", () => {
     expect(screen.getByRole("link", { name: "Log out" })).toBeInTheDocument();
   });
 
+  it("show & hide menu items", () => {
+    expect(screen.getByTestId("menu-container")).toHaveStyle("height: 0");
+
+    fireEvent.click(screen.getByTestId("ExpandMoreIcon"));
+    expect(screen.getByTestId("ExpandLessIcon")).toBeInTheDocument();
+
+    expect(screen.getByTestId("menu-container")).toHaveStyle("height: auto");
+
+    fireEvent.click(screen.getByRole("link", { name: "Profile Information" }));
+
+    expect(screen.getByTestId("ExpandMoreIcon")).toBeInTheDocument();
+  });
+
   it("hides menu items on outside click", () => {
     fireEvent.click(screen.getByTestId("ExpandMoreIcon"));
     expect(screen.getByTestId("menu-container")).toHaveStyle("height: auto");

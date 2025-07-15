@@ -53,6 +53,20 @@ describe("Sign-In form component", () => {
     });
   });
 
+  it("should toggle password text visibility", () => {
+    expect(screen.getByPlaceholderText("Password")).toHaveAttribute(
+      "type",
+      "password",
+    );
+
+    fireEvent.click(screen.getByTestId("toggle-password-visibility"));
+
+    expect(screen.getByPlaceholderText("Password")).toHaveAttribute(
+      "type",
+      "text",
+    );
+  });
+
   it("should submit form", async () => {
     fireEvent.change(screen.getByPlaceholderText("Email"), {
       target: { value: "test@mail.com" },
@@ -89,7 +103,7 @@ describe("Sign-In form component", () => {
     });
   });
 
-  it.only("handles error for unverified account", async () => {
+  it("handles error for unverified account", async () => {
     vi.mocked(api.login).mockRejectedValue(
       new Error(ErrorCodes.EMAIL_NOT_VERIFIED),
     );

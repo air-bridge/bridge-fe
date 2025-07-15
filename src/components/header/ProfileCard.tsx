@@ -103,6 +103,7 @@ export const ProfileCard = () => {
                 }}
                 onClick={() => {
                   setExpanded(false);
+                  console.log("mooo");
                 }}
               >
                 <Typography

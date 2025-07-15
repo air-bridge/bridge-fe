@@ -17,7 +17,7 @@ vi.mock("../../../api/auth.ts", () => ({
   setNewPassword: vi.fn(() => Promise.resolve({ isSuccess: true })),
 }));
 
-describe("Personal Details", () => {
+describe("SetNewPassword Component", () => {
   beforeEach(() => {
     render(
       <ComponentTestWrapper>
@@ -125,6 +125,20 @@ describe("Personal Details", () => {
     );
   });
 
+  it("should toggle new password text visibility", () => {
+    expect(screen.getByPlaceholderText("New Password")).toHaveAttribute(
+      "type",
+      "password",
+    );
+
+    fireEvent.click(screen.getByTestId("toggle-password-visibility"));
+
+    expect(screen.getByPlaceholderText("New Password")).toHaveAttribute(
+      "type",
+      "text",
+    );
+  });
+
   it("should toggle confirm password text visibility", () => {
     expect(screen.getByPlaceholderText("Repeat New Password")).toHaveAttribute(
       "type",
@@ -157,7 +171,7 @@ describe("Personal Details", () => {
     fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
 
     await waitFor(() => {
-      // expect(screen.getByText("Unable to save changes!")).toBeInTheDocument();
+      expect(screen.getByText("Unable to save changes!")).toBeInTheDocument();
     });
   });
 });

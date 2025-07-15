@@ -1,30 +1,24 @@
-import { PropsWithChildren, useCallback, useState } from "react";
-import { getAuthUser, setUserAuth } from "../../utils/userAuth.ts";
-import { UserAuth, UserAuthField } from "../../types/auth.ts";
+import { PropsWithChildren } from "react";
 import { UserContext } from "./util.ts";
 import { ACCOUNT_TYPE } from "../registration/constant.ts";
+import { useQuery } from "@tanstack/react-query";
+import { getProfile } from "../../api/user.ts";
 
 export const UserContextProvider = ({ children }: PropsWithChildren) => {
-  const [currentUser, setCurrentUser] = useState<UserAuth | undefined>(
-    getAuthUser(),
-  );
+  const { data: profileData, refetch } = useQuery({
+    queryKey: ["user-profile"],
+    queryFn: getProfile,
+  });
 
-  const updateUserAuthInfo = useCallback(
-    (arg: UserAuthField) => {
-      const payload = {
-        ...currentUser,
-        ...arg,
-      };
-      setUserAuth(payload);
+  const refetchProfile = () => {
+    void refetch();
+  };
 
-      setCurrentUser(payload);
-    },
-    [currentUser],
-  );
-
-  const isSender = currentUser?.role === ACCOUNT_TYPE.Sender;
+  const isSender = profileData?.role === ACCOUNT_TYPE.Sender;
   return (
-    <UserContext.Provider value={{ currentUser, isSender, updateUserAuthInfo }}>
+    <UserContext.Provider
+      value={{ currentUser: profileData, isSender, refetchProfile }}
+    >
       {children}
     </UserContext.Provider>
   );

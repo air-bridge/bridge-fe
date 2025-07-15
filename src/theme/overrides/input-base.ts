@@ -6,6 +6,27 @@ const InputBase: Components<Theme>["MuiInputBase"] = {
       props: { size: "medium" },
       style: {},
     },
+    {
+      props: { size: "small" },
+      style: {
+        "& .MuiInputBase-input.MuiOutlinedInput-input": {
+          padding: "10px 12px",
+          fontSize: "0.8rem",
+        },
+        "&.MuiInputBase-root": {
+          borderRadius: "6px",
+        },
+        ".MuiTelInput-IconButton": {
+          paddingLeft: 0,
+        },
+        ".MuiTypography-body1": {
+          fontSize: "0.8rem",
+        },
+        ".MuiInputAdornment-outlined.MuiInputAdornment-sizeSmall": {
+          marginRight: "0",
+        },
+      },
+    },
   ],
   styleOverrides: {
     root: ({ theme }) => ({

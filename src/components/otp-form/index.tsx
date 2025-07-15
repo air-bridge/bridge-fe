@@ -1,4 +1,4 @@
-import { useRef, useState, ChangeEvent, KeyboardEvent } from "react";
+import { ChangeEvent, KeyboardEvent, useRef, useState } from "react";
 import Grid from "@mui/material/Grid2";
 import {
   Alert,
@@ -13,14 +13,16 @@ import {
 import useMediaQuery from "@mui/material/useMediaQuery";
 import MobileIcon from "@mui/icons-material/PhoneAndroid";
 import { useMutation } from "@tanstack/react-query";
-import { verifyOTP } from "../../api/auth.ts";
+import { activateUser, verifyOTP } from "../../api/auth.ts";
 import { shadowEmailString } from "../../utils/string.ts";
 import { useRegistrationContext } from "../../context/registration/util.ts";
+import { AccountAction } from "../../context/registration/constant.ts";
 
 type Props = {
+  action: AccountAction;
   onNext: () => void;
 };
-export const OTPForm = ({ onNext }: Props) => {
+export const OTPForm = ({ onNext, action }: Props) => {
   const { payload } = useRegistrationContext();
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
@@ -29,7 +31,18 @@ export const OTPForm = ({ onNext }: Props) => {
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const userEmail = payload.email;
 
-  const { mutate, isPending, isError, error } = useMutation({
+  const {
+    mutate: activateMutate,
+    isPending: isPendingActivate,
+    error: errorActivate,
+  } = useMutation({
+    mutationFn: (code: string) => activateUser(code, userEmail),
+    onSuccess: () => {
+      onNext();
+    },
+  });
+
+  const { mutate, isPending, error } = useMutation({
     mutationFn: (code: string) => verifyOTP(code, userEmail),
     onSuccess: () => {
       onNext();
@@ -37,7 +50,12 @@ export const OTPForm = ({ onNext }: Props) => {
   });
 
   const handleOtp = () => {
-    mutate(otp.join(""));
+    const otpCode = otp.join("");
+    if (action === AccountAction.ACTIVATE_USER) {
+      activateMutate(otpCode);
+    } else {
+      mutate(otpCode);
+    }
   };
 
   const handleChange = (
@@ -65,6 +83,9 @@ export const OTPForm = ({ onNext }: Props) => {
     }
   };
 
+  const isLoading = isPending || isPendingActivate;
+  const errorMessage = error?.message || errorActivate?.message;
+
   return (
     <Stack
       gap={{ xs: 2, lg: 3 }}
@@ -91,10 +112,10 @@ export const OTPForm = ({ onNext }: Props) => {
 
       <Stack gap={2}>
         <Grid container spacing={2}>
-          {isError && (
+          {errorMessage && (
             <Grid size={{ xs: 12 }}>
               <Alert severity="error" variant="filled">
-                {error?.message}
+                {errorMessage}
               </Alert>
             </Grid>
           )}
@@ -137,8 +158,8 @@ export const OTPForm = ({ onNext }: Props) => {
               variant="contained"
               color="primary"
               onClick={handleOtp}
-              disabled={isPending}
-              loading={isPending}
+              disabled={isLoading}
+              loading={isLoading}
               loadingIndicator={<CircularProgress color="inherit" size={16} />}
             >
               Submit

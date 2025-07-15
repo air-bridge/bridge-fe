@@ -6,6 +6,7 @@ import { useState } from "react";
 import { SendOTP } from "./SendOTP.tsx";
 import { OTPForm } from "../otp-form";
 import { useNotificationContext } from "../../context/notification/util.ts";
+import { AccountAction } from "../../context/registration/constant.ts";
 
 type Props = {
   onNext: (arg: AccountTabState) => void;
@@ -29,6 +30,7 @@ export const SignIn = ({ onNext }: Props) => {
 
       {activeTab === LoginTabState.OTP_VERIFICATION && (
         <OTPForm
+          action={AccountAction.VERIFY_OTP}
           onNext={() => {
             openNotification(
               "Account verified. Please login with your credentials",

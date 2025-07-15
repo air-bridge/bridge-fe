@@ -10,6 +10,7 @@ vi.mock("../../../api/auth.ts", () => ({
   login: vi.fn(() => Promise.resolve({ data: mockUserAuth })),
   sendOTP: vi.fn(() => Promise.resolve({ isSuccess: true })),
   verifyOTP: vi.fn(() => Promise.resolve({ isSuccess: true })),
+  activateUser: vi.fn(() => Promise.resolve({ isSuccess: true })),
 }));
 
 describe("Sign-In component", () => {

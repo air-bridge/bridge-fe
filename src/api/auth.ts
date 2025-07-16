@@ -54,7 +54,7 @@ export const register = async (payload: RegistrationPayload) => {
 };
 
 export const setNewPassword = async (payload: SetPasswordFormValues) => {
-  const res = await postAPI("users/reset-password", payload);
+  const res = await postAPI("users/reset-password", payload, false);
 
   if (!res.ok) {
     const errorData = (await res.json()) as {
@@ -70,7 +70,7 @@ export const setNewPassword = async (payload: SetPasswordFormValues) => {
 };
 
 export const sendOTP = async (email: string) => {
-  const res = await postAPI("users/send-otp", { email });
+  const res = await postAPI("users/send-otp", { email }, false);
 
   if (!res.ok) {
     const errorData = (await res.json()) as {
@@ -86,7 +86,7 @@ export const sendOTP = async (email: string) => {
 };
 
 export const verifyOTP = async (code: string, email: string | undefined) => {
-  const res = await postAPI("users/verify-otp", { code, email });
+  const res = await postAPI("users/verify-otp", { code, email }, false);
 
   if (!res.ok) {
     const errorData = (await res.json()) as {
@@ -102,7 +102,7 @@ export const verifyOTP = async (code: string, email: string | undefined) => {
 };
 
 export const activateUser = async (code: string, email: string | undefined) => {
-  const res = await postAPI("users/activate", { code, email });
+  const res = await postAPI("users/activate", { code, email }, false);
 
   if (!res.ok) {
     const errorData = (await res.json()) as {

@@ -24,6 +24,7 @@ export type SetPasswordFormValues = {
 };
 
 export type UserAuth = {
+  id?: number; // TODO: remove undefined
   refresh_token: string;
   token: string;
   firstname: string;

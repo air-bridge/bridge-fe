@@ -57,8 +57,14 @@ export const ProfileCard = () => {
           <img src={profileAvatar} alt="profile" width={40} />
           {!isMobile && currentUser && (
             <Box>
-              <Typography variant="subtitle2">{`${currentUser?.firstname} ${currentUser?.lastname}`}</Typography>
-              <Typography variant="caption">{`Hey ${currentUser?.firstname}`}</Typography>
+              <Typography variant="subtitle2" noWrap sx={{ maxWidth: 200 }}>
+                {`${currentUser?.firstname} ${currentUser?.lastname}`}
+              </Typography>
+              <Typography
+                variant="caption"
+                noWrap
+                sx={{ maxWidth: 200 }}
+              >{`Hey ${currentUser?.firstname}`}</Typography>
             </Box>
           )}
 

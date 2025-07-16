@@ -34,6 +34,7 @@ export const ProfileCard = () => {
   const { currentUser } = useUserContext();
 
   const [expanded, setExpanded] = useState(false);
+  const fullName = `${currentUser?.firstname} ${currentUser?.lastname}`;
   return (
     <OutsideClickHandler onOutsideClick={() => setExpanded(false)}>
       <Box
@@ -57,13 +58,18 @@ export const ProfileCard = () => {
           <img src={profileAvatar} alt="profile" width={40} />
           {!isMobile && currentUser && (
             <Box>
-              <Typography variant="subtitle2" noWrap sx={{ maxWidth: 200 }}>
-                {`${currentUser?.firstname} ${currentUser?.lastname}`}
+              <Typography
+                variant="subtitle2"
+                noWrap
+                sx={{ maxWidth: 200 }}
+                title={fullName}
+              >
+                {fullName}
               </Typography>
               <Typography
                 variant="caption"
                 noWrap
-                sx={{ maxWidth: 200 }}
+                sx={{ display: "block", maxWidth: 200 }}
               >{`Hey ${currentUser?.firstname}`}</Typography>
             </Box>
           )}

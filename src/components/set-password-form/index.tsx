@@ -70,7 +70,8 @@ export const SetPasswordForm = ({ onNext }: Props) => {
           Setup New Password
         </Typography>
         <Typography variant="body2" textAlign="center" color="text.secondary">
-          Have you already reset the password <Link to="/account">Sign in</Link>
+          Have you already reset the password?{" "}
+          <Link to="/account">Sign in</Link>
         </Typography>
       </Box>
 

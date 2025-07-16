@@ -16,7 +16,6 @@ export const NotificationContextProvider = ({
     setMessage(message);
   };
 
-  console.log(open, { open });
   return (
     <NotificationContext.Provider
       value={{

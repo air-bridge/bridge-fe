@@ -24,6 +24,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { updateUser } from "../../api/user.ts";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useUserContext } from "../../context/user/util.ts";
+import { useNotificationContext } from "../../context/notification/util.ts";
 
 type Props = {
   data: Profile;
@@ -31,6 +32,7 @@ type Props = {
 
 export const PersonalDetails = ({ data }: Props) => {
   const { refetchProfile } = useUserContext();
+  const { openNotification } = useNotificationContext();
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
   );
@@ -65,8 +67,8 @@ export const PersonalDetails = ({ data }: Props) => {
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: (payload: ProfileFormValues) => updateUser(data.id, payload),
     onSuccess: () => {
-      // TODO: use notification
       refetchProfile();
+      openNotification("Profile changes saved successfully.");
     },
   });
 

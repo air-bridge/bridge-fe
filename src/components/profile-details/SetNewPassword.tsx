@@ -47,6 +47,7 @@ export const SetNewPassword = ({ email }: Props) => {
     handleSubmit,
     formState: { errors },
     watch,
+    reset,
   } = useForm<SetPasswordFormValues>({
     resolver: yupResolver(updatePasswordValidationSchema),
     defaultValues: {
@@ -61,6 +62,7 @@ export const SetNewPassword = ({ email }: Props) => {
     mutationFn: setNewPassword,
     onSuccess: () => {
       openNotification("Password changed successfully.");
+      reset();
     },
   });
 

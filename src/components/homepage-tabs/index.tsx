@@ -1,8 +1,9 @@
 import { Button, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import { useUserContext } from "../../context/user/util.ts";
 
-const menuItems = [
+const senderMenuItems = [
   {
     text: "Overview",
     link: "",
@@ -13,9 +14,21 @@ const menuItems = [
   },
 ];
 
-export const HomepageTabs = ({ showAction }: { showAction: boolean }) => {
-  const currentPathname = location.pathname.replace("/", "");
+const passengerMenuItems = [
+  {
+    text: "Overview",
+    link: "",
+  },
+  {
+    text: "Services",
+    link: "services",
+  },
+];
 
+export const HomepageTabs = ({ showAction }: { showAction: boolean }) => {
+  const { isSender } = useUserContext();
+  const currentPathname = location.pathname.replace("/", "");
+  const menuItems = isSender ? senderMenuItems : passengerMenuItems;
   return (
     <Stack
       direction="row"
@@ -49,7 +62,7 @@ export const HomepageTabs = ({ showAction }: { showAction: boolean }) => {
       {showAction && (
         <Button
           component={Link}
-          to="/create-order"
+          to={isSender ? "/create-order" : "/create-service"}
           variant="contained"
           color="primary"
           startIcon={<AddCircleOutlineIcon />}
@@ -57,7 +70,7 @@ export const HomepageTabs = ({ showAction }: { showAction: boolean }) => {
             mb: 0.5,
           }}
         >
-          Create Order
+          {isSender ? "Create Order" : "Create Service"}
         </Button>
       )}
     </Stack>

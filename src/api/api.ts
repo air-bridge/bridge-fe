@@ -85,9 +85,13 @@ const fetchWithRetry = async (
   const resClone = res.clone();
 
   const data: APIResponse = await resClone.json();
+  const errorCode = data?.error?.code;
   if (
     resClone.status === 401 &&
-    data?.error?.code === ErrorCodes.EMAIL_NOT_VERIFIED
+    errorCode &&
+    [ErrorCodes.EMAIL_NOT_VERIFIED, ErrorCodes.INVALID_CREDENTIALS].includes(
+      errorCode,
+    )
   ) {
     return res;
   }

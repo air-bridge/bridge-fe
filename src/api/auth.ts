@@ -8,6 +8,7 @@ import { postAPI } from "./api.ts";
 import { RegistrationPayload } from "../types/user.ts";
 import { ErrorCodes } from "../components/signin/constant.ts";
 import { getAuthUser, setUserAuth } from "../utils/userAuth.ts";
+import { ACCOUNT_TYPE } from "../context/registration/constant.ts";
 
 export const login = async (payload: LoginFormValues) => {
   const res = await postAPI("users/login", payload, false);
@@ -118,8 +119,10 @@ export const activateUser = async (code: string, email: string | undefined) => {
   return (await res.json()) as { isSuccess: boolean };
 };
 
-export const switchRole = async (role: string) => {
-  const res = await postAPI("users/role-switch", { role });
+export const switchRole = async (sender: boolean) => {
+  const res = await postAPI("users/role-switch", {
+    role: sender ? ACCOUNT_TYPE.Passenger : ACCOUNT_TYPE.Sender,
+  });
 
   if (!res.ok) {
     const errorData = (await res.json()) as {
@@ -148,5 +151,6 @@ export const switchRole = async (role: string) => {
       token: response.data.token,
     });
   }
-  return response.data;
+
+  return { isSuccess: true };
 };

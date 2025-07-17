@@ -18,7 +18,6 @@ import {
   AlertType,
   useNotificationContext,
 } from "../../context/notification/util.ts";
-import { ACCOUNT_TYPE } from "../../context/registration/constant.ts";
 
 export const Header = () => {
   const isMobile = useMediaQuery<Theme>((theme) =>
@@ -39,7 +38,7 @@ export const Header = () => {
   });
 
   const handleSwitch = () => {
-    mutate(isSender ? ACCOUNT_TYPE.Passenger : ACCOUNT_TYPE.Sender);
+    mutate(isSender);
   };
 
   return (
@@ -97,7 +96,6 @@ export const Header = () => {
             {isSender ? "Switch to Passenger" : "Switch to Sender"}
           </Button>
         )}
-
         <ProfileCard />
       </Stack>
     </Stack>

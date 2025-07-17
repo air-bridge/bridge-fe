@@ -23,3 +23,16 @@ export const mockUserProfile: Profile = {
   country_code: "Nigeria",
   state: "Lagos",
 };
+
+export const mockPassengerProfile: Profile = {
+  id: 2,
+  firstname: "Felix",
+  lastname: "Musk",
+  email: "felix@mail.com",
+  role: ACCOUNT_TYPE.Passenger,
+  current_role: ACCOUNT_TYPE.Passenger,
+  image: "",
+  phone: "098298398938",
+  country_code: "Nigeria",
+  state: "Lagos",
+};

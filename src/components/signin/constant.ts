@@ -16,4 +16,5 @@ export enum LoginTabState {
 
 export enum ErrorCodes {
   EMAIL_NOT_VERIFIED = "EMAIL_NOT_VERIFIED",
+  INVALID_CREDENTIALS = "INVALID_CREDENTIALS",
 }

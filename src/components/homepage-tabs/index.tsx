@@ -29,6 +29,7 @@ export const HomepageTabs = ({ showAction }: { showAction: boolean }) => {
   const { isSender } = useUserContext();
   const currentPathname = location.pathname.replace("/", "");
   const menuItems = isSender ? senderMenuItems : passengerMenuItems;
+
   return (
     <Stack
       direction="row"

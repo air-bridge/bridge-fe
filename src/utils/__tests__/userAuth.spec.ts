@@ -46,7 +46,7 @@ describe("Auth Utils", () => {
     (Cookies.get as any).mockReturnValue(JSON.stringify(mockUserAuth));
 
     const token = getAccessToken();
-    expect(token).toBe("token");
+    expect(token).toBe("dummy_token");
   });
 
   it("getAuthUser returns undefined if cookie is missing", () => {

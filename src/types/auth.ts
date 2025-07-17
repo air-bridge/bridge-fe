@@ -24,15 +24,15 @@ export type SetPasswordFormValues = {
 };
 
 export type UserAuth = {
+  user_id: number;
   refresh_token: string;
   token: string;
   firstname: string;
   lastname: string;
   email: string;
   role: string;
+  current_role: string;
 };
-
-export type UserAuthField = Record<keyof UserAuth, string>;
 
 export type APIResponse = {
   data: unknown;

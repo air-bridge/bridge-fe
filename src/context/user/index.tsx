@@ -14,7 +14,7 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
     void refetch();
   };
 
-  const isSender = profileData?.role === ACCOUNT_TYPE.Sender;
+  const isSender = profileData?.current_role === ACCOUNT_TYPE.Sender;
   return (
     <UserContext.Provider
       value={{ currentUser: profileData, isSender, refetchProfile }}

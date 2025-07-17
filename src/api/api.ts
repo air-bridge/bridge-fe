@@ -29,12 +29,16 @@ const getRefreshToken = async (): Promise<string | undefined> => {
 
       const storedValue = JSON.parse(cookieValue) as UserAuth;
       const refreshToken = storedValue.refresh_token;
+      const userId = storedValue.user_id;
 
       const res = await fetch(
         `${import.meta.env.VITE_API_ENDPOINT}/users/refresh`,
         {
           method: "POST",
-          body: JSON.stringify({ refreshToken }),
+          body: JSON.stringify({
+            refresh_token: refreshToken,
+            user_id: userId,
+          }),
           headers: { "Content-Type": "application/json" },
         },
       );

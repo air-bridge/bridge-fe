@@ -42,6 +42,7 @@ describe("useUserContext", () => {
       lastname: "User",
       email: "tests@mail.com",
       role: ACCOUNT_TYPE.Passenger,
+      current_role: ACCOUNT_TYPE.Passenger,
     });
     const { result } = renderHook(useUserContext, { wrapper });
 

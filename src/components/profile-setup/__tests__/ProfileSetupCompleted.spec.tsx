@@ -26,6 +26,6 @@ describe("Profile Setup Completed Component", () => {
       name: "Start Exploring",
     });
 
-    expect(continueButton).toHaveAttribute("href", "/");
+    expect(continueButton).toHaveAttribute("href", "/account");
   });
 });

@@ -32,5 +32,6 @@ export type Profile = {
   phone: string;
   country_code: string;
   state: string;
+  current_role: string;
   role: string;
 };

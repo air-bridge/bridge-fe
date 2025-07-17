@@ -7,6 +7,8 @@ import {
 import { postAPI } from "./api.ts";
 import { RegistrationPayload } from "../types/user.ts";
 import { ErrorCodes } from "../components/signin/constant.ts";
+import { getAuthUser, setUserAuth } from "../utils/userAuth.ts";
+import { ACCOUNT_TYPE } from "../context/registration/constant.ts";
 
 export const login = async (payload: LoginFormValues) => {
   const res = await postAPI("users/login", payload, false);
@@ -54,7 +56,7 @@ export const register = async (payload: RegistrationPayload) => {
 };
 
 export const setNewPassword = async (payload: SetPasswordFormValues) => {
-  const res = await postAPI("users/reset-password", payload);
+  const res = await postAPI("users/reset-password", payload, false);
 
   if (!res.ok) {
     const errorData = (await res.json()) as {
@@ -70,7 +72,7 @@ export const setNewPassword = async (payload: SetPasswordFormValues) => {
 };
 
 export const sendOTP = async (email: string) => {
-  const res = await postAPI("users/send-otp", { email });
+  const res = await postAPI("users/send-otp", { email }, false);
 
   if (!res.ok) {
     const errorData = (await res.json()) as {
@@ -86,7 +88,7 @@ export const sendOTP = async (email: string) => {
 };
 
 export const verifyOTP = async (code: string, email: string | undefined) => {
-  const res = await postAPI("users/verify-otp", { code, email });
+  const res = await postAPI("users/verify-otp", { code, email }, false);
 
   if (!res.ok) {
     const errorData = (await res.json()) as {
@@ -102,7 +104,7 @@ export const verifyOTP = async (code: string, email: string | undefined) => {
 };
 
 export const activateUser = async (code: string, email: string | undefined) => {
-  const res = await postAPI("users/activate", { code, email });
+  const res = await postAPI("users/activate", { code, email }, false);
 
   if (!res.ok) {
     const errorData = (await res.json()) as {
@@ -115,4 +117,40 @@ export const activateUser = async (code: string, email: string | undefined) => {
   }
 
   return (await res.json()) as { isSuccess: boolean };
+};
+
+export const switchRole = async (sender: boolean) => {
+  const res = await postAPI("users/role-switch", {
+    role: sender ? ACCOUNT_TYPE.Passenger : ACCOUNT_TYPE.Sender,
+  });
+
+  if (!res.ok) {
+    const errorData = (await res.json()) as {
+      message: string;
+    };
+
+    throw new Error(
+      errorData.message || "Account activation failed. Please try again!",
+    );
+  }
+
+  const response: {
+    data: {
+      current_role: string;
+      firstname: string;
+      lastname: string;
+      token?: string;
+    };
+  } = await res.json();
+
+  // Update auth
+  const authUser = getAuthUser();
+  if (response.data.token && authUser) {
+    setUserAuth({
+      ...authUser,
+      token: response.data.token,
+    });
+  }
+
+  return { isSuccess: true };
 };

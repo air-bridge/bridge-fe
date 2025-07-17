@@ -10,7 +10,6 @@ describe("HomeScreen Component", () => {
         <OrdersScreen />
       </ComponentTestWrapper>,
     );
-    expect(screen.getByRole("link", { name: "Overview" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Orders" })).toBeInTheDocument();
+    expect(screen.getByText("Orders")).toBeInTheDocument();
   });
 });

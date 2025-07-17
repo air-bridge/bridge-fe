@@ -1,6 +1,6 @@
 export const ACCOUNT_TYPE = {
-  Sender: "sender",
-  Passenger: "passenger",
+  Sender: "SENDER",
+  Passenger: "PASSENGER",
 };
 
 export enum AccountAction {

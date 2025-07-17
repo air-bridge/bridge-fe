@@ -7,6 +7,7 @@ import {
   removeAccessToken,
   AUTH_KEY,
 } from "../userAuth.ts";
+import { mockUserAuth } from "../../mocks/user.ts";
 
 const mockHostname = "example.com";
 
@@ -21,18 +22,6 @@ vi.mock("js-cookie", () => ({
     remove: vi.fn(),
   },
 }));
-
-const mockUser = {
-  refresh_token: "refresh_token",
-  token: "token",
-  firstname: "Max",
-  lastname: "Alex",
-  phone: "12345678",
-  country_code: "Germany",
-  state: "Berlin",
-  email: "test@mail.com",
-  role: "sender",
-};
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -54,7 +43,7 @@ describe("Auth Utils", () => {
   });
 
   it("getAccessToken returns access token from cookie", () => {
-    (Cookies.get as any).mockReturnValue(JSON.stringify(mockUser));
+    (Cookies.get as any).mockReturnValue(JSON.stringify(mockUserAuth));
 
     const token = getAccessToken();
     expect(token).toBe("token");
@@ -75,18 +64,18 @@ describe("Auth Utils", () => {
   });
 
   it("getAuthUser returns user object from cookie", () => {
-    (Cookies.get as any).mockReturnValue(JSON.stringify(mockUser));
+    (Cookies.get as any).mockReturnValue(JSON.stringify(mockUserAuth));
 
     const user = getAuthUser();
-    expect(user).toEqual(mockUser);
+    expect(user).toEqual(mockUserAuth);
   });
 
   it("setUserAuth sets cookie with correct options", () => {
-    setUserAuth(mockUser);
+    setUserAuth(mockUserAuth);
 
     expect(Cookies.set).toHaveBeenCalledWith(
       AUTH_KEY,
-      JSON.stringify(mockUser),
+      JSON.stringify(mockUserAuth),
       {
         expires: 1,
         path: "/",

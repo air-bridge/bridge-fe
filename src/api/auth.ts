@@ -7,6 +7,7 @@ import {
 import { postAPI } from "./api.ts";
 import { RegistrationPayload } from "../types/user.ts";
 import { ErrorCodes } from "../components/signin/constant.ts";
+import { getAuthUser, setUserAuth } from "../utils/userAuth.ts";
 
 export const login = async (payload: LoginFormValues) => {
   const res = await postAPI("users/login", payload, false);
@@ -115,4 +116,37 @@ export const activateUser = async (code: string, email: string | undefined) => {
   }
 
   return (await res.json()) as { isSuccess: boolean };
+};
+
+export const switchRole = async (role: string) => {
+  const res = await postAPI("users/role-switch", { role });
+
+  if (!res.ok) {
+    const errorData = (await res.json()) as {
+      message: string;
+    };
+
+    throw new Error(
+      errorData.message || "Account activation failed. Please try again!",
+    );
+  }
+
+  const response: {
+    data: {
+      current_role: string;
+      firstname: string;
+      lastname: string;
+      token?: string;
+    };
+  } = await res.json();
+
+  // Update auth
+  const authUser = getAuthUser();
+  if (response.data.token && authUser) {
+    setUserAuth({
+      ...authUser,
+      token: response.data.token,
+    });
+  }
+  return response.data;
 };

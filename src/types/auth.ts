@@ -31,6 +31,7 @@ export type UserAuth = {
   lastname: string;
   email: string;
   role: string;
+  current_role: string;
 };
 
 export type UserAuthField = Record<keyof UserAuth, string>;

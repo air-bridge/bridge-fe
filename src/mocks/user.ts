@@ -8,6 +8,7 @@ export const mockUserAuth = {
   lastname: "Max",
   email: "test@mail.com",
   role: ACCOUNT_TYPE.Sender,
+  current_role: ACCOUNT_TYPE.Sender,
 };
 
 export const mockUserProfile: Profile = {
@@ -16,6 +17,7 @@ export const mockUserProfile: Profile = {
   lastname: "Max",
   email: "test@mail.com",
   role: ACCOUNT_TYPE.Sender,
+  current_role: ACCOUNT_TYPE.Sender,
   image: "",
   phone: "098298398938",
   country_code: "Nigeria",

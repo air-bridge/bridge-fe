@@ -29,8 +29,7 @@ const getRefreshToken = async (): Promise<string | undefined> => {
 
       const storedValue = JSON.parse(cookieValue) as UserAuth;
       const refreshToken = storedValue.refresh_token;
-      // TODO: add userId
-      const userId = storedValue.id;
+      const userId = storedValue.user_id;
 
       const res = await fetch(
         `${import.meta.env.VITE_API_ENDPOINT}/users/refresh`,
@@ -38,7 +37,7 @@ const getRefreshToken = async (): Promise<string | undefined> => {
           method: "POST",
           body: JSON.stringify({
             refresh_token: refreshToken,
-            user_id: userId || 5, // TODO: rely on userId
+            user_id: userId,
           }),
           headers: { "Content-Type": "application/json" },
         },
@@ -51,12 +50,12 @@ const getRefreshToken = async (): Promise<string | undefined> => {
       const response = (await res.json()) as {
         data: {
           token: string;
+          refresh_token: string;
         };
       };
-      const { token } = response.data;
+      const { token, refresh_token } = response.data;
 
-      // TODO: get new refresh token
-      setUserAuth({ ...storedValue, token });
+      setUserAuth({ ...storedValue, token, refresh_token });
 
       return token;
     } catch {

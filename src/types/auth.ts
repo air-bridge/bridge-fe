@@ -24,7 +24,7 @@ export type SetPasswordFormValues = {
 };
 
 export type UserAuth = {
-  id?: number; // TODO: remove undefined
+  user_id: number;
   refresh_token: string;
   token: string;
   firstname: string;
@@ -33,8 +33,6 @@ export type UserAuth = {
   role: string;
   current_role: string;
 };
-
-export type UserAuthField = Record<keyof UserAuth, string>;
 
 export type APIResponse = {
   data: unknown;

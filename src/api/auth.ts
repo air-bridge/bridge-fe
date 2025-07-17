@@ -15,9 +15,12 @@ export const login = async (payload: LoginFormValues) => {
 
   if (!res.ok) {
     const errorData = (await res.json()) as APIResponse;
+    const errorCode = errorData.error?.code;
 
-    if (errorData.error?.code === ErrorCodes.EMAIL_NOT_VERIFIED) {
+    if (errorCode === ErrorCodes.EMAIL_NOT_VERIFIED) {
       throw new Error(ErrorCodes.EMAIL_NOT_VERIFIED);
+    } else if (errorCode === ErrorCodes.INVALID_CREDENTIALS) {
+      throw new Error("Invalid Credentials");
     } else {
       throw new Error(
         errorData.message || "Invalid credentials, please try again.",

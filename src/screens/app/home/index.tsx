@@ -1,9 +1,10 @@
 import { Stack } from "@mui/material";
 import { HomepageTabs } from "../../../components/homepage-tabs";
-import { OverviewStats } from "../../../components/stats/OverViewStats.tsx";
 import { useUserContext } from "../../../context/user/util.ts";
 import { SenderDashboard } from "./SenderDashboard.tsx";
 import { PassengerDashboard } from "./PassengerDashboard.tsx";
+import { SenderOverviewStats } from "../../../components/stats/SenderOverViewStats.tsx";
+import { PassengerOverviewStats } from "../../../components/stats/PassengerOverViewStats.tsx";
 
 type Props = {
   count?: number;
@@ -15,12 +16,16 @@ const HomeScreen = ({ count = 0 }: Props) => {
     <Stack gap={2}>
       <HomepageTabs showAction={count > 0} />
 
-      <OverviewStats />
-
       {isSender ? (
-        <SenderDashboard count={count} />
+        <>
+          <SenderOverviewStats />
+          <SenderDashboard count={count} />
+        </>
       ) : (
-        <PassengerDashboard count={count} />
+        <>
+          <PassengerOverviewStats />
+          <PassengerDashboard count={count} />
+        </>
       )}
     </Stack>
   );

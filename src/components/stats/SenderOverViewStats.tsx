@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { OverviewStats } from "./OverViewStats.tsx";
 
 export const SenderOverviewStats = () => {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["sender-overview-stats"],
     queryFn: senderDashboard,
   });
@@ -36,5 +36,5 @@ export const SenderOverviewStats = () => {
     return [];
   }, [data]);
 
-  return <OverviewStats data={stats} isLoading={isLoading} />;
+  return <OverviewStats data={stats} isError={isError} isLoading={isLoading} />;
 };

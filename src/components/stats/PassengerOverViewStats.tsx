@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { OverviewStats } from "./OverViewStats.tsx";
 
 export const PassengerOverviewStats = () => {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["passenger-overview-stats"],
     queryFn: passengerDashboard,
   });
@@ -36,5 +36,5 @@ export const PassengerOverviewStats = () => {
     return [];
   }, [data]);
 
-  return <OverviewStats data={stats} isLoading={isLoading} />;
+  return <OverviewStats data={stats} isError={isError} isLoading={isLoading} />;
 };

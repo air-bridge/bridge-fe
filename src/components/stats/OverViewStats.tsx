@@ -2,84 +2,87 @@ import { Box, Stack, Typography } from "@mui/material";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import RedeemIcon from "@mui/icons-material/Redeem";
 import { styled } from "@mui/material/styles";
+import { DashboardStat } from "../../types/dashboard.ts";
+import { Loading } from "../loading";
 
-const data = [
-  {
-    name: "Total Request",
-    count: "20+",
-    background: "info.light",
-    color: "primary.main",
-  },
-  {
-    name: "Active Request",
-    count: "15+",
-    background: "warning.light",
-    color: "warning.main",
-  },
-  {
-    name: "Successful Sent Goods",
-    count: "5+",
-    background: "success.light",
-    color: "success.main",
-  },
-];
-
-export const OverviewStats = () => {
+export const OverviewStats = ({
+  isLoading,
+  isError,
+  data,
+}: {
+  isError: boolean;
+  isLoading: boolean;
+  data: DashboardStat[];
+}) => {
+  if (isError) {
+    return null;
+  }
   return (
-    <Wrapper
-      sx={{
-        borderRadius: 3,
-        bgcolor: { xs: "none", lg: "white" },
-      }}
-    >
-      {data.map((item, index) => (
-        <Stack
-          key={index}
-          gap={3}
+    <>
+      {isLoading ? (
+        <Box sx={{ textAlign: "center" }}>
+          <Loading />
+        </Box>
+      ) : (
+        <Wrapper
           sx={{
-            width: 270,
-            flex: { xs: "0 0 auto", lg: 1 },
-            pl: { xs: 2, lg: index === 0 ? 0 : 3 },
-            pr: { xs: 2, lg: index === 2 ? 0 : 3 },
-            py: { xs: 2, lg: 3 },
-            borderRight: { xs: "none", lg: index === 2 ? "none" : "solid 1px" },
-            borderRightColor: { xs: "none", lg: "grey.300" },
-            bgcolor: { xs: "white", lg: "none" },
-            borderRadius: { xs: 3, lg: 0 },
+            borderRadius: 3,
+            bgcolor: { xs: "none", lg: "white" },
           }}
         >
-          <Stack
-            alignItems="center"
-            justifyContent="center"
-            sx={{
-              borderRadius: 3,
-              width: 63,
-              height: 63,
-              bgcolor: item.background,
-            }}
-          >
-            <RedeemIcon sx={{ fontSize: 35, color: item.color }} />
-          </Stack>
-          <Box>
-            <Typography variant="subtitle1" mb={0.75}>
-              {item.count}
-            </Typography>
+          {data.map((item, index) => (
             <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-              gap={1}
+              key={index}
+              gap={3}
+              sx={{
+                width: 270,
+                flex: { xs: "0 0 auto", lg: 1 },
+                pl: { xs: 2, lg: index === 0 ? 0 : 3 },
+                pr: { xs: 2, lg: index === 2 ? 0 : 3 },
+                py: { xs: 2, lg: 3 },
+                borderRight: {
+                  xs: "none",
+                  lg: index === 2 ? "none" : "solid 1px",
+                },
+                borderRightColor: { xs: "none", lg: "grey.300" },
+                bgcolor: { xs: "white", lg: "none" },
+                borderRadius: { xs: 3, lg: 0 },
+              }}
             >
-              <Typography color="text.secondary" variant="body2">
-                {item.name}
-              </Typography>
+              <Stack
+                alignItems="center"
+                justifyContent="center"
+                sx={{
+                  borderRadius: 3,
+                  width: 63,
+                  height: 63,
+                  bgcolor: item.background,
+                }}
+              >
+                <RedeemIcon sx={{ fontSize: 35, color: item.color }} />
+              </Stack>
+              <Box>
+                <Typography variant="subtitle1" mb={0.75}>
+                  {item.count}
+                </Typography>
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  gap={1}
+                >
+                  <Typography color="text.secondary" variant="body2">
+                    {item.name}
+                  </Typography>
 
-              <ArrowOutwardIcon sx={{ color: "grey.900" }} />
+                  <ArrowOutwardIcon sx={{ color: "grey.900" }} />
+                </Stack>
+              </Box>
             </Stack>
-          </Box>
-        </Stack>
-      ))}
-    </Wrapper>
+          ))}
+        </Wrapper>
+      )}
+    </>
   );
 };
 

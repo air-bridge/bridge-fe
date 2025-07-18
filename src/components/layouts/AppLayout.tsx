@@ -1,6 +1,6 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getAuthUser } from "../../utils/userAuth.ts";
 import { Header } from "../header";
 import { UserContextProvider } from "../../context/user";
@@ -8,6 +8,7 @@ import { NotificationContextProvider } from "../../context/notification";
 
 const fullScreenPaths = ["create-order"];
 const AppLayout = () => {
+  const [isAllowed, setIsAllowed] = useState(false);
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -18,10 +19,12 @@ const AppLayout = () => {
     if (!authUser) {
       void navigate("/account");
       return;
+    } else {
+      setIsAllowed(true);
     }
   }, []);
 
-  return (
+  return isAllowed ? (
     <NotificationContextProvider>
       <UserContextProvider>
         {isFullScreen ? (
@@ -36,7 +39,7 @@ const AppLayout = () => {
         )}
       </UserContextProvider>
     </NotificationContextProvider>
-  );
+  ) : null;
 };
 
 export default AppLayout;

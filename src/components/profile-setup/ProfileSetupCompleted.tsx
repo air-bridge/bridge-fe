@@ -24,7 +24,7 @@ export const ProfileSetupCompleted = () => {
         variant="contained"
         color="primary"
         component={Link}
-        to="/account"
+        to="/"
       >
         Start Exploring
       </Button>

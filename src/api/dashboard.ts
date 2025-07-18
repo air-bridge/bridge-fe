@@ -1,7 +1,8 @@
 import { getAPI } from "./api.ts";
+import { PassengerStats, SenderStats } from "../types/dashboard.ts";
 
 export const passengerDashboard = async () => {
-  const res = await getAPI(`passenger/dashboard`);
+  const res = await getAPI(`passengers/dashboard`);
 
   if (!res.ok) {
     const errorData = (await res.json()) as {
@@ -14,14 +15,14 @@ export const passengerDashboard = async () => {
   }
 
   const response: {
-    data: string[];
+    data: PassengerStats;
   } = await res.json();
 
   return response.data;
 };
 
 export const senderDashboard = async () => {
-  const res = await getAPI(`sender/dashboard`);
+  const res = await getAPI(`senders/dashboard`);
 
   if (!res.ok) {
     const errorData = (await res.json()) as {
@@ -34,7 +35,7 @@ export const senderDashboard = async () => {
   }
 
   const response: {
-    data: string[];
+    data: SenderStats;
   } = await res.json();
 
   return response.data;

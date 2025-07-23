@@ -2,11 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { passengerDashboard } from "../../api/dashboard.ts";
 import { useMemo } from "react";
 import { OverviewStats } from "./OverViewStats.tsx";
+import { useUserContext } from "../../context/user/util.ts";
 
 export const PassengerOverviewStats = () => {
+  const { isPassenger } = useUserContext();
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["passenger-overview-stats"],
+    queryKey: ["passenger-overview-stats", isPassenger],
     queryFn: passengerDashboard,
+    enabled: !!isPassenger,
   });
 
   const stats = useMemo(() => {

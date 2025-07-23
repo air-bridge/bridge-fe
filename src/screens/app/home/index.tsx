@@ -11,7 +11,6 @@ type Props = {
 };
 const HomeScreen = ({ count = 0 }: Props) => {
   const { isSender } = useUserContext();
-
   return (
     <Stack gap={2}>
       <HomepageTabs showAction={count > 0} />

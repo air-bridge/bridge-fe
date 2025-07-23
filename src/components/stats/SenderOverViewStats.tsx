@@ -2,11 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { senderDashboard } from "../../api/dashboard.ts";
 import { useMemo } from "react";
 import { OverviewStats } from "./OverViewStats.tsx";
+import { useUserContext } from "../../context/user/util.ts";
 
 export const SenderOverviewStats = () => {
+  const { isSender } = useUserContext();
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["sender-overview-stats"],
+    queryKey: ["sender-overview-stats", isSender],
     queryFn: senderDashboard,
+    enabled: !!isSender,
   });
 
   const stats = useMemo(() => {

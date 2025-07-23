@@ -12,11 +12,20 @@ export const CreateOrderHeading = () => {
   return (
     <Stack
       px={{ xs: 2, lg: 5 }}
-      py={{ xs: 1.5, lg: 3 }}
+      py={{ xs: 1.5, lg: 2 }}
       justifyContent="space-between"
       alignItems="center"
       direction="row"
-      sx={{ borderBottom: "solid 1px", borderBottomColor: "grey.200" }}
+      sx={{
+        bgcolor: "white",
+        borderBottom: "solid 1px",
+        zIndex: 2,
+        borderBottomColor: "grey.200",
+        position: { xs: "unset", lg: "fixed" },
+        left: 0,
+        right: 0,
+        top: 0,
+      }}
     >
       <Stack gap={1} alignItems="center" direction="row">
         <IconButton onClick={() => navigate(-1)} data-testid="close-button">
@@ -33,7 +42,7 @@ export const CreateOrderHeading = () => {
 
       {!isMobile && (
         <Stack gap={2} alignItems="center" direction="row">
-          <Button variant="outlined" color="primary">
+          <Button variant="outlined" color="primary" type="submit">
             Save for later
           </Button>
           <Button variant="contained" color="primary">

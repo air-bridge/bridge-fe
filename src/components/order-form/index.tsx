@@ -6,75 +6,56 @@ import {
   Stack,
   Typography,
   Grid2,
+  Theme,
 } from "@mui/material";
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import Grid from "@mui/material/Grid2";
+import { Controller, useFormContext } from "react-hook-form";
 import { luggageCategories } from "./util.ts";
 import { OrderFormValues } from "../../types/order.ts";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { PhotoInput } from "../photo-input";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
-const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
-  title: yup.string().required("Title is required"),
-  luggageType: yup.string().required("Luggage Type is required"),
-  weight: yup
-    .number()
-    .typeError("Weight must be a number")
-    .positive("Weight must be a number")
-    .nullable()
-    .notRequired(),
-  origin: yup.string().nullable().notRequired(),
-  destination: yup.string().nullable().notRequired(),
-  receiver: yup.string().nullable().notRequired(),
-  address: yup.string().nullable().notRequired(),
-});
-
-const initialValues: OrderFormValues = {
-  title: "",
-  luggageType: "box",
-  weight: undefined,
-  origin: "",
-  destination: "",
-  receiver: "",
-  address: "",
-};
 export const OrderForm = () => {
+  const isMobile = useMediaQuery<Theme>((theme) =>
+    theme.breakpoints.down("lg"),
+  );
   const {
     watch,
     control,
-    handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<OrderFormValues>({
-    resolver: yupResolver(schema),
-    defaultValues: initialValues,
-  });
+  } = useFormContext<OrderFormValues>();
 
-  const onSubmit: SubmitHandler<OrderFormValues> = (data) => {
-    console.log(data);
-  };
-
-  const luggageType = watch("luggageType");
+  const packageType = watch("package_type");
 
   return (
-    <Stack
-      gap={{ xs: 2, lg: 3 }}
-      component="form"
-      onSubmit={handleSubmit(onSubmit)}
-      noValidate
-    >
+    <Stack gap={{ xs: 2, lg: 3 }}>
       <Box>
         <InputLabel>Luggage Type</InputLabel>
-        <Stack direction="row" spacing={1}>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            overflowX: "auto",
+            whiteSpace: "nowrap",
+            paddingBottom: 1,
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+          }}
+        >
           {luggageCategories.map((category) => (
             <Button
               key={category.value}
               variant="outlined"
-              color={luggageType === category.value ? "primary" : "secondary"}
+              color={packageType === category.value ? "primary" : "secondary"}
               size="small"
               startIcon={<category.icon />}
-              onClick={() => setValue("luggageType", category.value)}
+              onClick={() => setValue("package_type", category.value)}
+              sx={{ flexShrink: 0 }}
             >
               {category.name}
             </Button>
@@ -82,97 +63,243 @@ export const OrderForm = () => {
         </Stack>
       </Box>
 
-      <Controller
-        name="title"
-        control={control}
-        render={({ field }) => (
-          <Box>
-            <InputLabel htmlFor="title">
-              Order Title (e.g I want to deliver a 3kg box)
-            </InputLabel>
-            <TextField
-              id="title"
-              variant="outlined"
-              {...field}
-              error={!!errors.title}
-              helperText={errors.title?.message}
-              fullWidth
-            />
-          </Box>
-        )}
-      />
+      <Grid container spacing={{ xs: 1, lg: 2 }}>
+        <Grid size={{ xs: 12 }}>
+          <Controller
+            name="title"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="title">
+                  Order Title (e.g I want to deliver a 3kg box)
+                </InputLabel>
+                <TextField
+                  id="title"
+                  variant="outlined"
+                  {...field}
+                  error={!!errors.title}
+                  helperText={errors.title?.message}
+                  fullWidth
+                />
+              </Box>
+            )}
+          />
+        </Grid>
+        <Grid size={{ xs: 12 }}>
+          <Controller
+            name="weight"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="weight">Package weight (KG)</InputLabel>
+                <TextField
+                  {...field}
+                  id="weight"
+                  variant="outlined"
+                  type="number"
+                  error={!!errors.weight}
+                  helperText={errors.weight?.message}
+                  fullWidth
+                />
+              </Box>
+            )}
+          />
+        </Grid>
 
-      <Controller
-        name="weight"
-        control={control}
-        render={({ field }) => (
-          <Box>
-            <InputLabel htmlFor="weight">Package weight (KG)</InputLabel>
-            <TextField
-              {...field}
-              id="weight"
-              variant="outlined"
-              type="number"
-              error={!!errors.weight}
-              helperText={errors.weight?.message}
-              fullWidth
-            />
-          </Box>
-        )}
-      />
+        <Grid size={{ xs: 12 }}>
+          <Typography variant="subtitle2" sx={{ py: 1.5 }}>
+            Sender
+          </Typography>
+        </Grid>
 
-      <Typography variant="subtitle2">Destination</Typography>
+        <Grid size={{ xs: 12 }}>
+          <Controller
+            name="pickup_address"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="origin">From (Pickup address)</InputLabel>
+                <TextField
+                  {...field}
+                  id="origin"
+                  variant="outlined"
+                  fullWidth
+                  error={!!errors.pickup_address}
+                  helperText={errors.pickup_address?.message}
+                />
+              </Box>
+            )}
+          />
+        </Grid>
 
-      <Controller
-        name="origin"
-        control={control}
-        render={({ field }) => (
-          <Box>
-            <InputLabel htmlFor="origin">From (Pickup address)</InputLabel>
-            <TextField id="origin" variant="outlined" {...field} fullWidth />
-          </Box>
-        )}
-      />
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <Controller
+            name="pickup_country"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="pickup_country">Country</InputLabel>
+                <TextField
+                  id="pickup_country"
+                  variant="outlined"
+                  {...field}
+                  fullWidth
+                  error={!!errors.pickup_country}
+                  helperText={errors.pickup_country?.message}
+                />
+              </Box>
+            )}
+          />
+        </Grid>
 
-      <Controller
-        name="destination"
-        control={control}
-        render={({ field }) => (
-          <Box>
-            <InputLabel htmlFor="destination">To (Country)</InputLabel>
-            <TextField
-              id="destination"
-              variant="outlined"
-              {...field}
-              fullWidth
-            />
-          </Box>
-        )}
-      />
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <Controller
+            name="pickup_state"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="pickup_state">State</InputLabel>
+                <TextField
+                  id="pickup_state"
+                  variant="outlined"
+                  {...field}
+                  fullWidth
+                  error={!!errors.pickup_state}
+                  helperText={errors.pickup_state?.message}
+                />
+              </Box>
+            )}
+          />
+        </Grid>
 
-      <Typography variant="subtitle2">Receiver</Typography>
+        <Grid size={{ xs: 12 }}>
+          <Typography variant="subtitle2" sx={{ py: 1.5 }}>
+            Receiver
+          </Typography>
+        </Grid>
 
-      <Controller
-        name="receiver"
-        control={control}
-        render={({ field }) => (
-          <Box>
-            <InputLabel htmlFor="receiver">Full name</InputLabel>
-            <TextField id="receiver" variant="outlined" {...field} fullWidth />
-          </Box>
-        )}
-      />
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <Controller
+            name="receiver_firstname"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="receiver_firstname">First name</InputLabel>
+                <TextField
+                  id="receiver_firstname"
+                  variant="outlined"
+                  {...field}
+                  fullWidth
+                  error={!!errors.receiver_firstname}
+                  helperText={errors.receiver_firstname?.message}
+                />
+              </Box>
+            )}
+          />
+        </Grid>
 
-      <Controller
-        name="address"
-        control={control}
-        render={({ field }) => (
-          <Box>
-            <InputLabel htmlFor="address">Delivery Address</InputLabel>
-            <TextField id="address" variant="outlined" {...field} fullWidth />
-          </Box>
-        )}
-      />
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <Controller
+            name="receiver_lastname"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="receiver_lastname">Last name</InputLabel>
+                <TextField
+                  id="receiver_lastname"
+                  variant="outlined"
+                  {...field}
+                  fullWidth
+                  error={!!errors.receiver_lastname}
+                  helperText={errors.receiver_lastname?.message}
+                />
+              </Box>
+            )}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12 }}>
+          <Controller
+            name="receiver_phone"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="receiver_phone">Phone</InputLabel>
+                <TextField
+                  id="receiver_phone"
+                  variant="outlined"
+                  {...field}
+                  fullWidth
+                  error={!!errors.receiver_phone}
+                  helperText={errors.receiver_phone?.message}
+                />
+              </Box>
+            )}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12 }}>
+          <Controller
+            name="destination_address"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="destination_address">
+                  Delivery Address
+                </InputLabel>
+                <TextField
+                  id="destination_address"
+                  variant="outlined"
+                  {...field}
+                  fullWidth
+                  error={!!errors.destination_address}
+                  helperText={errors.destination_address?.message}
+                />
+              </Box>
+            )}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <Controller
+            name="destination_country"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="destination_country">Country</InputLabel>
+                <TextField
+                  id="destination_country"
+                  variant="outlined"
+                  {...field}
+                  fullWidth
+                  error={!!errors.destination_country}
+                  helperText={errors.destination_country?.message}
+                />
+              </Box>
+            )}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <Controller
+            name="destination_state"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="destination_state">State</InputLabel>
+                <TextField
+                  id="destination_state"
+                  variant="outlined"
+                  {...field}
+                  fullWidth
+                  error={!!errors.destination_state}
+                  helperText={errors.destination_state?.message}
+                />
+              </Box>
+            )}
+          />
+        </Grid>
+      </Grid>
 
       <Typography variant="subtitle2" color="text.secondary" fontWeight="300">
         Upload Information
@@ -211,9 +338,30 @@ export const OrderForm = () => {
         </Grid2>
       </Grid2>
 
-      <Button type="submit" variant="contained" color="primary">
-        Submit
-      </Button>
+      <Controller
+        name="delivery_note"
+        control={control}
+        render={({ field }) => (
+          <Box>
+            <InputLabel htmlFor="delivery_note">Additional Note</InputLabel>
+            <TextField
+              id="delivery_note"
+              variant="outlined"
+              {...field}
+              fullWidth
+              multiline
+              error={!!errors.delivery_note}
+              helperText={errors.delivery_note?.message}
+            />
+          </Box>
+        )}
+      />
+
+      {isMobile && (
+        <Button type="submit" variant="contained" color="primary">
+          Submit
+        </Button>
+      )}
     </Stack>
   );
 };

@@ -105,5 +105,8 @@ export const StyledUploadContainer = styled(Stack)<{ filled?: string }>(
       borderColor: "transparent",
       height: "unset",
     }),
+    [theme.breakpoints.down("lg")]: {
+      height: "90px",
+    },
   }),
 );

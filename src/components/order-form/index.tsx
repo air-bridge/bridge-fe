@@ -32,7 +32,7 @@ export const OrderForm = () => {
   return (
     <Stack gap={{ xs: 2, lg: 3 }}>
       <Box>
-        <InputLabel>Luggage Type</InputLabel>
+        <InputLabel>Package Type</InputLabel>
         <Stack
           direction="row"
           spacing={1}
@@ -328,13 +328,13 @@ export const OrderForm = () => {
 
       <Grid2 container spacing={1}>
         <Grid2 size={{ xs: 12, lg: 4 }}>
-          <PhotoInput />
+          <PhotoInput onChange={(file) => setValue("image1", file)} />
         </Grid2>
         <Grid2 size={{ xs: 12, lg: 4 }}>
-          <PhotoInput />
+          <PhotoInput onChange={(file) => setValue("image2", file)} />
         </Grid2>
         <Grid2 size={{ xs: 12, lg: 4 }}>
-          <PhotoInput />
+          <PhotoInput onChange={(file) => setValue("image3", file)} />
         </Grid2>
       </Grid2>
 

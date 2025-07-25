@@ -1,44 +1,25 @@
-import { useRef, ChangeEvent, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Box, Stack } from "@mui/material";
 import ImageIcon from "@mui/icons-material/Image";
 import { styled } from "@mui/material/styles";
-import { Cancel } from "@mui/icons-material";
 
 type Props = {
-  onChange: (file: File) => void;
+  file: File;
 };
-export const PhotoInput = ({ onChange }: Props) => {
+export const PhotoPreview = ({ file }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [photoSource, setPhotoSource] = useState<string | null>(null);
 
-  const handleAddImage = (event: ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
+  useEffect(() => {
+    const reader = new FileReader();
 
-    if (files instanceof FileList && files.length > 0) {
-      const file = files[0];
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        if (typeof reader.result === "string") {
-          setPhotoSource(reader.result);
-        }
-      };
-      reader.readAsDataURL(file);
-
-      onChange(file);
-
-      if (inputRef?.current) {
-        inputRef.current.value = "";
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        setPhotoSource(reader.result);
       }
-    }
-  };
-
-  const handleRemovePhoto = () => {
-    if (inputRef?.current) {
-      inputRef.current.value = "";
-    }
-    setPhotoSource(null);
-  };
+    };
+    reader.readAsDataURL(file);
+  }, [file]);
 
   return (
     <StyledUploadContainer
@@ -59,29 +40,10 @@ export const PhotoInput = ({ onChange }: Props) => {
             height="100%"
             style={{ borderRadius: "8px" }}
           />
-
-          <Cancel
-            onClick={handleRemovePhoto}
-            sx={{
-              cursor: "pointer",
-              position: "absolute",
-              top: 0,
-              right: 0,
-              color: "error.main",
-            }}
-          />
         </Box>
       ) : (
         <ImageIcon sx={{ fontSize: 60 }} />
       )}
-
-      <input
-        ref={inputRef}
-        data-testid="photo-input"
-        type="file"
-        onChange={handleAddImage}
-        accept="image/png, image/jpeg"
-      />
     </StyledUploadContainer>
   );
 };

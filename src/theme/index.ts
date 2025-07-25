@@ -240,7 +240,7 @@ const theme = createTheme({
     },
     text: {
       primary: "rgba(0, 0, 0, 1)",
-      secondary: "#999999",
+      secondary: "#394753",
       disabled: "rgba(153, 153, 153, 0.18)",
     },
     action: {

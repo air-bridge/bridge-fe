@@ -5,6 +5,9 @@ import { SubmitHandler, FormProvider, useForm } from "react-hook-form";
 import { OrderFormValues } from "../../../types/order.ts";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useState } from "react";
+import { OrderDetails } from "../../../components/order-form/order-details.tsx";
+import { boolean } from "yup";
 
 const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
   title: yup.string().required("Title is required"),
@@ -23,6 +26,9 @@ const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
   receiver_firstname: yup.string().required("Receiver first name is required"),
   receiver_lastname: yup.string().required("Receiver last name is required"),
   receiver_phone: yup.string().required("Receiver phone is required"),
+  terms: boolean()
+    .required("You need to agree to our terms & condition to continue")
+    .oneOf([true], "You need to agree to our terms & condition to continue"),
   delivery_note: yup.string().nullable().notRequired(),
   image1: yup.mixed<File | string>().nullable().notRequired(),
   image2: yup.mixed<File | string>().nullable().notRequired(),
@@ -43,12 +49,14 @@ const initialValues: OrderFormValues = {
   receiver_lastname: "",
   receiver_phone: "",
   delivery_note: "",
+  terms: true,
   image1: null,
   image2: null,
   image3: null,
 };
 
 export const CreateOrderScreen = () => {
+  const [showReview, setShowReview] = useState(false);
   const methods = useForm<OrderFormValues>({
     resolver: yupResolver(schema),
     defaultValues: initialValues,
@@ -58,21 +66,32 @@ export const CreateOrderScreen = () => {
     console.log(data);
   };
 
+  const handleShowReview = async () => {
+    const isValidForm = await methods.trigger();
+    if (isValidForm) {
+      setShowReview(true);
+    }
+  };
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
         <Stack gap={{ xs: 2, lg: 3 }}>
-          <CreateOrderHeading />
+          <CreateOrderHeading
+            showReview={showReview}
+            onSetShowReview={handleShowReview}
+            onBack={() => setShowReview(false)}
+          />
 
           <Container
             sx={{
-              maxWidth: { xs: "100%", lg: "600px" },
+              maxWidth: { xs: "100%", lg: "620px" },
               px: { xs: 2, lg: 0 },
               py: 3,
               pt: { xs: 0, lg: "100px" },
             }}
           >
-            <OrderForm />
+            {showReview ? <OrderDetails /> : <OrderForm />}
           </Container>
         </Stack>
       </form>

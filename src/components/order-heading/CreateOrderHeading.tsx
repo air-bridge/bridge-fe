@@ -3,7 +3,16 @@ import CloseIcon from "@mui/icons-material/Close";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useNavigate } from "react-router-dom";
 
-export const CreateOrderHeading = () => {
+type Props = {
+  showReview: boolean;
+  onSetShowReview: () => void;
+  onBack: () => void;
+};
+export const CreateOrderHeading = ({
+  onBack,
+  showReview,
+  onSetShowReview,
+}: Props) => {
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
   );
@@ -42,12 +51,53 @@ export const CreateOrderHeading = () => {
 
       {!isMobile && (
         <Stack gap={2} alignItems="center" direction="row">
-          <Button variant="outlined" color="primary" type="submit">
-            Save for later
-          </Button>
-          <Button variant="contained" color="primary">
-            Review
-          </Button>
+          {showReview ? (
+            <>
+              <Button
+                variant="outlined"
+                color="primary"
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onBack();
+                }}
+                sx={{ px: 5 }}
+              >
+                Back
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                sx={{ px: 5 }}
+              >
+                Submit
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                variant="outlined"
+                color="primary"
+                type="submit"
+                sx={{ px: 5 }}
+              >
+                Save for later
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onSetShowReview();
+                }}
+                sx={{ px: 5 }}
+              >
+                Review
+              </Button>
+            </>
+          )}
         </Stack>
       )}
     </Stack>

@@ -1,6 +1,6 @@
 import { CreateOrderHeading } from "../../../components/order-heading/CreateOrderHeading.tsx";
 import { OrderForm } from "../../../components/order-form";
-import { Container, Stack } from "@mui/material";
+import { Alert, Container, Stack } from "@mui/material";
 import { SubmitHandler, FormProvider, useForm } from "react-hook-form";
 import { OrderFormValues } from "../../../types/order.ts";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -8,6 +8,9 @@ import * as yup from "yup";
 import { useState } from "react";
 import { OrderDetails } from "../../../components/order-form/order-details.tsx";
 import { boolean } from "yup";
+import { useMutation } from "@tanstack/react-query";
+import { createOrder } from "../../../api/order.ts";
+import { useNotificationContext } from "../../../context/notification/util.ts";
 
 const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
   title: yup.string().required("Title is required"),
@@ -61,9 +64,20 @@ export const CreateOrderScreen = () => {
     resolver: yupResolver(schema),
     defaultValues: initialValues,
   });
+  const { openNotification } = useNotificationContext();
+
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationFn: createOrder,
+    onSuccess: () => {
+      openNotification("Order created successfully.");
+    },
+    onError: () => {
+      setShowReview(false);
+    },
+  });
 
   const onSubmit: SubmitHandler<OrderFormValues> = (data) => {
-    console.log(data);
+    mutate(data);
   };
 
   const handleShowReview = async () => {
@@ -81,6 +95,7 @@ export const CreateOrderScreen = () => {
             showReview={showReview}
             onSetShowReview={handleShowReview}
             onBack={() => setShowReview(false)}
+            isPending={isPending}
           />
 
           <Container
@@ -91,6 +106,11 @@ export const CreateOrderScreen = () => {
               pt: { xs: 0, lg: "100px" },
             }}
           >
+            {isError && (
+              <Alert severity="error" variant="filled" sx={{ mb: 1 }}>
+                {error?.message}
+              </Alert>
+            )}
             {showReview ? <OrderDetails /> : <OrderForm />}
           </Container>
         </Stack>

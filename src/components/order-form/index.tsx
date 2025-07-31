@@ -349,6 +349,7 @@ export const OrderForm = () => {
               variant="outlined"
               {...field}
               fullWidth
+              rows={3}
               multiline
               error={!!errors.delivery_note}
               helperText={errors.delivery_note?.message}

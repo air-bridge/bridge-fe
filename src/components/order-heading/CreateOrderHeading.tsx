@@ -1,15 +1,24 @@
-import { Button, IconButton, Stack, Theme, Typography } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  IconButton,
+  Stack,
+  Theme,
+  Typography,
+} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
+  isPending: boolean;
   showReview: boolean;
   onSetShowReview: () => void;
   onBack: () => void;
 };
 export const CreateOrderHeading = ({
   onBack,
+  isPending,
   showReview,
   onSetShowReview,
 }: Props) => {
@@ -70,6 +79,8 @@ export const CreateOrderHeading = ({
                 color="primary"
                 type="submit"
                 sx={{ px: 5 }}
+                loading={isPending}
+                loadingIndicator={<CircularProgress />}
               >
                 Submit
               </Button>

@@ -18,7 +18,7 @@ const OrderCard = ({ order }: Props) => {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Typography variant="caption">{order.createdAt}</Typography>
+            <Typography variant="caption">{order.created_at}</Typography>
             <OrderStatusLabel status={order.status} />
           </Stack>
 
@@ -37,14 +37,14 @@ const OrderCard = ({ order }: Props) => {
         </Box>
 
         <Stack alignItems="center" gap={2} direction="row" minHeight={20}>
-          {order.category.length > 0 && (
+          {order.package_type.length > 0 && (
             <>
               <Typography color="text.secondary" variant="body2">
                 Package type:
               </Typography>
 
               <Stack direction="row" alignItems="center" gap={0.5}>
-                {order.category.map((c, index) => (
+                {order.package_type.map((c, index) => (
                   <Typography
                     variant="caption"
                     key={index}

@@ -1,19 +1,34 @@
 export enum OrderStatus {
   Draft = "Draft",
+  Inactive = "inactive",
   Open = "Open",
   Pending = "Pending",
   Requested = "Requested",
 }
 export interface Order {
-  id: string;
+  id: number;
+  user_id: number;
   title: string;
-  createdAt: string;
-  weight: string;
+  description: string;
+  weight: number;
+  package_type: string[];
+  payment_status: boolean;
   status: OrderStatus;
-  origin: string;
-  destination?: string;
-  tripType?: string;
-  category: string[];
+  destination_address: string;
+  destination_state: string;
+  destination_country: string;
+  pickup_address: string;
+  pickup_state: string;
+  pickup_country: string;
+  receiver_firstname: string;
+  receiver_lastname: string;
+  receiver_phone: string;
+  delivery_note: string;
+  image1: string;
+  image2: string;
+  image3: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export type OrderFormValues = {

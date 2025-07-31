@@ -35,12 +35,12 @@ export const OrderTimeline = ({ order }: Props) => {
           <RadioButtonUncheckedIcon fontSize="small" />
         </Avatar>
         <Box ml={2}>
-          <Typography variant="h6">{order.origin}</Typography>
+          <Typography variant="h6">{`${order.pickup_state}, ${order.pickup_country}`}</Typography>
           <Typography variant="body2" color="text.secondary">
-            {order.createdAt}
+            {order.created_at}
           </Typography>
           <Typography variant="subtitle2" color="success.main" mt={3}>
-            {order.tripType}&nbsp;
+            {order.package_type[0]}&nbsp;
           </Typography>
         </Box>
       </Box>
@@ -51,7 +51,7 @@ export const OrderTimeline = ({ order }: Props) => {
           <LocationOnIcon fontSize="small" sx={{ color: "black" }} />
         </Avatar>
         <Box ml={2} mt={2.5}>
-          <Typography fontWeight="bold">{order.destination}</Typography>
+          <Typography fontWeight="bold">{`${order.destination_state}, ${order.destination_country}`}</Typography>
         </Box>
       </Box>
     </Box>

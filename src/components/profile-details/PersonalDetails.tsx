@@ -17,7 +17,7 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validationSchema } from "../profile-form/validation.ts";
 import { useMutation } from "@tanstack/react-query";
-import { Country, IState, State } from "country-state-city";
+import { Country, IState } from "country-state-city";
 import Grid from "@mui/material/Grid2";
 import { MuiTelInput } from "mui-tel-input";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -25,6 +25,7 @@ import { updateUser } from "../../api/user.ts";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useUserContext } from "../../context/user/util.ts";
 import { useNotificationContext } from "../../context/notification/util.ts";
+import { getStates } from "../../utils/country-state.ts";
 
 type Props = {
   data: Profile;
@@ -39,14 +40,6 @@ export const PersonalDetails = ({ data }: Props) => {
   const countries = Country.getAllCountries();
   const [stateOptions, setStateOptions] = useState<IState[]>([]);
 
-  const getStates = (countryIsoCode?: string | null) => {
-    if (countryIsoCode) {
-      const countryStates = State.getStatesOfCountry(countryIsoCode);
-      setStateOptions(countryStates);
-    } else {
-      setStateOptions([]);
-    }
-  };
   const {
     control,
     handleSubmit,

@@ -1,8 +1,8 @@
-import { postAPI } from "./api.ts";
+import { postFormDataAPI } from "./api.ts";
 import { Order, OrderFormValues } from "../types/order.ts";
 
 export const createOrder = async (payload: OrderFormValues) => {
-  const res = await postAPI("senders/orders", payload);
+  const res = await postFormDataAPI("senders/orders", payload);
 
   if (!res.ok) {
     const errorData = (await res.json()) as {

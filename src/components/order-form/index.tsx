@@ -7,6 +7,7 @@ import {
   Typography,
   Grid2,
   Theme,
+  MenuItem,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { Controller, useFormContext } from "react-hook-form";
@@ -15,6 +16,11 @@ import { OrderFormValues } from "../../types/order.ts";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { PhotoInput } from "../photo-input";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { Country } from "country-state-city";
+import { useMemo } from "react";
+import { getStates } from "../../utils/country-state.ts";
+import Autocomplete from "@mui/material/Autocomplete";
+import { MuiTelInput } from "mui-tel-input";
 
 export const OrderForm = () => {
   const isMobile = useMediaQuery<Theme>((theme) =>
@@ -27,7 +33,32 @@ export const OrderForm = () => {
     formState: { errors },
   } = useFormContext<OrderFormValues>();
 
+  const countries = Country.getAllCountries();
   const packageType = watch("package_type");
+
+  // Watch for country changes to update state options
+  const selectedDestinationCountry = watch("destination_country");
+  const selectedPickupCountry = watch("pickup_country");
+
+  const pickupStateOptions = useMemo(() => {
+    if (!selectedPickupCountry) {
+      return [];
+    }
+
+    const country = countries.find((c) => c.name === selectedPickupCountry);
+    return getStates(country?.isoCode);
+  }, [selectedPickupCountry]);
+
+  const destinationStateOptions = useMemo(() => {
+    if (!selectedPickupCountry) {
+      return [];
+    }
+
+    const country = countries.find(
+      (c) => c.name === selectedDestinationCountry,
+    );
+    return getStates(country?.isoCode);
+  }, [selectedDestinationCountry]);
 
   return (
     <Stack gap={{ xs: 2, lg: 3 }}>
@@ -139,13 +170,33 @@ export const OrderForm = () => {
             render={({ field }) => (
               <Box>
                 <InputLabel htmlFor="pickup_country">Country</InputLabel>
-                <TextField
-                  id="pickup_country"
-                  variant="outlined"
+                <Controller
                   {...field}
-                  fullWidth
-                  error={!!errors.pickup_country}
-                  helperText={errors.pickup_country?.message}
+                  control={control}
+                  render={({ field }) => (
+                    <Autocomplete
+                      {...field}
+                      id="country"
+                      options={countries}
+                      getOptionLabel={(option) => option.name}
+                      value={
+                        countries.find((c) => c.name === field.value) || null
+                      }
+                      onChange={(_, value) => {
+                        setValue("pickup_country", value?.name || "");
+                        setValue("pickup_state", "");
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          fullWidth
+                          placeholder="Select country"
+                          error={!!errors.pickup_country}
+                          helperText={errors.pickup_country?.message}
+                        />
+                      )}
+                    />
+                  )}
                 />
               </Box>
             )}
@@ -159,13 +210,27 @@ export const OrderForm = () => {
             render={({ field }) => (
               <Box>
                 <InputLabel htmlFor="pickup_state">State</InputLabel>
-                <TextField
-                  id="pickup_state"
-                  variant="outlined"
+                <Controller
                   {...field}
-                  fullWidth
-                  error={!!errors.pickup_state}
-                  helperText={errors.pickup_state?.message}
+                  name="pickup_state"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      id="pickup_state"
+                      variant="outlined"
+                      select
+                      fullWidth
+                      error={!!errors.pickup_state}
+                      helperText={errors.pickup_state?.message}
+                    >
+                      {pickupStateOptions.map((option) => (
+                        <MenuItem key={option.isoCode} value={option.name}>
+                          {option.name}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  )}
                 />
               </Box>
             )}
@@ -225,13 +290,23 @@ export const OrderForm = () => {
             render={({ field }) => (
               <Box>
                 <InputLabel htmlFor="receiver_phone">Phone</InputLabel>
-                <TextField
-                  id="receiver_phone"
-                  variant="outlined"
+                <Controller
                   {...field}
-                  fullWidth
-                  error={!!errors.receiver_phone}
-                  helperText={errors.receiver_phone?.message}
+                  control={control}
+                  render={({ field }) => (
+                    <MuiTelInput
+                      {...field}
+                      id="receiver_phone"
+                      fullWidth
+                      forceCallingCode
+                      defaultCountry="NG"
+                      preferredCountries={["NG", "DE", "GB"]}
+                      placeholder="Phone Number"
+                      error={Boolean(errors.receiver_phone)}
+                      helperText={errors.receiver_phone?.message}
+                      onChange={field.onChange}
+                    />
+                  )}
                 />
               </Box>
             )}
@@ -248,9 +323,9 @@ export const OrderForm = () => {
                   Delivery Address
                 </InputLabel>
                 <TextField
+                  {...field}
                   id="destination_address"
                   variant="outlined"
-                  {...field}
                   fullWidth
                   error={!!errors.destination_address}
                   helperText={errors.destination_address?.message}
@@ -266,14 +341,35 @@ export const OrderForm = () => {
             control={control}
             render={({ field }) => (
               <Box>
-                <InputLabel htmlFor="destination_country">Country</InputLabel>
-                <TextField
-                  id="destination_country"
-                  variant="outlined"
+                <InputLabel htmlFor="pickup_country">Country</InputLabel>
+                <Controller
                   {...field}
-                  fullWidth
-                  error={!!errors.destination_country}
-                  helperText={errors.destination_country?.message}
+                  name="destination_country"
+                  control={control}
+                  render={({ field }) => (
+                    <Autocomplete
+                      {...field}
+                      id="country"
+                      options={countries}
+                      getOptionLabel={(option) => option.name}
+                      value={
+                        countries.find((c) => c.name === field.value) || null
+                      }
+                      onChange={(_, value) => {
+                        setValue("destination_country", value?.name || "");
+                        setValue("destination_state", "");
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          fullWidth
+                          placeholder="Select country"
+                          error={!!errors.destination_country}
+                          helperText={errors.destination_country?.message}
+                        />
+                      )}
+                    />
+                  )}
                 />
               </Box>
             )}
@@ -287,13 +383,27 @@ export const OrderForm = () => {
             render={({ field }) => (
               <Box>
                 <InputLabel htmlFor="destination_state">State</InputLabel>
-                <TextField
-                  id="destination_state"
-                  variant="outlined"
+                <Controller
                   {...field}
-                  fullWidth
-                  error={!!errors.destination_state}
-                  helperText={errors.destination_state?.message}
+                  name="destination_state"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      id="destination_state"
+                      variant="outlined"
+                      select
+                      fullWidth
+                      error={!!errors.destination_state}
+                      helperText={errors.destination_state?.message}
+                    >
+                      {destinationStateOptions.map((option) => (
+                        <MenuItem key={option.isoCode} value={option.name}>
+                          {option.name}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  )}
                 />
               </Box>
             )}

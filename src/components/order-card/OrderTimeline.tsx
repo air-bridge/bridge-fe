@@ -51,7 +51,10 @@ export const OrderTimeline = ({ order }: Props) => {
           <LocationOnIcon fontSize="small" sx={{ color: "black" }} />
         </Avatar>
         <Box ml={2} mt={2.5}>
-          <Typography fontWeight="bold">{`${order.destination_state}, ${order.destination_country}`}</Typography>
+          <Typography
+            fontWeight="bold"
+            textTransform="capitalize"
+          >{`${order.destination_state}, ${order.destination_country}`}</Typography>
         </Box>
       </Box>
     </Box>

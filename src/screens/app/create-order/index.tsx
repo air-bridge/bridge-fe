@@ -7,10 +7,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useState } from "react";
 import { OrderDetails } from "../../../components/order-form/order-details.tsx";
-import { boolean } from "yup";
+import { boolean, string } from "yup";
 import { useMutation } from "@tanstack/react-query";
 import { createOrder } from "../../../api/order.ts";
 import { useNotificationContext } from "../../../context/notification/util.ts";
+import { useNavigate } from "react-router-dom";
+import { isValidPhoneNumber } from "../../../utils/validate-phone.ts";
 
 const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
   title: yup.string().required("Title is required"),
@@ -28,7 +30,11 @@ const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
   pickup_country: yup.string().required("Pickup country is required"),
   receiver_firstname: yup.string().required("Receiver first name is required"),
   receiver_lastname: yup.string().required("Receiver last name is required"),
-  receiver_phone: yup.string().required("Receiver phone is required"),
+  receiver_phone: string()
+    .required("Receiver phone is required")
+    .test("is-valid-phone", "Phone number is not valid", function (value) {
+      return isValidPhoneNumber(value);
+    }),
   terms: boolean()
     .required("You need to agree to our terms & condition to continue")
     .oneOf([true], "You need to agree to our terms & condition to continue"),
@@ -65,11 +71,13 @@ export const CreateOrderScreen = () => {
     defaultValues: initialValues,
   });
   const { openNotification } = useNotificationContext();
+  const navigate = useNavigate();
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: createOrder,
     onSuccess: () => {
       openNotification("Order created successfully.");
+      navigate("/");
     },
     onError: () => {
       setShowReview(false);

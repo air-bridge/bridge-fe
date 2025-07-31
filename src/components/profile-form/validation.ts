@@ -1,12 +1,17 @@
 import { object, ref, string } from "yup";
 import * as yup from "yup";
 import { SetPasswordFormValues } from "../../types/auth.ts";
+import { isValidPhoneNumber } from "../../utils/validate-phone.ts";
 
 export const validationSchema = () =>
   object({
     firstname: string().required("First name is required"),
     lastname: string().required("Last name is required"),
-    phone: string().required("Phone number is required"),
+    phone: string()
+      .required("Phone number is required")
+      .test("is-valid-phone", "Phone number is not valid", function (value) {
+        return isValidPhoneNumber(value);
+      }),
     country_code: string().required("Country is required"),
     state: string().required("State is required"),
   });

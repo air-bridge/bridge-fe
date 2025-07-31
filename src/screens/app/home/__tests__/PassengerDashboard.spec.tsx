@@ -18,7 +18,7 @@ describe("Passenger Dashboard Component", () => {
   it("renders the dashboard text with services", () => {
     render(
       <ComponentTestWrapper>
-        <PassengerDashboard count={3} />
+        <PassengerDashboard />
       </ComponentTestWrapper>,
     );
 

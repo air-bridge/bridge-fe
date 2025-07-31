@@ -137,6 +137,7 @@ const theme = createTheme({
       color: "#1C1C1C",
       "@media (min-width: 1200px)": {
         fontSize: "1.25rem",
+        lineHeight: "1.5rem",
       },
     },
     subtitle2: {

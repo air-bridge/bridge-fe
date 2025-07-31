@@ -36,11 +36,11 @@ export const OrderTimeline = ({ order }: Props) => {
         </Avatar>
         <Box ml={2}>
           <Typography variant="h6">{`${order.pickup_state}, ${order.pickup_country}`}</Typography>
-          <Typography variant="body2" color="text.secondary">
-            {order.created_at}
+          <Typography variant="body2" color="text.secondary" noWrap>
+            {order.pickup_address}
           </Typography>
-          <Typography variant="subtitle2" color="success.main" mt={3}>
-            {order.package_type[0]}&nbsp;
+          <Typography variant="subtitle2" color="success.main" mt={3} noWrap>
+            {order.destination_address}
           </Typography>
         </Box>
       </Box>

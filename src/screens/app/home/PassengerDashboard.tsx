@@ -8,12 +8,9 @@ import { getPassengerDashboard } from "../../../api/dashboard.ts";
 import { useMemo } from "react";
 import { useUserContext } from "../../../context/user/util.ts";
 import { OverviewStats } from "../../../components/stats/OverViewStats.tsx";
+import { HomepageTabs } from "../../../components/homepage-tabs";
 
-type Props = {
-  count?: number;
-};
-
-export const PassengerDashboard = ({ count = 0 }: Props) => {
+export const PassengerDashboard = () => {
   const { isPassenger } = useUserContext();
   // TODO: switch to api count
   const homeOrders = orders.slice(0, 2);
@@ -50,8 +47,13 @@ export const PassengerDashboard = ({ count = 0 }: Props) => {
     return [];
   }, [data]);
 
+  const recentRequests = data?.recent_requests;
+  const servicesCount = recentRequests?.length || 0;
+  const isEmpty = servicesCount === 0;
+
   return (
     <>
+      <HomepageTabs showAction={!isEmpty} />
       <OverviewStats data={stats} isError={isError} isLoading={isLoading} />
       <Stack gap={4}>
         <Stack
@@ -66,7 +68,7 @@ export const PassengerDashboard = ({ count = 0 }: Props) => {
         >
           <Typography variant="body1">My Services</Typography>
 
-          {count > 0 && (
+          {!isEmpty && (
             <Typography
               variant="body2"
               component={Link}
@@ -78,7 +80,7 @@ export const PassengerDashboard = ({ count = 0 }: Props) => {
           )}
         </Stack>
 
-        {count === 0 ? <EmptyService /> : <ServiceList orders={homeOrders} />}
+        {isEmpty ? <EmptyService /> : <ServiceList orders={homeOrders} />}
       </Stack>
     </>
   );

@@ -2,6 +2,7 @@ import { Box, Card, CardContent, Stack, Typography } from "@mui/material";
 import { Order } from "../../types/order.ts";
 import { OrderStatusLabel } from "./OrderStatusLabel.tsx";
 import { OrderTimeline } from "./OrderTimeline.tsx";
+import dayjs from "dayjs";
 
 type Props = {
   order: Order;
@@ -10,21 +11,25 @@ const OrderCard = ({ order }: Props) => {
   return (
     <Card>
       <CardContent>
-        <Stack>
-          <Typography variant="subtitle1">{order.title}</Typography>
+        <Stack gap={0.5}>
+          <Typography variant="subtitle1" noWrap>
+            {order.title}
+          </Typography>
 
           <Stack
             direction="row"
             justifyContent="space-between"
             alignItems="center"
           >
-            <Typography variant="caption">{order.created_at}</Typography>
+            <Typography variant="caption">
+              Created on {dayjs(order.created_at).format("MMMM D, YYYY h:mm A")}
+            </Typography>
             <OrderStatusLabel status={order.status} />
           </Stack>
 
           <Typography variant="body2" color="text.secondary">
             Package Weight:&nbsp;
-            <strong style={{ color: "black" }}>{order.weight}</strong>
+            <strong style={{ color: "black" }}>{order.weight}KG</strong>
           </Typography>
         </Stack>
 
@@ -36,7 +41,7 @@ const OrderCard = ({ order }: Props) => {
           <OrderTimeline order={order} />
         </Box>
 
-        <Stack alignItems="center" gap={2} direction="row" minHeight={20}>
+        <Stack alignItems="center" gap={1} direction="row" minHeight={20}>
           {order.package_type.length > 0 && (
             <>
               <Typography color="text.secondary" variant="body2">
@@ -53,6 +58,7 @@ const OrderCard = ({ order }: Props) => {
                       px: 0.5,
                       py: 0.25,
                       bgcolor: "success.light",
+                      textTransform: "capitalize",
                     }}
                   >
                     {c}

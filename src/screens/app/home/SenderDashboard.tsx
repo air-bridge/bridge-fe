@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getSenderDashboard } from "../../../api/dashboard.ts";
 import { OverviewStats } from "../../../components/stats/OverViewStats.tsx";
 import { useMemo } from "react";
+import { HomepageTabs } from "../../../components/homepage-tabs";
 
 export const SenderDashboard = () => {
   const { isSender } = useUserContext();
@@ -43,14 +44,13 @@ export const SenderDashboard = () => {
     return [];
   }, [data]);
 
-  const recentOrders = useMemo(() => {
-    return data?.recent_orders || [];
-  }, [data]);
-
-  const ordersCount = recentOrders?.length || 0;
+  const recentOrders = data?.recent_orders || [];
+  const ordersCount = recentOrders.length || 0;
+  const isEmpty = ordersCount === 0;
 
   return (
     <>
+      <HomepageTabs showAction={!isEmpty} />
       <OverviewStats data={stats} isError={isError} isLoading={isLoading} />
       <Stack gap={4}>
         <Stack
@@ -65,7 +65,7 @@ export const SenderDashboard = () => {
         >
           <Typography variant="body1">My Parcel</Typography>
 
-          {ordersCount > 0 && (
+          {!isEmpty && (
             <Typography
               variant="body2"
               component={Link}
@@ -77,11 +77,7 @@ export const SenderDashboard = () => {
           )}
         </Stack>
 
-        {ordersCount === 0 ? (
-          <EmptyOrder />
-        ) : (
-          <OrderList orders={recentOrders} />
-        )}
+        {isEmpty ? <EmptyOrder /> : <OrderList orders={recentOrders} />}
       </Stack>
     </>
   );

@@ -28,11 +28,15 @@ const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
   pickup_address: yup.string().required("Pickup address is required"),
   pickup_state: yup.string().required("Pickup state is required"),
   pickup_country: yup.string().required("Pickup country is required"),
-  receiver_firstname: yup.string().required("Receiver first name is required"),
-  receiver_lastname: yup.string().required("Receiver last name is required"),
+  receiver_firstname: yup.string().nullable().notRequired(),
+  receiver_lastname: yup.string().nullable().notRequired(),
   receiver_phone: string()
     .required("Receiver phone is required")
     .test("is-valid-phone", "Phone number is not valid", function (value) {
+      if (!value) {
+        return true;
+      }
+
       return isValidPhoneNumber(value);
     }),
   terms: boolean()

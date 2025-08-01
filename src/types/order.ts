@@ -41,8 +41,8 @@ export type OrderFormValues = {
   pickup_address: string;
   pickup_state: string;
   pickup_country: string;
-  receiver_firstname: string;
-  receiver_lastname: string;
+  receiver_firstname?: string | null;
+  receiver_lastname?: string | null;
   receiver_phone: string;
   delivery_note?: string | null;
   image1?: File | string | null;

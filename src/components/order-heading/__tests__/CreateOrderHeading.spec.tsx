@@ -33,6 +33,7 @@ describe("CreateOrderHeading Component", () => {
           showReview
           onSetShowReview={mockOnSetShowReview}
           onBack={mockOnBack}
+          isPending={false}
         />
       </ComponentTestWrapper>,
     );
@@ -50,6 +51,7 @@ describe("CreateOrderHeading Component", () => {
     render(
       <ComponentTestWrapper>
         <CreateOrderHeading
+          isPending={false}
           showReview
           onSetShowReview={mockOnSetShowReview}
           onBack={mockOnBack}
@@ -75,6 +77,7 @@ describe("Order Heading - Mobile", () => {
     render(
       <ComponentTestWrapper>
         <CreateOrderHeading
+          isPending={false}
           showReview
           onSetShowReview={mockOnSetShowReview}
           onBack={mockOnBack}
@@ -103,6 +106,7 @@ describe("CreateOrderHeading useMediaQuery callback coverage", () => {
     render(
       <ComponentTestWrapper>
         <CreateOrderHeading
+          isPending={false}
           showReview
           onSetShowReview={mockOnSetShowReview}
           onBack={mockOnBack}

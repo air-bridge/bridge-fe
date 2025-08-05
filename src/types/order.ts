@@ -33,8 +33,9 @@ export interface Order {
 
 export type OrderFormValues = {
   title: string;
-  package_type: string;
-  weight: number | null;
+  package_type: string[];
+  weight?: number | null;
+  delivery_date: string;
   destination_address: string;
   destination_state: string;
   destination_country: string;

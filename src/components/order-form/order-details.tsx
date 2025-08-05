@@ -1,12 +1,12 @@
 import {
   Button,
-  Stack,
-  Typography,
-  Grid2,
-  Theme,
-  FormControlLabel,
   Checkbox,
+  FormControlLabel,
   FormHelperText,
+  Grid2,
+  Stack,
+  Theme,
+  Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { Controller, useFormContext } from "react-hook-form";
@@ -27,9 +27,9 @@ export const OrderDetails = () => {
   } = useFormContext<OrderFormValues>();
 
   const packageTypeValue = watch("package_type");
-  const packageType = luggageCategories.find(
-    (l) => l.value === packageTypeValue,
-  );
+  const packageTypes = packageTypeValue.map((pv) => {
+    return luggageCategories.find((l) => l.value === pv);
+  });
 
   const title = watch("title");
   const weight = watch("weight");
@@ -56,14 +56,18 @@ export const OrderDetails = () => {
         <Typography color="text.secondary" variant="body2">
           Package Type
         </Typography>
-        <Button
-          variant="outlined"
-          color={"primary"}
-          size="small"
-          startIcon={packageType ? <packageType.icon /> : null}
-        >
-          {packageType?.name}
-        </Button>
+        <Stack direction="row" gap={1}>
+          {packageTypes.map((pv) => (
+            <Button
+              variant="outlined"
+              color={"primary"}
+              size="small"
+              startIcon={pv ? <pv.icon /> : null}
+            >
+              {pv?.name}
+            </Button>
+          ))}
+        </Stack>
       </Stack>
 
       <Grid container spacing={{ xs: 1, lg: 2 }}>

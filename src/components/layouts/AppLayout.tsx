@@ -5,6 +5,8 @@ import { getAuthUser } from "../../utils/userAuth.ts";
 import { Header } from "../header";
 import { UserContextProvider } from "../../context/user";
 import { NotificationContextProvider } from "../../context/notification";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 const fullScreenPaths = ["create-order"];
 const AppLayout = () => {
@@ -26,18 +28,20 @@ const AppLayout = () => {
 
   return isAllowed ? (
     <NotificationContextProvider>
-      <UserContextProvider>
-        {isFullScreen ? (
-          <Outlet />
-        ) : (
-          <>
-            <Header />
-            <Box py={2} px={{ xs: 2, lg: 5 }}>
-              <Outlet />
-            </Box>
-          </>
-        )}
-      </UserContextProvider>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <UserContextProvider>
+          {isFullScreen ? (
+            <Outlet />
+          ) : (
+            <>
+              <Header />
+              <Box py={2} px={{ xs: 2, lg: 5 }}>
+                <Outlet />
+              </Box>
+            </>
+          )}
+        </UserContextProvider>
+      </LocalizationProvider>
     </NotificationContextProvider>
   ) : null;
 };

@@ -8,3 +8,22 @@ html, body {
 a, a:active, a:hover, a:focus {
     text-decoration: none;
 }
+
+/* MUI Date Picker*/
+.MuiPickersInputBase-root.MuiPickersOutlinedInput-root {
+    border-radius: 16px;
+    padding: 0 15px;
+}
+
+.MuiPickersInputBase-root.MuiPickersOutlinedInput-root:hover,
+.MuiPickersInputBase-root.MuiPickersOutlinedInput-root:focus,
+.MuiPickersInputBase-root.MuiPickersOutlinedInput-root input:focus
+{
+    border: none;
+}
+.MuiFormControl-root.MuiPickersTextField-root.Mui-focused:not(.Mui-error) .MuiPickersOutlinedInput-notchedOutline {
+    border-color: #0000003b;
+}
+.MuiPickersInputBase-root.MuiPickersOutlinedInput-root input {
+    padding: 0;
+}

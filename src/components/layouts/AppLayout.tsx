@@ -1,4 +1,4 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, matchPath } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getAuthUser } from "../../utils/userAuth.ts";
@@ -8,13 +8,14 @@ import { NotificationContextProvider } from "../../context/notification";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
-const fullScreenPaths = ["create-order"];
+const fullScreenPaths = ["create-order", "orders/:orderId"];
 const AppLayout = () => {
   const [isAllowed, setIsAllowed] = useState(false);
   const navigate = useNavigate();
-  const { pathname } = useLocation();
 
-  const isFullScreen = fullScreenPaths.includes(pathname.replace("/", ""));
+  const isFullScreen = fullScreenPaths.some((path) =>
+    matchPath({ path, end: true }, location.pathname),
+  );
 
   useEffect(() => {
     const authUser = getAuthUser();

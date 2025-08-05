@@ -4,21 +4,27 @@ import ImageIcon from "@mui/icons-material/Image";
 import { styled } from "@mui/material/styles";
 
 type Props = {
-  file: File;
+  file: File | string;
 };
 export const PhotoPreview = ({ file }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [photoSource, setPhotoSource] = useState<string | null>(null);
 
   useEffect(() => {
-    const reader = new FileReader();
+    if (file instanceof File) {
+      const reader = new FileReader();
 
-    reader.onload = () => {
-      if (typeof reader.result === "string") {
-        setPhotoSource(reader.result);
-      }
-    };
-    reader.readAsDataURL(file);
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          setPhotoSource(reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    if (typeof file === "string") {
+      setPhotoSource(file);
+    }
   }, [file]);
 
   return (

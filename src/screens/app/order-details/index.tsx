@@ -1,11 +1,11 @@
 import { Container, Stack } from "@mui/material";
-import { OrderDetails } from "../../../components/order-form/order-details.tsx";
 import { OrderDetailsHeading } from "../../../components/order-heading/OrderDetailsHeading.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { getOrder } from "../../../api/order.ts";
 import { Loading } from "../../../components/loading";
 import { ErrorInfo } from "../../../components/error-info";
+import { OrderDetails } from "../../../components/order-details";
 
 export const OrderDetailsScreen = () => {
   const { orderId = "" } = useParams();

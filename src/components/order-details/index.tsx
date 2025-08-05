@@ -1,54 +1,23 @@
-import {
-  Button,
-  Checkbox,
-  FormControlLabel,
-  FormHelperText,
-  Grid2,
-  Stack,
-  Theme,
-  Typography,
-} from "@mui/material";
+import { Button, Grid2, Stack, Theme, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { Controller, useFormContext } from "react-hook-form";
-import { OrderFormValues } from "../../types/order.ts";
+import { Order } from "../../types/order.ts";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Link } from "react-router-dom";
 import { PhotoPreview } from "../photo-input/PhotoPreview.tsx";
 import { luggageCategories } from "../order-form/util.ts";
 
-export const OrderDetails = () => {
+type Props = {
+  data: Order;
+};
+export const OrderDetails = ({ data }: Props) => {
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
   );
-  const {
-    control,
-    watch,
-    formState: { errors },
-  } = useFormContext<OrderFormValues>();
 
-  const packageTypeValue = watch("package_type");
-  const packageTypes = packageTypeValue.map((pv) => {
+  const packageTypes = data.package_type.map((pv) => {
     return luggageCategories.find((l) => l.value === pv);
   });
 
-  const title = watch("title");
-  const weight = watch("weight");
-  const pickupAddress = watch("pickup_address");
-  const destinationAddress = watch("destination_address");
-  const destinationCountry = watch("destination_country");
-  const destinationState = watch("destination_state");
-  const pickupCountry = watch("pickup_country");
-  const pickupState = watch("pickup_state");
-  const receiverFirstName = watch("receiver_firstname");
-  const receiverLastName = watch("receiver_lastname");
-  const receiverPhone = watch("receiver_phone");
-  const deliveryNote = watch("delivery_note");
-  const terms = watch("terms");
-  const image1 = watch("image1");
-  const image2 = watch("image2");
-  const image3 = watch("image3");
-
-  const noImage = !image1 && !image2 && !image3;
+  const noImage = !data.image1 && !data.image2 && !data.image3;
 
   return (
     <Stack gap={{ xs: 2, lg: 3 }}>
@@ -76,7 +45,7 @@ export const OrderDetails = () => {
             <Typography color="text.secondary" variant="body2">
               Order Title
             </Typography>
-            <Typography color="text.primary">{title}</Typography>
+            <Typography color="text.primary">{data.title}</Typography>
           </Stack>
         </Grid>
 
@@ -85,7 +54,7 @@ export const OrderDetails = () => {
             <Typography color="text.secondary" variant="body2">
               Package weight
             </Typography>
-            <Typography>{`${weight}KG`}</Typography>
+            <Typography>{`${data.weight}KG`}</Typography>
           </Stack>
         </Grid>
 
@@ -103,7 +72,7 @@ export const OrderDetails = () => {
             <Typography color="text.secondary" variant="body2">
               From (Pickup address)
             </Typography>
-            <Typography>{`${pickupAddress}, ${pickupState}, ${pickupCountry}`}</Typography>
+            <Typography>{`${data.pickup_address}, ${data.pickup_state}, ${data.pickup_country}`}</Typography>
           </Stack>
         </Grid>
 
@@ -112,7 +81,7 @@ export const OrderDetails = () => {
             <Typography color="text.secondary" variant="body2">
               To (Destination address)
             </Typography>
-            <Typography>{`${destinationAddress}, ${destinationState}, ${destinationCountry}`}</Typography>
+            <Typography>{`${data.destination_address}, ${data.destination_state}, ${data.destination_country}`}</Typography>
           </Stack>
         </Grid>
 
@@ -127,7 +96,7 @@ export const OrderDetails = () => {
             <Typography color="text.secondary" variant="body2">
               Full Name
             </Typography>
-            <Typography>{`${receiverFirstName} ${receiverLastName}`}</Typography>
+            <Typography>{`${data.receiver_firstname} ${data.receiver_lastname}`}</Typography>
           </Stack>
         </Grid>
 
@@ -136,7 +105,7 @@ export const OrderDetails = () => {
             <Typography color="text.secondary" variant="body2">
               Phone Number
             </Typography>
-            <Typography>{receiverPhone}</Typography>
+            <Typography>{data.receiver_phone}</Typography>
           </Stack>
         </Grid>
 
@@ -145,7 +114,7 @@ export const OrderDetails = () => {
             <Typography color="text.secondary" variant="body2">
               Delivery Address
             </Typography>
-            <Typography>{`${destinationAddress}, ${destinationState}, ${destinationCountry}`}</Typography>
+            <Typography>{`${data.destination_address}, ${data.destination_state}, ${data.destination_country}`}</Typography>
           </Stack>
         </Grid>
       </Grid>
@@ -157,61 +126,37 @@ export const OrderDetails = () => {
       )}
 
       <Grid2 container spacing={1}>
-        {image1 instanceof File && (
+        {data.image1 && (
           <Grid2 size={{ xs: 12, lg: 4 }}>
-            <PhotoPreview file={image1} />
+            <PhotoPreview file={data.image1} />
           </Grid2>
         )}
 
-        {image2 instanceof File && (
+        {data.image2 && (
           <Grid2 size={{ xs: 12, lg: 4 }}>
-            <PhotoPreview file={image2} />
+            <PhotoPreview file={data.image2} />
           </Grid2>
         )}
 
-        {image3 instanceof File && (
+        {data.image3 && (
           <Grid2 size={{ xs: 12, lg: 4 }}>
-            <PhotoPreview file={image3} />
+            <PhotoPreview file={data.image3} />
           </Grid2>
         )}
       </Grid2>
 
-      {deliveryNote && (
+      {data.delivery_note && (
         <Stack gap={0.5}>
           <Typography variant="body2" color="text.secondary">
             Delivery Note
           </Typography>
-          <Typography>{deliveryNote}</Typography>
+          <Typography>{data.delivery_note}</Typography>
         </Stack>
       )}
-      <Grid size={{ xs: 12 }}>
-        <Controller
-          name="terms"
-          control={control}
-          render={({ field }) => (
-            <FormControlLabel
-              {...field}
-              control={<Checkbox color="info" />}
-              checked={Boolean(terms)}
-              label={
-                <Typography variant="body2">
-                  Review the GDPR policy and proceed if you comply to
-                  Airbridge&nbsp;
-                  <Link to="/">terms & privacy policy</Link>
-                </Typography>
-              }
-            />
-          )}
-        />
-
-        {errors.terms && (
-          <FormHelperText error>{errors.terms?.message}</FormHelperText>
-        )}
-      </Grid>
 
       {isMobile && (
-        <Button type="submit" variant="contained" color="primary">
-          Submit
+        <Button variant="contained" color="primary">
+          Check Availability
         </Button>
       )}
     </Stack>

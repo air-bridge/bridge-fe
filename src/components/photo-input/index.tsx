@@ -1,13 +1,14 @@
-import { useRef, ChangeEvent, useState } from "react";
+import { useRef, ChangeEvent, useState, useEffect } from "react";
 import { Box, Stack } from "@mui/material";
 import ImageIcon from "@mui/icons-material/Image";
 import { styled } from "@mui/material/styles";
 import { Cancel } from "@mui/icons-material";
 
 type Props = {
-  onChange: (file: File) => void;
+  onChange: (file: File | string) => void;
+  file?: string | File | null;
 };
-export const PhotoInput = ({ onChange }: Props) => {
+export const PhotoInput = ({ onChange, file }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [photoSource, setPhotoSource] = useState<string | null>(null);
 
@@ -18,12 +19,12 @@ export const PhotoInput = ({ onChange }: Props) => {
       const file = files[0];
       const reader = new FileReader();
 
+      reader.readAsDataURL(file);
       reader.onload = () => {
         if (typeof reader.result === "string") {
           setPhotoSource(reader.result);
         }
       };
-      reader.readAsDataURL(file);
 
       onChange(file);
 
@@ -38,7 +39,25 @@ export const PhotoInput = ({ onChange }: Props) => {
       inputRef.current.value = "";
     }
     setPhotoSource(null);
+    onChange("");
   };
+
+  useEffect(() => {
+    if (typeof file === "string") {
+      setPhotoSource(file);
+    }
+
+    if (file instanceof File) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          setPhotoSource(reader.result);
+        }
+      };
+    }
+  }, [file]);
 
   return (
     <StyledUploadContainer
@@ -51,7 +70,7 @@ export const PhotoInput = ({ onChange }: Props) => {
       }}
     >
       {photoSource ? (
-        <Box sx={{ position: "relative" }}>
+        <Box>
           <img
             alt="photo"
             src={photoSource}
@@ -92,8 +111,8 @@ export const StyledUploadContainer = styled(Stack)<{ filled?: string }>(
     borderColor: "grey.900",
     borderRadius: theme.shape.borderRadius * 2,
     justifyContent: "center",
+    position: "relative",
     alignItems: "center",
-    cursor: "pointer",
     height: "150px",
     maxHeight: "150px",
     overflow: "hidden",
@@ -106,6 +125,9 @@ export const StyledUploadContainer = styled(Stack)<{ filled?: string }>(
       height: "100%",
       pointerEvents: "none",
     },
+    ...(filled === "false" && {
+      cursor: "pointer",
+    }),
     ...(filled === "true" && {
       borderColor: "transparent",
       height: "unset",

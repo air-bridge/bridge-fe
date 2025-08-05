@@ -43,6 +43,9 @@ export const OrderForm = () => {
   const selectedDestinationCountry = watch("destination_country");
   const selectedPickupCountry = watch("pickup_country");
   const deliveryDate = watch("delivery_date");
+  const image1 = watch("image1");
+  const image2 = watch("image2");
+  const image3 = watch("image3");
 
   const pickupStateOptions = useMemo(() => {
     if (!selectedPickupCountry) {
@@ -505,13 +508,22 @@ export const OrderForm = () => {
 
       <Grid2 container spacing={1}>
         <Grid2 size={{ xs: 12, lg: 4 }}>
-          <PhotoInput onChange={(file) => setValue("image1", file)} />
+          <PhotoInput
+            onChange={(file) => setValue("image1", file)}
+            file={image1}
+          />
         </Grid2>
         <Grid2 size={{ xs: 12, lg: 4 }}>
-          <PhotoInput onChange={(file) => setValue("image2", file)} />
+          <PhotoInput
+            onChange={(file) => setValue("image2", file)}
+            file={image2}
+          />
         </Grid2>
         <Grid2 size={{ xs: 12, lg: 4 }}>
-          <PhotoInput onChange={(file) => setValue("image3", file)} />
+          <PhotoInput
+            onChange={(file) => setValue("image3", file)}
+            file={image3}
+          />
         </Grid2>
       </Grid2>
 

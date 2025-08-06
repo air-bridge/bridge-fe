@@ -1,5 +1,6 @@
 import { createTheme } from "@mui/material/styles";
 import * as Components from "./overrides";
+import { TypographyStyle } from "@mui/material/styles/createTypography";
 
 declare module "@mui/material/styles" {
   export interface BreakpointOverrides {
@@ -18,6 +19,18 @@ declare module "@mui/material/styles" {
   }
   interface PaletteColor {
     background?: string;
+  }
+
+  export interface TypographyVariants {
+    h1x: TypographyStyle;
+    body1x: TypographyStyle;
+    body2x: TypographyStyle;
+  }
+
+  interface TypographyVariantsOptions {
+    h1x?: TypographyStyle;
+    body1x?: TypographyStyle;
+    body2x?: TypographyStyle;
   }
 }
 

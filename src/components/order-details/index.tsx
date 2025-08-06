@@ -1,7 +1,6 @@
-import { Button, Grid2, Stack, Theme, Typography } from "@mui/material";
+import { Button, Grid2, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { Order } from "../../types/order.ts";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { PhotoPreview } from "../photo-input/PhotoPreview.tsx";
 import { luggageCategories } from "../order-form/util.ts";
 
@@ -9,10 +8,6 @@ type Props = {
   data: Order;
 };
 export const OrderDetails = ({ data }: Props) => {
-  const isMobile = useMediaQuery<Theme>((theme) =>
-    theme.breakpoints.down("lg"),
-  );
-
   const packageTypes = data.package_type.map((pv) => {
     return luggageCategories.find((l) => l.value === pv);
   });
@@ -152,12 +147,6 @@ export const OrderDetails = ({ data }: Props) => {
           </Typography>
           <Typography>{data.delivery_note}</Typography>
         </Stack>
-      )}
-
-      {isMobile && (
-        <Button variant="contained" color="primary">
-          Check Availability
-        </Button>
       )}
     </Stack>
   );

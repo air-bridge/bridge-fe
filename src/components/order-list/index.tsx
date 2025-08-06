@@ -11,7 +11,7 @@ export const OrderList = ({ orders }: Props) => {
     <Grid2 container spacing={2}>
       {orders.map((order) => (
         <Grid2 key={order.id} size={{ xs: 12, lg: 4 }}>
-          <Link to={`order/${order.id}`}>
+          <Link to={`orders/${order.id}`}>
             <OrderCard order={order} />
           </Link>
         </Grid2>

@@ -33,6 +33,14 @@ declare module "@mui/material/Button" {
   }
 }
 
+declare module "@mui/material/Typography" {
+  interface TypographyPropsVariantOverrides {
+    h1x: true;
+    body1x: true;
+    body2x: true;
+  }
+}
+
 const theme = createTheme({
   spacing: (factor: number) => `${0.5 * factor}rem`, // theme.spacing(2) => 0.5 * 2rem = 1rem = 16px
   shape: {
@@ -68,6 +76,15 @@ const theme = createTheme({
   ],
   typography: {
     fontFamily: "Inter, sans-serif",
+    h1x: {
+      fontSize: "2.25rem",
+      lineHeight: "2.75rem",
+      fontWeight: 700,
+      "@media (min-width: 1200px)": {
+        fontSize: "4rem",
+        lineHeight: "4.5rem",
+      },
+    },
     h1: {
       fontSize: "1.5rem",
       fontWeight: 700,
@@ -145,6 +162,24 @@ const theme = createTheme({
       fontWeight: 500,
       lineHeight: "1.2rem",
       color: "#1C1C1C",
+    },
+    body1x: {
+      fontSize: "1.25rem",
+      fontWeight: 400,
+      lineHeight: "1.75rem",
+      "@media (min-width: 1200px)": {
+        fontSize: "1.75rem",
+        lineHeight: "2.5rem",
+      },
+    },
+    body2x: {
+      fontSize: "1.05rem",
+      fontWeight: 400,
+      lineHeight: "1.5rem",
+      "@media (min-width: 1200px)": {
+        fontSize: "1.35rem",
+        lineHeight: "1.75rem",
+      },
     },
     body1: {
       fontSize: "1rem",

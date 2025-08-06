@@ -1,11 +1,12 @@
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { PhotoInput } from "../index";
 import { createMockFileList } from "../../../config/tests/utils.tsx";
 
 describe("PhotoInput", () => {
+  const mockOnChange = vi.fn();
   beforeEach(() => {
-    render(<PhotoInput />);
+    render(<PhotoInput onChange={mockOnChange} />);
   });
 
   it("renders upload icon initially", () => {

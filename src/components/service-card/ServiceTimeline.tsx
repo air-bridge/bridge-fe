@@ -1,13 +1,14 @@
 import { Typography, Box, Avatar } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import { Order } from "../../types/order.ts";
+import { Service } from "../../types/service.ts";
+import dayjs from "dayjs";
 
 type Props = {
-  order: Order;
+  data: Service;
 };
 
-export const OrderTimeline = ({ order }: Props) => {
+export const ServiceTimeline = ({ data }: Props) => {
   return (
     <Box position="relative">
       <Box
@@ -35,12 +36,18 @@ export const OrderTimeline = ({ order }: Props) => {
           <RadioButtonUncheckedIcon fontSize="small" />
         </Avatar>
         <Box ml={2}>
-          <Typography variant="h6">{`${order.pickup_state}, ${order.pickup_country}`}</Typography>
+          <Typography variant="h6">{`${data.departure_city}`}</Typography>
           <Typography variant="body2" color="text.secondary" noWrap>
-            {order.pickup_address}
+            {`Trip Date -  ${dayjs(data.departure_date).format("ll")}`}
           </Typography>
-          <Typography variant="subtitle2" color="success.main" mt={3} noWrap>
-            {order.destination_address}
+          <Typography
+            variant="caption"
+            color="success.main"
+            mt={3}
+            noWrap
+            component="p"
+          >
+            {/*  TODO: data point needed */}1 way trip
           </Typography>
         </Box>
       </Box>
@@ -51,10 +58,9 @@ export const OrderTimeline = ({ order }: Props) => {
           <LocationOnIcon fontSize="small" sx={{ color: "black" }} />
         </Avatar>
         <Box ml={2} mt={2.5}>
-          <Typography
-            fontWeight="bold"
-            textTransform="capitalize"
-          >{`${order.destination_state}, ${order.destination_country}`}</Typography>
+          <Typography fontWeight="bold" textTransform="capitalize">
+            {data.arrival_city}
+          </Typography>
         </Box>
       </Box>
     </Box>

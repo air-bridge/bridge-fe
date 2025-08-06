@@ -1,18 +1,21 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, matchPath } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getAuthUser } from "../../utils/userAuth.ts";
 import { Header } from "../header";
 import { UserContextProvider } from "../../context/user";
 import { NotificationContextProvider } from "../../context/notification";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
-const fullScreenPaths = ["create-order"];
+const fullScreenPaths = ["create-order", "orders/:orderId"];
 const AppLayout = () => {
   const [isAllowed, setIsAllowed] = useState(false);
   const navigate = useNavigate();
-  const { pathname } = useLocation();
 
-  const isFullScreen = fullScreenPaths.includes(pathname.replace("/", ""));
+  const isFullScreen = fullScreenPaths.some((path) =>
+    matchPath({ path, end: true }, location.pathname),
+  );
 
   useEffect(() => {
     const authUser = getAuthUser();
@@ -26,18 +29,20 @@ const AppLayout = () => {
 
   return isAllowed ? (
     <NotificationContextProvider>
-      <UserContextProvider>
-        {isFullScreen ? (
-          <Outlet />
-        ) : (
-          <>
-            <Header />
-            <Box py={2} px={{ xs: 2, lg: 5 }}>
-              <Outlet />
-            </Box>
-          </>
-        )}
-      </UserContextProvider>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <UserContextProvider>
+          {isFullScreen ? (
+            <Outlet />
+          ) : (
+            <>
+              <Header />
+              <Box py={2} px={{ xs: 2, lg: 5 }}>
+                <Outlet />
+              </Box>
+            </>
+          )}
+        </UserContextProvider>
+      </LocalizationProvider>
     </NotificationContextProvider>
   ) : null;
 };

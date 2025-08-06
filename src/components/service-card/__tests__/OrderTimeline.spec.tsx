@@ -1,11 +1,11 @@
 import { describe, expect, beforeEach, it } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { OrderTimeline } from "../OrderTimeline.tsx";
+import { ServiceTimeline } from "../ServiceTimeline.tsx";
 import { mockOpenOrder } from "../../../mocks/order.ts";
 
 describe("OrderTimeline ", () => {
   beforeEach(() => {
-    render(<OrderTimeline order={mockOpenOrder} />);
+    render(<ServiceTimeline order={mockOpenOrder} />);
   });
 
   it("renders details correctly", () => {

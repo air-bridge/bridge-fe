@@ -6,173 +6,480 @@ import {
   Stack,
   Typography,
   Grid2,
+  Theme,
+  MenuItem,
+  FormHelperText,
 } from "@mui/material";
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import Grid from "@mui/material/Grid2";
+import { DatePicker } from "@mui/x-date-pickers";
+import { Controller, useFormContext } from "react-hook-form";
 import { luggageCategories } from "./util.ts";
 import { OrderFormValues } from "../../types/order.ts";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { PhotoInput } from "../photo-input";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { Country } from "country-state-city";
+import { useMemo } from "react";
+import { getStates } from "../../utils/country-state.ts";
+import Autocomplete from "@mui/material/Autocomplete";
+import { MuiTelInput } from "mui-tel-input";
+import dayjs from "dayjs";
 
-const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
-  title: yup.string().required("Title is required"),
-  luggageType: yup.string().required("Luggage Type is required"),
-  weight: yup
-    .number()
-    .typeError("Weight must be a number")
-    .positive("Weight must be a number")
-    .nullable()
-    .notRequired(),
-  origin: yup.string().nullable().notRequired(),
-  destination: yup.string().nullable().notRequired(),
-  receiver: yup.string().nullable().notRequired(),
-  address: yup.string().nullable().notRequired(),
-});
-
-const initialValues: OrderFormValues = {
-  title: "",
-  luggageType: "box",
-  weight: undefined,
-  origin: "",
-  destination: "",
-  receiver: "",
-  address: "",
-};
 export const OrderForm = () => {
+  const isMobile = useMediaQuery<Theme>((theme) =>
+    theme.breakpoints.down("lg"),
+  );
   const {
     watch,
     control,
-    handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<OrderFormValues>({
-    resolver: yupResolver(schema),
-    defaultValues: initialValues,
-  });
+  } = useFormContext<OrderFormValues>();
 
-  const onSubmit: SubmitHandler<OrderFormValues> = (data) => {
-    console.log(data);
+  const countries = Country.getAllCountries();
+  const packageType = watch("package_type");
+
+  // Watch for country changes to update state options
+  const selectedDestinationCountry = watch("destination_country");
+  const selectedPickupCountry = watch("pickup_country");
+  const deliveryDate = watch("delivery_date");
+  const image1 = watch("image1");
+  const image2 = watch("image2");
+  const image3 = watch("image3");
+
+  const pickupStateOptions = useMemo(() => {
+    if (!selectedPickupCountry) {
+      return [];
+    }
+
+    const country = countries.find((c) => c.name === selectedPickupCountry);
+    return getStates(country?.isoCode);
+  }, [selectedPickupCountry]);
+
+  const destinationStateOptions = useMemo(() => {
+    if (!selectedPickupCountry) {
+      return [];
+    }
+
+    const country = countries.find(
+      (c) => c.name === selectedDestinationCountry,
+    );
+    return getStates(country?.isoCode);
+  }, [selectedDestinationCountry]);
+
+  const customSetInputValue = (name: keyof OrderFormValues, value: string) => {
+    setValue(name, value, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
   };
 
-  const luggageType = watch("luggageType");
-
   return (
-    <Stack
-      gap={{ xs: 2, lg: 3 }}
-      component="form"
-      onSubmit={handleSubmit(onSubmit)}
-      noValidate
-    >
+    <Stack gap={{ xs: 2, lg: 3 }}>
       <Box>
-        <InputLabel>Luggage Type</InputLabel>
-        <Stack direction="row" spacing={1}>
-          {luggageCategories.map((category) => (
-            <Button
-              key={category.value}
-              variant="outlined"
-              color={luggageType === category.value ? "primary" : "secondary"}
-              size="small"
-              startIcon={<category.icon />}
-              onClick={() => setValue("luggageType", category.value)}
-            >
-              {category.name}
-            </Button>
-          ))}
+        <InputLabel>Package Type</InputLabel>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            overflowX: "auto",
+            whiteSpace: "nowrap",
+            paddingBottom: 1,
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+          }}
+        >
+          {luggageCategories.map((category) => {
+            const isSelected = packageType.includes(category.value);
+            return (
+              <Button
+                key={category.value}
+                variant="outlined"
+                color={isSelected ? "primary" : "secondary"}
+                size="small"
+                startIcon={<category.icon />}
+                onClick={() => {
+                  if (isSelected) {
+                    const newValues = packageType.filter(
+                      (p) => p !== category.value,
+                    );
+                    setValue("package_type", [...newValues]);
+                  } else {
+                    setValue("package_type", [...packageType, category.value]);
+                  }
+                }}
+                sx={{ flexShrink: 0 }}
+              >
+                {category.name}
+              </Button>
+            );
+          })}
         </Stack>
       </Box>
 
-      <Controller
-        name="title"
-        control={control}
-        render={({ field }) => (
-          <Box>
-            <InputLabel htmlFor="title">
-              Order Title (e.g I want to deliver a 3kg box)
-            </InputLabel>
-            <TextField
-              id="title"
-              variant="outlined"
-              {...field}
-              error={!!errors.title}
-              helperText={errors.title?.message}
-              fullWidth
-            />
-          </Box>
-        )}
-      />
+      <Grid container spacing={{ xs: 1, lg: 2 }}>
+        <Grid size={{ xs: 12 }}>
+          <Controller
+            name="title"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="title">
+                  Order Title (e.g I want to deliver a 3kg box)
+                </InputLabel>
+                <TextField
+                  id="title"
+                  variant="outlined"
+                  {...field}
+                  error={!!errors.title}
+                  helperText={errors.title?.message}
+                  fullWidth
+                />
+              </Box>
+            )}
+          />
+        </Grid>
+        <Grid size={{ xs: 12 }}>
+          <Controller
+            name="weight"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="weight">Package weight (KG)</InputLabel>
+                <TextField
+                  {...field}
+                  id="weight"
+                  variant="outlined"
+                  type="number"
+                  error={!!errors.weight}
+                  helperText={errors.weight?.message}
+                  fullWidth
+                />
+              </Box>
+            )}
+          />
+        </Grid>
 
-      <Controller
-        name="weight"
-        control={control}
-        render={({ field }) => (
-          <Box>
-            <InputLabel htmlFor="weight">Package weight (KG)</InputLabel>
-            <TextField
-              {...field}
-              id="weight"
-              variant="outlined"
-              type="number"
-              error={!!errors.weight}
-              helperText={errors.weight?.message}
-              fullWidth
-            />
-          </Box>
-        )}
-      />
+        <Grid size={{ xs: 12 }}>
+          <Typography variant="subtitle2" sx={{ py: 1.5 }}>
+            Sender
+          </Typography>
+        </Grid>
 
-      <Typography variant="subtitle2">Destination</Typography>
+        <Grid size={{ xs: 12 }}>
+          <Controller
+            name="pickup_address"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="origin">From (Pickup address)</InputLabel>
+                <TextField
+                  {...field}
+                  id="origin"
+                  variant="outlined"
+                  fullWidth
+                  error={!!errors.pickup_address}
+                  helperText={errors.pickup_address?.message}
+                />
+              </Box>
+            )}
+          />
+        </Grid>
 
-      <Controller
-        name="origin"
-        control={control}
-        render={({ field }) => (
-          <Box>
-            <InputLabel htmlFor="origin">From (Pickup address)</InputLabel>
-            <TextField id="origin" variant="outlined" {...field} fullWidth />
-          </Box>
-        )}
-      />
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <Controller
+            name="pickup_country"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="pickup_country">Country</InputLabel>
+                <Controller
+                  {...field}
+                  control={control}
+                  render={({ field }) => (
+                    <Autocomplete
+                      {...field}
+                      id="country"
+                      options={countries}
+                      getOptionLabel={(option) => option.name}
+                      value={
+                        countries.find((c) => c.name === field.value) || null
+                      }
+                      onChange={(_, value) => {
+                        customSetInputValue(
+                          "pickup_country",
+                          value?.name || "",
+                        );
+                        customSetInputValue("pickup_state", "");
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          fullWidth
+                          placeholder="Select country"
+                          error={!!errors.pickup_country}
+                          helperText={errors.pickup_country?.message}
+                        />
+                      )}
+                    />
+                  )}
+                />
+              </Box>
+            )}
+          />
+        </Grid>
 
-      <Controller
-        name="destination"
-        control={control}
-        render={({ field }) => (
-          <Box>
-            <InputLabel htmlFor="destination">To (Country)</InputLabel>
-            <TextField
-              id="destination"
-              variant="outlined"
-              {...field}
-              fullWidth
-            />
-          </Box>
-        )}
-      />
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <Controller
+            name="pickup_state"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="pickup_state">State</InputLabel>
+                <Controller
+                  {...field}
+                  name="pickup_state"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      id="pickup_state"
+                      variant="outlined"
+                      select
+                      fullWidth
+                      error={!!errors.pickup_state}
+                      helperText={errors.pickup_state?.message}
+                    >
+                      {pickupStateOptions.map((option) => (
+                        <MenuItem key={option.isoCode} value={option.name}>
+                          {option.name}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  )}
+                />
+              </Box>
+            )}
+          />
+        </Grid>
 
-      <Typography variant="subtitle2">Receiver</Typography>
+        <Grid size={{ xs: 12 }}>
+          <Typography variant="subtitle2" sx={{ py: 1.5 }}>
+            Receiver
+          </Typography>
+        </Grid>
 
-      <Controller
-        name="receiver"
-        control={control}
-        render={({ field }) => (
-          <Box>
-            <InputLabel htmlFor="receiver">Full name</InputLabel>
-            <TextField id="receiver" variant="outlined" {...field} fullWidth />
-          </Box>
-        )}
-      />
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <Controller
+            name="receiver_firstname"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="receiver_firstname">First name</InputLabel>
+                <TextField
+                  id="receiver_firstname"
+                  variant="outlined"
+                  {...field}
+                  fullWidth
+                  error={!!errors.receiver_firstname}
+                  helperText={errors.receiver_firstname?.message}
+                />
+              </Box>
+            )}
+          />
+        </Grid>
 
-      <Controller
-        name="address"
-        control={control}
-        render={({ field }) => (
-          <Box>
-            <InputLabel htmlFor="address">Delivery Address</InputLabel>
-            <TextField id="address" variant="outlined" {...field} fullWidth />
-          </Box>
-        )}
-      />
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <Controller
+            name="receiver_lastname"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="receiver_lastname">Last name</InputLabel>
+                <TextField
+                  id="receiver_lastname"
+                  variant="outlined"
+                  {...field}
+                  fullWidth
+                  error={!!errors.receiver_lastname}
+                  helperText={errors.receiver_lastname?.message}
+                />
+              </Box>
+            )}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12 }}>
+          <Controller
+            name="receiver_phone"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="receiver_phone">Phone</InputLabel>
+                <Controller
+                  {...field}
+                  control={control}
+                  render={({ field }) => (
+                    <MuiTelInput
+                      {...field}
+                      id="receiver_phone"
+                      fullWidth
+                      forceCallingCode
+                      defaultCountry="NG"
+                      preferredCountries={["NG", "DE", "GB"]}
+                      placeholder="Phone Number"
+                      error={Boolean(errors.receiver_phone)}
+                      helperText={errors.receiver_phone?.message}
+                      onChange={field.onChange}
+                    />
+                  )}
+                />
+              </Box>
+            )}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12 }}>
+          <Controller
+            name="destination_address"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="destination_address">
+                  Delivery Address
+                </InputLabel>
+                <TextField
+                  {...field}
+                  id="destination_address"
+                  variant="outlined"
+                  fullWidth
+                  error={!!errors.destination_address}
+                  helperText={errors.destination_address?.message}
+                />
+              </Box>
+            )}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <Controller
+            name="destination_country"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="pickup_country">Country</InputLabel>
+                <Controller
+                  {...field}
+                  name="destination_country"
+                  control={control}
+                  render={({ field }) => (
+                    <Autocomplete
+                      {...field}
+                      id="country"
+                      options={countries}
+                      getOptionLabel={(option) => option.name}
+                      value={
+                        countries.find((c) => c.name === field.value) || null
+                      }
+                      onChange={(_, value) => {
+                        customSetInputValue(
+                          "destination_country",
+                          value?.name || "",
+                        );
+                        customSetInputValue("destination_state", "");
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          fullWidth
+                          placeholder="Select country"
+                          error={!!errors.destination_country}
+                          helperText={errors.destination_country?.message}
+                        />
+                      )}
+                    />
+                  )}
+                />
+              </Box>
+            )}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <Controller
+            name="destination_state"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="destination_state">State</InputLabel>
+                <Controller
+                  {...field}
+                  name="destination_state"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      id="destination_state"
+                      variant="outlined"
+                      select
+                      fullWidth
+                      error={!!errors.destination_state}
+                      helperText={errors.destination_state?.message}
+                    >
+                      {destinationStateOptions.map((option) => (
+                        <MenuItem key={option.isoCode} value={option.name}>
+                          {option.name}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  )}
+                />
+              </Box>
+            )}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12 }}>
+          <Controller
+            name="delivery_date"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <InputLabel htmlFor="delivery_date">Delivery date</InputLabel>
+                <Controller
+                  {...field}
+                  control={control}
+                  render={({ field }) => (
+                    <DatePicker
+                      {...field}
+                      value={deliveryDate ? dayjs(deliveryDate) : null}
+                      sx={{
+                        width: "100%",
+                      }}
+                      format="YYYY-MM-DD"
+                      onChange={(date) => {
+                        customSetInputValue(
+                          "delivery_date",
+                          dayjs(date).format("YYYY-MM-DD"),
+                        );
+                      }}
+                    />
+                  )}
+                />
+                {errors.delivery_date && (
+                  <FormHelperText error>
+                    {errors.delivery_date?.message}
+                  </FormHelperText>
+                )}
+              </Box>
+            )}
+          />
+        </Grid>
+      </Grid>
 
       <Typography variant="subtitle2" color="text.secondary" fontWeight="300">
         Upload Information
@@ -201,19 +508,50 @@ export const OrderForm = () => {
 
       <Grid2 container spacing={1}>
         <Grid2 size={{ xs: 12, lg: 4 }}>
-          <PhotoInput />
+          <PhotoInput
+            onChange={(file) => setValue("image1", file)}
+            file={image1}
+          />
         </Grid2>
         <Grid2 size={{ xs: 12, lg: 4 }}>
-          <PhotoInput />
+          <PhotoInput
+            onChange={(file) => setValue("image2", file)}
+            file={image2}
+          />
         </Grid2>
         <Grid2 size={{ xs: 12, lg: 4 }}>
-          <PhotoInput />
+          <PhotoInput
+            onChange={(file) => setValue("image3", file)}
+            file={image3}
+          />
         </Grid2>
       </Grid2>
 
-      <Button type="submit" variant="contained" color="primary">
-        Submit
-      </Button>
+      <Controller
+        name="delivery_note"
+        control={control}
+        render={({ field }) => (
+          <Box>
+            <InputLabel htmlFor="delivery_note">Additional Note</InputLabel>
+            <TextField
+              id="delivery_note"
+              variant="outlined"
+              {...field}
+              fullWidth
+              rows={3}
+              multiline
+              error={!!errors.delivery_note}
+              helperText={errors.delivery_note?.message}
+            />
+          </Box>
+        )}
+      />
+
+      {isMobile && (
+        <Button type="submit" variant="contained" color="primary">
+          Submit
+        </Button>
+      )}
     </Stack>
   );
 };

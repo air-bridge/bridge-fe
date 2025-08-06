@@ -1,7 +1,7 @@
 import { getAPI } from "./api.ts";
 import { PassengerStats, SenderStats } from "../types/dashboard.ts";
 
-export const passengerDashboard = async () => {
+export const getPassengerDashboard = async () => {
   const res = await getAPI(`passengers/dashboard`);
 
   if (!res.ok) {
@@ -21,7 +21,7 @@ export const passengerDashboard = async () => {
   return response.data;
 };
 
-export const senderDashboard = async () => {
+export const getSenderDashboard = async () => {
   const res = await getAPI(`senders/dashboard`);
 
   if (!res.ok) {

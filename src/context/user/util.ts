@@ -3,12 +3,14 @@ import { Profile } from "../../types/user.ts";
 
 type Props = {
   currentUser?: Profile;
-  isSender: boolean;
+  isSender: boolean | null;
+  isPassenger: boolean | null;
   refetchProfile: () => void;
 };
 
 export const UserContext = createContext<Props>({
-  isSender: true,
+  isSender: null,
+  isPassenger: null,
   refetchProfile: () => {},
 });
 

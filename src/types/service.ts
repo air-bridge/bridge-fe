@@ -5,15 +5,23 @@ export enum ServiceStatus {
   Requested = "Requested",
 }
 export interface Service {
-  id: string;
+  id: number;
   title: string;
-  createdAt: string;
-  weight: string;
+  transport_type: string;
+  package_type: string[];
   status: ServiceStatus;
-  origin: string;
-  destination?: string;
-  tripType?: string;
-  category: string[];
+  weight: string;
+  arrival_city: string;
+  arrival_country: string;
+  arrival_date: string;
+  currency: string;
+  departure_city: string;
+  departure_country: string;
+  departure_date: string;
+  phone: string;
+  price_per_kg: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export type ServiceFormValues = {

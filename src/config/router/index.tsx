@@ -12,6 +12,7 @@ import Account from "../../screens/auth/account";
 import { CreateOrderScreen } from "../../screens/app/create-order";
 import ProfileScreen from "../../screens/app/profile";
 import { OrderDetailsScreen } from "../../screens/app/order-details";
+import PoolListScreen from "../../screens/app/pool-list";
 
 export const Router = () => {
   return (
@@ -40,6 +41,7 @@ export const Router = () => {
           <Route path="orders" element={<OrdersScreen />} />
           <Route path="create-order" element={<CreateOrderScreen />} />
           <Route path="orders/:orderId" element={<OrderDetailsScreen />} />
+          <Route path="pool-list" element={<PoolListScreen />} />
           <Route path="profile" element={<ProfileScreen />} />
         </Route>
 

@@ -3,6 +3,7 @@ import poolImage from "../../assets/images/pool-access.png";
 import StarIcon from "@mui/icons-material/Star";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   onClose: () => void;
@@ -11,6 +12,12 @@ export const MatchTrigger = ({ onClose }: Props) => {
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
   );
+  const navigate = useNavigate();
+
+  const handlePay = () => {
+    //   TODO: redirect to payment portal
+    navigate("/pool-list");
+  };
   return (
     <Stack direction={{ xs: "column", lg: "row" }} gap={{ xs: 3, lg: 6 }}>
       <Box
@@ -90,6 +97,7 @@ export const MatchTrigger = ({ onClose }: Props) => {
             sx={{ px: 3, boxShadow: 0 }}
             endIcon={<ArrowRightAltIcon />}
             fullWidth={isMobile}
+            onClick={handlePay}
           >
             Make Payment ($5)
           </Button>

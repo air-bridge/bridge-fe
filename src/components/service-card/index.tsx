@@ -1,35 +1,41 @@
 import { Box, Card, CardContent, Stack, Typography } from "@mui/material";
-import { Order } from "../../types/order.ts";
-import { OrderStatusLabel } from "./OrderStatusLabel.tsx";
-import { OrderTimeline } from "./OrderTimeline.tsx";
+import { ServiceStatusLabel } from "./ServiceStatusLabel.tsx";
+import { ServiceTimeline } from "./ServiceTimeline.tsx";
 import dayjs from "dayjs";
+import { Service } from "../../types/service.ts";
 
 type Props = {
-  order: Order;
+  data: Service;
 };
-const OrderCard = ({ order }: Props) => {
+
+const ServiceCard = ({ data }: Props) => {
   return (
     <Card>
       <CardContent>
-        <Stack gap={0.5}>
+        <Stack gap={1}>
           <Typography variant="subtitle1" noWrap>
-            {order.title}
+            {data.title}
           </Typography>
 
           <Stack
             direction="row"
             justifyContent="space-between"
-            alignItems="center"
+            alignItems="flex-start"
           >
             <Typography variant="caption">
-              Created on {dayjs(order.created_at).format("MMMM D, YYYY h:mm A")}
+              Created on {dayjs(data.created_at).format("MMMM D, YYYY h:mm A")}
             </Typography>
-            <OrderStatusLabel status={order.status} />
+            <ServiceStatusLabel status={data.status} />
           </Stack>
 
           <Typography variant="body2" color="text.secondary">
-            Package Weight:&nbsp;
-            <strong style={{ color: "black" }}>{order.weight}KG</strong>
+            Transport Type:&nbsp;
+            <strong style={{ color: "black" }}>{data.transport_type}</strong>
+          </Typography>
+
+          <Typography variant="body2" color="text.secondary">
+            Available Weight:&nbsp;
+            <strong style={{ color: "black" }}>{data.weight}KG</strong>
           </Typography>
         </Stack>
 
@@ -38,18 +44,18 @@ const OrderCard = ({ order }: Props) => {
           py={2}
           mt={2}
         >
-          <OrderTimeline order={order} />
+          <ServiceTimeline data={data} />
         </Box>
 
         <Stack alignItems="center" gap={1} direction="row" minHeight={20}>
-          {order.package_type.length > 0 && (
+          {data.package_type.length > 0 && (
             <>
               <Typography color="text.secondary" variant="body2">
                 Package type:
               </Typography>
 
               <Stack direction="row" alignItems="center" gap={0.5}>
-                {order.package_type.map((c, index) => (
+                {data.package_type.map((c, index) => (
                   <Typography
                     variant="caption"
                     key={index}
@@ -73,4 +79,4 @@ const OrderCard = ({ order }: Props) => {
   );
 };
 
-export default OrderCard;
+export default ServiceCard;

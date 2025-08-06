@@ -38,7 +38,7 @@ export const Header = () => {
   });
 
   const handleSwitch = () => {
-    mutate(isSender);
+    mutate(!!isSender);
   };
 
   return (

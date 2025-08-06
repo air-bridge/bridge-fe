@@ -53,6 +53,9 @@ const InputBase: Components<Theme>["MuiInputBase"] = {
       "&.MuiInputBase-root": {
         borderRadius: theme.shape.borderRadius * 4,
       },
+      "&.MuiSelect-select MuiSelect-outlined": {
+        background: "red",
+      },
     }),
   },
 };

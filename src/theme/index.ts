@@ -1,5 +1,6 @@
 import { createTheme } from "@mui/material/styles";
 import * as Components from "./overrides";
+import { TypographyStyle } from "@mui/material/styles/createTypography";
 
 declare module "@mui/material/styles" {
   export interface BreakpointOverrides {
@@ -19,6 +20,18 @@ declare module "@mui/material/styles" {
   interface PaletteColor {
     background?: string;
   }
+
+  export interface TypographyVariants {
+    h1x: TypographyStyle;
+    body1x: TypographyStyle;
+    body2x: TypographyStyle;
+  }
+
+  interface TypographyVariantsOptions {
+    h1x?: TypographyStyle;
+    body1x?: TypographyStyle;
+    body2x?: TypographyStyle;
+  }
 }
 
 declare module "@mui/material/styles/createPalette" {
@@ -30,6 +43,14 @@ declare module "@mui/material/styles/createPalette" {
 declare module "@mui/material/Button" {
   export interface ButtonPropsVariantOverrides {
     plain: true;
+  }
+}
+
+declare module "@mui/material/Typography" {
+  interface TypographyPropsVariantOverrides {
+    h1x: true;
+    body1x: true;
+    body2x: true;
   }
 }
 
@@ -68,6 +89,15 @@ const theme = createTheme({
   ],
   typography: {
     fontFamily: "Inter, sans-serif",
+    h1x: {
+      fontSize: "2.25rem",
+      lineHeight: "2.75rem",
+      fontWeight: 700,
+      "@media (min-width: 1200px)": {
+        fontSize: "4rem",
+        lineHeight: "4.5rem",
+      },
+    },
     h1: {
       fontSize: "1.5rem",
       fontWeight: 700,
@@ -137,13 +167,32 @@ const theme = createTheme({
       color: "#1C1C1C",
       "@media (min-width: 1200px)": {
         fontSize: "1.25rem",
+        lineHeight: "1.5rem",
       },
     },
     subtitle2: {
       fontSize: "1rem",
       fontWeight: 500,
-      lineHeight: "1rem",
+      lineHeight: "1.2rem",
       color: "#1C1C1C",
+    },
+    body1x: {
+      fontSize: "1.25rem",
+      fontWeight: 400,
+      lineHeight: "1.75rem",
+      "@media (min-width: 1200px)": {
+        fontSize: "1.75rem",
+        lineHeight: "2.5rem",
+      },
+    },
+    body2x: {
+      fontSize: "1.05rem",
+      fontWeight: 400,
+      lineHeight: "1.5rem",
+      "@media (min-width: 1200px)": {
+        fontSize: "1.35rem",
+        lineHeight: "1.75rem",
+      },
     },
     body1: {
       fontSize: "1rem",
@@ -240,7 +289,7 @@ const theme = createTheme({
     },
     text: {
       primary: "rgba(0, 0, 0, 1)",
-      secondary: "#999999",
+      secondary: "#394753",
       disabled: "rgba(153, 153, 153, 0.18)",
     },
     action: {

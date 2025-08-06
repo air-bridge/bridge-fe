@@ -23,11 +23,18 @@ describe("CreateOrderHeading Component", () => {
   beforeEach(() => {
     vi.spyOn(userAuth, "getAuthUser").mockReturnValue(mockUserAuth);
   });
+  const mockOnSetShowReview = vi.fn();
+  const mockOnBack = vi.fn();
 
   it("should render correctly", () => {
     render(
       <ComponentTestWrapper>
-        <CreateOrderHeading />
+        <CreateOrderHeading
+          showReview
+          onSetShowReview={mockOnSetShowReview}
+          onBack={mockOnBack}
+          isPending={false}
+        />
       </ComponentTestWrapper>,
     );
 
@@ -43,7 +50,12 @@ describe("CreateOrderHeading Component", () => {
   it("handles close action correctly", () => {
     render(
       <ComponentTestWrapper>
-        <CreateOrderHeading />
+        <CreateOrderHeading
+          isPending={false}
+          showReview
+          onSetShowReview={mockOnSetShowReview}
+          onBack={mockOnBack}
+        />
       </ComponentTestWrapper>,
     );
 
@@ -54,6 +66,9 @@ describe("CreateOrderHeading Component", () => {
 });
 
 describe("Order Heading - Mobile", () => {
+  const mockOnSetShowReview = vi.fn();
+  const mockOnBack = vi.fn();
+
   beforeEach(() => {
     vi.spyOn(useMediaQuery, "default").mockReturnValue(true);
   });
@@ -61,7 +76,12 @@ describe("Order Heading - Mobile", () => {
   it("should render correctly on mobile", () => {
     render(
       <ComponentTestWrapper>
-        <CreateOrderHeading />
+        <CreateOrderHeading
+          isPending={false}
+          showReview
+          onSetShowReview={mockOnSetShowReview}
+          onBack={mockOnBack}
+        />
       </ComponentTestWrapper>,
     );
 
@@ -76,13 +96,21 @@ describe("Order Heading - Mobile", () => {
 });
 
 describe("CreateOrderHeading useMediaQuery callback coverage", () => {
+  const mockOnSetShowReview = vi.fn();
+  const mockOnBack = vi.fn();
+
   it("should execute the useMediaQuery callback", () => {
     const mockDown = vi.fn().mockReturnValue(false);
     spyOnMediaQuery(mockDown);
 
     render(
       <ComponentTestWrapper>
-        <CreateOrderHeading />
+        <CreateOrderHeading
+          isPending={false}
+          showReview
+          onSetShowReview={mockOnSetShowReview}
+          onBack={mockOnBack}
+        />
       </ComponentTestWrapper>,
     );
 

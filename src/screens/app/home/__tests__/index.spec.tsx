@@ -27,7 +27,7 @@ describe("HomeScreen for Sender", () => {
   it("renders the Home Screen text with orders", async () => {
     render(
       <ComponentTestWrapper>
-        <HomeScreen count={3} />
+        <HomeScreen />
       </ComponentTestWrapper>,
     );
 
@@ -64,7 +64,7 @@ describe("HomeScreen for Passenger", () => {
   it("renders the Home Screen text with orders", async () => {
     render(
       <ComponentTestWrapper>
-        <HomeScreen count={3} />
+        <HomeScreen />
       </ComponentTestWrapper>,
     );
 

@@ -5,7 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 import { getProfile } from "../../api/user.ts";
 
 export const UserContextProvider = ({ children }: PropsWithChildren) => {
-  const { data: profileData, refetch } = useQuery({
+  const {
+    data: profileData,
+    refetch,
+    isLoading,
+  } = useQuery({
     queryKey: ["user-profile"],
     queryFn: getProfile,
   });
@@ -14,10 +18,20 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
     void refetch();
   };
 
-  const isSender = profileData?.current_role === ACCOUNT_TYPE.Sender;
+  const isSender = isLoading
+    ? null
+    : profileData?.current_role === ACCOUNT_TYPE.Sender;
+  const isPassenger = isLoading
+    ? null
+    : profileData?.current_role === ACCOUNT_TYPE.Passenger;
   return (
     <UserContext.Provider
-      value={{ currentUser: profileData, isSender, refetchProfile }}
+      value={{
+        currentUser: profileData,
+        isSender,
+        isPassenger,
+        refetchProfile,
+      }}
     >
       {children}
     </UserContext.Provider>

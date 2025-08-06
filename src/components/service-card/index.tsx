@@ -20,7 +20,7 @@ const ServiceCard = ({ data }: Props) => {
           <Stack
             direction="row"
             justifyContent="space-between"
-            alignItems="center"
+            alignItems="flex-start"
           >
             <Typography variant="caption">
               Created on {dayjs(data.created_at).format("MMMM D, YYYY h:mm A")}

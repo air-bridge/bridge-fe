@@ -85,4 +85,6 @@ export const mockServices: Service[] = [
   mockPendingService,
   mockRequestedService,
   mockOpenService,
+  mockDraftService,
+  mockRequestedService,
 ];

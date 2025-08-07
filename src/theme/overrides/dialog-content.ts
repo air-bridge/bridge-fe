@@ -1,14 +1,14 @@
 import type { Components, Theme } from "@mui/material/styles";
 
-const DialogActions: Components<Theme>["MuiDialogActions"] = {
+const DialogContent: Components<Theme>["MuiDialogContent"] = {
   styleOverrides: {
     root: () => ({
-      padding: "8px 16px",
+      padding: "16px",
       "@media (min-width: 1200px)": {
-        padding: "8px 24px 32px",
+        padding: "32px",
       },
     }),
   },
 };
 
-export default DialogActions;
+export default DialogContent;

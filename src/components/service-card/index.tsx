@@ -6,11 +6,12 @@ import { Service } from "../../types/service.ts";
 
 type Props = {
   data: Service;
+  onOpen: (arg: Service) => void;
 };
 
-const ServiceCard = ({ data }: Props) => {
+const ServiceCard = ({ data, onOpen }: Props) => {
   return (
-    <Card>
+    <Card onClick={() => onOpen(data)} sx={{ cursor: "pointer" }}>
       <CardContent>
         <Stack gap={1}>
           <Typography variant="subtitle1" noWrap>

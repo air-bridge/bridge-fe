@@ -245,7 +245,7 @@ const theme = createTheme({
     divider: "rgba(0, 0, 0, 0.12)",
     primary: {
       main: "#6544C5",
-      light: "#ebe8fd",
+      light: "#EDEEFF",
       dark: "#3C2580",
       contrastText: "#FFF",
     },
@@ -318,7 +318,9 @@ const theme = createTheme({
     MuiTextField: Components.TextField,
     MuiButton: Components.Button,
     MuiCard: Components.Card,
+    MuiDialog: Components.Dialog,
     MuiDialogActions: Components.DialogActions,
+    MuiDialogContent: Components.DialogContent,
     MuiLink: Components.Link,
   },
 });

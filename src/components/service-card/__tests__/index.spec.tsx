@@ -1,23 +1,30 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { render } from "@testing-library/react";
-import { mockDraftOrder, mockPendingOrder } from "../../../mocks/order.ts";
-import OrderCard from "../index.tsx";
+import ServiceCard from "../index.tsx";
+import {
+  mockDraftService,
+  mockPendingService,
+} from "../../../mocks/service.ts";
 
-describe("OrderCard ", () => {
+describe("ServiceCard ", () => {
+  const mockOnOpen = vi.fn();
+
   it("renders details correctly", () => {
-    const { getByText } = render(<OrderCard order={mockPendingOrder} />);
+    const { getByText } = render(
+      <ServiceCard onOpen={mockOnOpen} data={mockPendingService} />,
+    );
 
-    expect(getByText(mockPendingOrder.title)).toBeInTheDocument();
+    expect(getByText(mockPendingService.title)).toBeInTheDocument();
     expect(getByText("Package Weight:")).toBeInTheDocument();
     expect(getByText("Package type:")).toBeInTheDocument();
   });
 
   it("hide package type when empty", () => {
     const { getByText, queryByText } = render(
-      <OrderCard order={mockDraftOrder} />,
+      <ServiceCard onOpen={mockOnOpen} data={mockDraftService} />,
     );
 
-    expect(getByText(mockDraftOrder.title)).toBeInTheDocument();
+    expect(getByText(mockDraftService.title)).toBeInTheDocument();
     expect(queryByText("Package type:")).toBeNull();
   });
 });

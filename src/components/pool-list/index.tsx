@@ -1,14 +1,14 @@
 import {
+  Button,
   Dialog,
-  DialogContent,
   DialogActions,
+  DialogContent,
   DialogTitle,
   Grid2,
-  Theme,
-  Button,
+  IconButton,
   Stack,
   TextField,
-  IconButton,
+  Theme,
   Typography,
 } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
@@ -17,8 +17,10 @@ import { mockServices } from "../../mocks/service.ts";
 import ServiceCard from "../service-card";
 import { useState } from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Service } from "../../types/service.ts";
+import { Service, ServiceStatus } from "../../types/service.ts";
 import { ServiceInfo } from "../service-card/ServiceInfo.tsx";
+import Lottie from "lottie-react";
+import animationJson from "../../assets/animation/plane.json";
 
 export const PoolList = () => {
   const [activeService, setActiveService] = useState<null | Service>(null);
@@ -85,7 +87,12 @@ export const PoolList = () => {
             <Button variant="outlined" color="secondary" onClick={closeDrawer}>
               Cancel
             </Button>
-            <Button variant="contained" color="primary" onClick={mutateRequest}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={mutateRequest}
+              disabled={activeService?.status === ServiceStatus.Requested}
+            >
               Request for service
             </Button>
           </Stack>
@@ -181,7 +188,12 @@ export const PoolList = () => {
           }}
         >
           <Stack alignItems="center" justifyContent="center" gap={2}>
-            <InfoIcon fontSize="large" sx={{ color: "warning.main" }} />
+            <Lottie
+              loop
+              animationData={animationJson}
+              style={{ width: 100, height: 100 }}
+            />
+
             <Typography variant="h4" textAlign="center">
               Request Sent Successfully
             </Typography>

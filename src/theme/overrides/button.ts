@@ -25,10 +25,16 @@ const Button: Components<Theme>["MuiButton"] = {
         padding: "10px 16px",
       },
     },
+    {
+      props: { color: "secondary", variant: "outlined" },
+      style: {
+        color: "#344054",
+      },
+    },
   ],
   styleOverrides: {
     root: {
-      fontWeight: 400,
+      fontWeight: 500,
     },
   },
 };

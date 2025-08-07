@@ -2,12 +2,17 @@ import {
   Dialog,
   DialogContent,
   DialogActions,
+  DialogTitle,
   Grid2,
   Theme,
   Button,
   Stack,
   TextField,
+  IconButton,
+  Typography,
 } from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
+import CloseIcon from "@mui/icons-material/Close";
 import { mockServices } from "../../mocks/service.ts";
 import ServiceCard from "../service-card";
 import { useState } from "react";
@@ -18,6 +23,8 @@ import { ServiceInfo } from "../service-card/ServiceInfo.tsx";
 export const PoolList = () => {
   const [activeService, setActiveService] = useState<null | Service>(null);
   const [open, setOpen] = useState(false);
+  const [openConfirmation, setOpenConfirmation] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
   );
@@ -29,6 +36,11 @@ export const PoolList = () => {
   const openDrawer = (data: Service) => {
     setOpen(true);
     setActiveService(data);
+  };
+
+  const mutateRequest = () => {
+    setOpen(false);
+    setOpenConfirmation(true);
   };
 
   return (
@@ -73,10 +85,124 @@ export const PoolList = () => {
             <Button variant="outlined" color="secondary" onClick={closeDrawer}>
               Cancel
             </Button>
-            <Button variant="contained" color="primary" onClick={closeDrawer}>
+            <Button variant="contained" color="primary" onClick={mutateRequest}>
               Request for service
             </Button>
           </Stack>
+        </DialogActions>
+      </Dialog>
+
+      {/* Request confirmation */}
+      <Dialog
+        open={openConfirmation}
+        onClose={() => setOpenConfirmation(false)}
+        disableEscapeKeyDown
+        fullScreen={isMobile}
+      >
+        <DialogTitle sx={{ textAlign: "right" }}>
+          <Stack
+            gap={1}
+            direction="row"
+            justifyContent="space-between"
+            alignItems="flex-start"
+          >
+            <InfoIcon fontSize="large" sx={{ color: "warning.main" }} />
+
+            <CloseIcon
+              onClick={() => setOpenConfirmation(false)}
+              sx={{ color: "text.secondary" }}
+            />
+          </Stack>
+        </DialogTitle>
+
+        <DialogContent
+          sx={{
+            borderBottom: "solid 1px",
+            borderBottomColor: "divider",
+            maxWidth: { xs: "100%", lg: 400 },
+            mt: 1,
+          }}
+        >
+          <Stack gap={1}>
+            <Typography variant="h4">Make Request?</Typography>
+            <Typography color="text.secondary">
+              You are about to make a request from this passenger, are you sure
+              you want to take this action?
+            </Typography>
+          </Stack>
+        </DialogContent>
+
+        <DialogActions>
+          <Stack
+            direction="row"
+            justifyContent="flex-end"
+            alignItems="center"
+            gap={1.5}
+          >
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={() => setOpenConfirmation(false)}
+            >
+              Close
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                setOpenConfirmation(false);
+                setOpenSuccess(true);
+              }}
+            >
+              Yes, Request
+            </Button>
+          </Stack>
+        </DialogActions>
+      </Dialog>
+
+      {/* Success info Dialog */}
+      <Dialog
+        open={openSuccess}
+        onClose={() => setOpenSuccess(false)}
+        disableEscapeKeyDown
+        fullScreen={isMobile}
+      >
+        <DialogTitle sx={{ textAlign: "right" }}>
+          <IconButton onClick={() => setOpenSuccess(false)}>
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+
+        <DialogContent
+          sx={{
+            borderBottom: "solid 1px",
+            borderBottomColor: "divider",
+            maxWidth: { xs: "100%", lg: 400 },
+          }}
+        >
+          <Stack alignItems="center" justifyContent="center" gap={2}>
+            <InfoIcon fontSize="large" sx={{ color: "warning.main" }} />
+            <Typography variant="h4" textAlign="center">
+              Request Sent Successfully
+            </Typography>
+            <Typography textAlign="center" color="text.secondary">
+              You have successfully made a request to the passenger. You will be
+              notified when they accept your request also.
+            </Typography>
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={() => {
+              setOpenConfirmation(false);
+              setOpenSuccess(false);
+            }}
+          >
+            Okay
+          </Button>
         </DialogActions>
       </Dialog>
     </>

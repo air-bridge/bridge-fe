@@ -1,41 +1,41 @@
 import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/react";
 import { ServiceStatusLabel } from "../ServiceStatusLabel.tsx";
-import { OrderStatus } from "../../../types/order.ts";
+import { ServiceStatus } from "../../../types/service.ts";
 
 describe("Screen Header", () => {
   it("renders chip with correct label and color for draft status", () => {
     const { getByText } = render(
-      <ServiceStatusLabel status={OrderStatus.Draft} />,
+      <ServiceStatusLabel status={ServiceStatus.Draft} />,
     );
-    const chip = getByText(OrderStatus.Draft);
+    const chip = getByText(ServiceStatus.Draft);
     expect(chip).toBeInTheDocument();
     expect(chip.parentElement).toHaveClass("MuiChip-colorSecondary");
   });
 
   it("renders chip with correct label and color for open status", () => {
     const { getByText } = render(
-      <ServiceStatusLabel status={OrderStatus.Open} />,
+      <ServiceStatusLabel status={ServiceStatus.Open} />,
     );
-    const chip = getByText(OrderStatus.Open);
+    const chip = getByText(ServiceStatus.Open);
     expect(chip).toBeInTheDocument();
     expect(chip.parentElement).toHaveClass("MuiChip-colorSuccess");
   });
 
   it("renders chip with correct label and color for pending status", () => {
     const { getByText } = render(
-      <ServiceStatusLabel status={OrderStatus.Pending} />,
+      <ServiceStatusLabel status={ServiceStatus.Pending} />,
     );
-    const chip = getByText(OrderStatus.Pending);
+    const chip = getByText(ServiceStatus.Pending);
     expect(chip).toBeInTheDocument();
     expect(chip.parentElement).toHaveClass("MuiChip-colorWarning");
   });
 
   it("renders chip with correct label and color for requested status", () => {
     const { getByText } = render(
-      <ServiceStatusLabel status={OrderStatus.Requested} />,
+      <ServiceStatusLabel status={ServiceStatus.Requested} />,
     );
-    const chip = getByText(OrderStatus.Requested);
+    const chip = getByText(ServiceStatus.Requested);
     expect(chip).toBeInTheDocument();
     expect(chip.parentElement).toHaveClass("MuiChip-colorWarning");
   });

@@ -5,7 +5,7 @@ const DialogActions: Components<Theme>["MuiDialogActions"] = {
     root: () => ({
       padding: "8px 16px",
       "@media (min-width: 1200px)": {
-        padding: "8px 24px 32px",
+        padding: "16px 24px 32px",
       },
     }),
   },

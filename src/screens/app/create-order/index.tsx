@@ -1,13 +1,13 @@
 import { CreateOrderHeading } from "../../../components/order-heading/CreateOrderHeading.tsx";
 import { OrderForm } from "../../../components/order-form";
 import { Alert, Container, Stack } from "@mui/material";
-import { SubmitHandler, FormProvider, useForm } from "react-hook-form";
-import { OrderFormValues } from "../../../types/order.ts";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { OrderFormValues, OrderStatus } from "../../../types/order.ts";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { boolean, string } from "yup";
 import { useState } from "react";
 import { OrderDetails } from "../../../components/order-form/order-details.tsx";
-import { boolean, string } from "yup";
 import { useMutation } from "@tanstack/react-query";
 import { createOrder } from "../../../api/order.ts";
 import { useNotificationContext } from "../../../context/notification/util.ts";
@@ -16,6 +16,7 @@ import { isValidPhoneNumber } from "../../../utils/validate-phone.ts";
 
 const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
   title: yup.string().required("Title is required"),
+  status: yup.mixed<OrderStatus>().notRequired().nullable(),
   package_type: yup
     .array()
     .of(yup.string().required("Package Type is required"))
@@ -26,7 +27,6 @@ const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
     .nullable()
     .typeError("Weight must be a number")
     .positive("Weight must be a positive number"),
-  delivery_date: yup.string().required("Delivery date is required"),
   destination_address: yup.string().required("Destination address is required"),
   destination_state: yup.string().required("Destination state is required"),
   destination_country: yup.string().required("Destination country is required"),
@@ -36,7 +36,8 @@ const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
   receiver_firstname: yup.string().nullable().notRequired(),
   receiver_lastname: yup.string().nullable().notRequired(),
   receiver_phone: string()
-    .required("Receiver phone is required")
+    .nullable()
+    .notRequired()
     .test("is-valid-phone", "Phone number is not valid", function (value) {
       if (!value) {
         return true;
@@ -67,7 +68,7 @@ const initialValues: OrderFormValues = {
   receiver_lastname: "",
   receiver_phone: "",
   delivery_note: "",
-  delivery_date: "",
+  status: OrderStatus.Inactive, // todo: change to draft
   terms: true,
   image1: null,
   image2: null,
@@ -87,8 +88,13 @@ export const CreateOrderScreen = () => {
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: createOrder,
     onSuccess: () => {
-      openNotification("Order created successfully.");
-      navigate("/");
+      if (!showReview) {
+        openNotification("Order saved for later successfully");
+        navigate("/");
+      } else {
+        // TODO: add order id to URL
+        navigate("/pool-list");
+      }
     },
     onError: () => {
       setShowReview(false);
@@ -96,7 +102,15 @@ export const CreateOrderScreen = () => {
   });
 
   const onSubmit: SubmitHandler<OrderFormValues> = (data) => {
-    mutate(data);
+    if (showReview) {
+      // TODO: further validation update
+      mutate({
+        ...data,
+        status: OrderStatus.Active,
+      });
+    } else {
+      mutate(data);
+    }
   };
 
   const handleShowReview = async () => {

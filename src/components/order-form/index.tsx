@@ -8,10 +8,8 @@ import {
   Grid2,
   Theme,
   MenuItem,
-  FormHelperText,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { DatePicker } from "@mui/x-date-pickers";
 import { Controller, useFormContext } from "react-hook-form";
 import { luggageCategories } from "./util.ts";
 import { OrderFormValues } from "../../types/order.ts";
@@ -23,7 +21,6 @@ import { useMemo } from "react";
 import { getStates } from "../../utils/country-state.ts";
 import Autocomplete from "@mui/material/Autocomplete";
 import { MuiTelInput } from "mui-tel-input";
-import dayjs from "dayjs";
 
 export const OrderForm = () => {
   const isMobile = useMediaQuery<Theme>((theme) =>
@@ -38,11 +35,11 @@ export const OrderForm = () => {
 
   const countries = Country.getAllCountries();
   const packageType = watch("package_type");
+  const receiverPhone = watch("receiver_phone");
 
   // Watch for country changes to update state options
   const selectedDestinationCountry = watch("destination_country");
   const selectedPickupCountry = watch("pickup_country");
-  const deliveryDate = watch("delivery_date");
   const image1 = watch("image1");
   const image2 = watch("image2");
   const image3 = watch("image3");
@@ -327,6 +324,7 @@ export const OrderForm = () => {
                     <MuiTelInput
                       {...field}
                       id="receiver_phone"
+                      value={receiverPhone || ""}
                       fullWidth
                       forceCallingCode
                       defaultCountry="NG"
@@ -438,43 +436,6 @@ export const OrderForm = () => {
                     </TextField>
                   )}
                 />
-              </Box>
-            )}
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12 }}>
-          <Controller
-            name="delivery_date"
-            control={control}
-            render={({ field }) => (
-              <Box>
-                <InputLabel htmlFor="delivery_date">Delivery date</InputLabel>
-                <Controller
-                  {...field}
-                  control={control}
-                  render={({ field }) => (
-                    <DatePicker
-                      {...field}
-                      value={deliveryDate ? dayjs(deliveryDate) : null}
-                      sx={{
-                        width: "100%",
-                      }}
-                      format="YYYY-MM-DD"
-                      onChange={(date) => {
-                        customSetInputValue(
-                          "delivery_date",
-                          dayjs(date).format("YYYY-MM-DD"),
-                        );
-                      }}
-                    />
-                  )}
-                />
-                {errors.delivery_date && (
-                  <FormHelperText error>
-                    {errors.delivery_date?.message}
-                  </FormHelperText>
-                )}
               </Box>
             )}
           />

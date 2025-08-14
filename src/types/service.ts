@@ -27,7 +27,7 @@ export interface Service {
 
 export type ServiceFormValues = {
   title: string;
-  weight: number;
+  weight?: number;
   arrival_city: string;
   arrival_country: string;
   arrival_date: string;
@@ -36,7 +36,7 @@ export type ServiceFormValues = {
   departure_country: string;
   departure_date: string;
   phone: string;
-  price_per_kg: number;
+  price_per_kg?: number;
   status?: ServiceStatus | null;
   transport_type?: string | null;
   delivery_note?: string | null;

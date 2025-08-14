@@ -7,13 +7,16 @@ import {
   Typography,
   Theme,
   FormHelperText,
+  InputAdornment,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { Controller, useFormContext } from "react-hook-form";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Country } from "country-state-city";
 import { useMemo } from "react";
-import { getStates } from "../../utils/country-state.ts";
+import { currencies, getStates } from "../../utils/country-state.ts";
 import Autocomplete from "@mui/material/Autocomplete";
 import { ServiceFormValues } from "../../types/service.ts";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -135,6 +138,35 @@ export const ServiceForm = () => {
                   error={!!errors.price_per_kg}
                   helperText={errors.price_per_kg?.message}
                   fullWidth
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Controller
+                            name="currency"
+                            control={control}
+                            render={({ field }) => (
+                              <Select
+                                {...field}
+                                variant="standard"
+                                disableUnderline
+                                sx={{ minWidth: 70 }}
+                              >
+                                {currencies.map((currency) => (
+                                  <MenuItem
+                                    value={currency.value}
+                                    key={currency.value}
+                                  >
+                                    {currency.label}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            )}
+                          />
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
                 />
               </Box>
             )}

@@ -1,8 +1,8 @@
-import { getAPI, postFormDataAPI, putAPI } from "./api.ts";
+import { getAPI, postAPI, putAPI } from "./api.ts";
 import { Service, ServiceFormValues } from "../types/service.ts";
 
 export const createService = async (payload: ServiceFormValues) => {
-  const res = await postFormDataAPI("passengers/services", payload);
+  const res = await postAPI("passengers/services", payload);
 
   if (!res.ok) {
     const errorData = (await res.json()) as {

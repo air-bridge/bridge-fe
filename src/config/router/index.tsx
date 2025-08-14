@@ -48,6 +48,7 @@ export const Router = () => {
 
           {/* Services */}
           <Route path="create-service" element={<CreateServiceScreen />} />
+          <Route path="services/:serviceId" element={<OrderDetailsScreen />} />
 
           <Route path="pool-list" element={<PoolListScreen />} />
           <Route path="profile" element={<ProfileScreen />} />

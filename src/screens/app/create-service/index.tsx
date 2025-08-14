@@ -2,7 +2,7 @@ import { Alert, Container, Stack } from "@mui/material";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import dayjs from "dayjs";
-import { boolean, string, mixed, number, object, ObjectSchema } from "yup";
+import { string, mixed, number, object, ObjectSchema } from "yup";
 import { useState } from "react";
 import { OrderDetails } from "../../../components/order-form/order-details.tsx";
 import { useMutation } from "@tanstack/react-query";
@@ -55,20 +55,15 @@ const schema: ObjectSchema<ServiceFormValues> = object({
 
       return isValidPhoneNumber(value);
     }),
-  terms: boolean()
-    .required("You need to agree to our terms & condition to continue")
-    .oneOf([true], "You need to agree to our terms & condition to continue"),
   delivery_note: string().nullable().notRequired(),
 });
 
 const initialValues: ServiceFormValues = {
   title: "",
-  weight: 5,
   arrival_city: "",
-  price_per_kg: 1,
   arrival_country: "",
   arrival_date: "",
-  currency: "",
+  currency: "USD",
   departure_city: "",
   departure_country: "",
   departure_date: "",
@@ -89,13 +84,13 @@ export const CreateServiceScreen = () => {
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: createService,
-    onSuccess: () => {
+    onSuccess: (data) => {
       if (!showReview) {
-        openNotification("Order saved for later successfully");
+        openNotification("Service saved for later successfully");
         navigate("/");
       } else {
-        // TODO: add order id to URL
-        navigate("/pool-list");
+        openNotification("Service created successfully");
+        navigate(`/services/${data.id}`);
       }
     },
     onError: () => {
@@ -121,6 +116,8 @@ export const CreateServiceScreen = () => {
       setShowReview(true);
     }
   };
+
+  console.log("err", methods.formState.errors);
 
   return (
     <FormProvider {...methods}>

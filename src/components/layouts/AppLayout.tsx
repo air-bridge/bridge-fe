@@ -36,7 +36,7 @@ const AppLayout = () => {
           ) : (
             <>
               <Header />
-              <Box py={2} px={{ xs: 2, lg: 5 }}>
+              <Box py={{ xs: 2, lg: 3 }} px={{ xs: 2, lg: 5 }}>
                 <Outlet />
               </Box>
             </>

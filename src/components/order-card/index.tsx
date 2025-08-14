@@ -12,7 +12,11 @@ const OrderCard = ({ order }: Props) => {
     <Card>
       <CardContent>
         <Stack gap={0.5}>
-          <Typography variant="subtitle1" noWrap>
+          <Typography
+            variant="subtitle1"
+            noWrap
+            sx={{ "&:first-letter": { textTransform: "uppercase" } }}
+          >
             {order.title}
           </Typography>
 

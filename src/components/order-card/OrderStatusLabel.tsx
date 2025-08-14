@@ -8,7 +8,7 @@ type Props = {
 const chipColor: Record<OrderStatus, ChipProps["color"]> = {
   [OrderStatus.Inactive]: "secondary",
   [OrderStatus.Draft]: "secondary",
-  [OrderStatus.Open]: "success",
+  [OrderStatus.Open]: "info",
   [OrderStatus.Pending]: "warning",
   [OrderStatus.Active]: "success",
 };

@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Stack, Typography } from "@mui/material";
+import { Card, CardContent, Divider, Stack, Typography } from "@mui/material";
 import { Order } from "../../types/order.ts";
 import { OrderStatusLabel } from "./OrderStatusLabel.tsx";
 import { OrderTimeline } from "./OrderTimeline.tsx";
@@ -10,9 +10,13 @@ type Props = {
 const OrderCard = ({ order }: Props) => {
   return (
     <Card>
-      <CardContent>
-        <Stack gap={0.5}>
-          <Typography variant="subtitle1" noWrap>
+      <CardContent component={Stack} gap={1}>
+        <Stack>
+          <Typography
+            variant="subtitle1"
+            noWrap
+            sx={{ "&:first-letter": { textTransform: "uppercase" } }}
+          >
             {order.title}
           </Typography>
 
@@ -33,13 +37,9 @@ const OrderCard = ({ order }: Props) => {
           </Typography>
         </Stack>
 
-        <Box
-          sx={{ borderTop: "solid 1px", borderTopColor: "grey.300" }}
-          py={2}
-          mt={2}
-        >
-          <OrderTimeline order={order} />
-        </Box>
+        <Divider />
+
+        <OrderTimeline order={order} />
 
         <Stack alignItems="center" gap={1} direction="row" minHeight={20}>
           {order.package_type.length > 0 && (

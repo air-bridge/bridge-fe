@@ -52,6 +52,32 @@ export const mockOpenOrder: Order = {
   updated_at: "2025-07-31T08:54:38.978959Z",
 };
 
+export const mockOpenOrder2: Order = {
+  id: 6,
+  user_id: 5,
+  title: "My School certificate & food stuffs with maggi",
+  description: "",
+  weight: 50,
+  package_type: ["documents"],
+  payment_status: false,
+  status: OrderStatus.Open,
+  destination_address: "45 Treptower",
+  destination_state: "Berlin",
+  destination_country: "Germany",
+  pickup_address: "23 Jon Jones",
+  pickup_state: "Lagos",
+  pickup_country: "Nigeria",
+  receiver_firstname: "Rufai",
+  receiver_lastname: "Oseni",
+  receiver_phone: "028390883983",
+  delivery_note: "Please return",
+  image1: "https://test.cloudinary.com/file.jpg",
+  image2: "https://test.cloudinary.com/file2.jpg",
+  image3: "",
+  created_at: "2025-07-31T08:54:38.978959Z",
+  updated_at: "2025-07-31T08:54:38.978959Z",
+};
+
 export const mockPendingOrder: Order = {
   id: 3,
   user_id: 5,

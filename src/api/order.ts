@@ -1,8 +1,46 @@
-import { getAPI, postFormDataAPI } from "./api.ts";
+import { getAPI, postFormDataAPI, putAPI } from "./api.ts";
 import { Order, OrderFormValues } from "../types/order.ts";
 
 export const createOrder = async (payload: OrderFormValues) => {
   const res = await postFormDataAPI("senders/orders", payload);
+
+  if (!res.ok) {
+    const errorData = (await res.json()) as {
+      message: string;
+      error: string;
+    };
+
+    throw new Error(
+      errorData.message || "Unable to create order. Please try again!",
+    );
+  }
+
+  const response = (await res.json()) as { data: Order };
+
+  return response.data;
+};
+
+export const updateOrder = async (
+  orderId: string,
+  payload: OrderFormValues,
+) => {
+  // TODO: allow package type update when BE is fixed
+  const refinedPayload: Record<
+    string,
+    string | number | boolean | string[] | File | null
+  > = {};
+  for (const [key, value] of Object.entries(payload)) {
+    if (["image1", "image2", "image3"].includes(key)) {
+      refinedPayload[key] = value;
+    } else if (value) {
+      refinedPayload[key] = value;
+    }
+  }
+
+  const res = await putAPI(`senders/orders/${orderId}`, {
+    ...refinedPayload,
+    package_type: undefined,
+  });
 
   if (!res.ok) {
     const errorData = (await res.json()) as {

@@ -1,42 +1,40 @@
 import { Stack, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import { EmptyService } from "../../../components/service-list/EmptyService.tsx";
-import { ServiceList } from "../../../components/service-list";
-import { useQuery } from "@tanstack/react-query";
-import { getPassengerDashboard } from "../../../api/dashboard.ts";
-import { useMemo } from "react";
+import { OrderList } from "../../../components/order-list";
+import { EmptyOrder } from "../../../components/order-list/EmptyOrder.tsx";
 import { useUserContext } from "../../../context/user/util.ts";
+import { useQuery } from "@tanstack/react-query";
+import { getSenderDashboard } from "../../../api/dashboard.ts";
 import { OverviewStats } from "../../../components/stats/OverViewStats.tsx";
+import { useMemo } from "react";
 import { HomepageTabs } from "../../../components/homepage-tabs";
-import { mockServices } from "../../../mocks/service.ts";
 
-export const PassengerDashboard = () => {
-  const { isPassenger } = useUserContext();
-  // TODO: switch to api count
+export const SenderDashboard = () => {
+  const { isSender } = useUserContext();
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["passenger-overview-stats", isPassenger],
-    queryFn: getPassengerDashboard,
-    enabled: !!isPassenger,
+    queryKey: ["sender-overview-stats", isSender],
+    queryFn: getSenderDashboard,
+    enabled: !!isSender,
   });
 
   const stats = useMemo(() => {
     if (data) {
       return [
         {
-          name: "Total Service",
-          count: data.total_services,
+          name: "Total Request",
+          count: data.total_requests,
           background: "info.light",
           color: "primary.main",
         },
         {
-          name: "Active Service",
-          count: data.active_services,
+          name: "Active Request",
+          count: data.active_requests,
           background: "warning.light",
           color: "warning.main",
         },
         {
-          name: "Total Request",
-          count: data.total_requests,
+          name: "Successful Sent Goods",
+          count: data.completed_orders,
           background: "success.light",
           color: "success.main",
         },
@@ -46,9 +44,9 @@ export const PassengerDashboard = () => {
     return [];
   }, [data]);
 
-  const recentRequests = data?.recent_requests;
-  const servicesCount = recentRequests?.length || 0;
-  const isEmpty = servicesCount === 0;
+  const recentOrders = data?.recent_orders || [];
+  const ordersCount = recentOrders.length || 0;
+  const isEmpty = ordersCount === 0;
 
   return (
     <>
@@ -65,13 +63,13 @@ export const PassengerDashboard = () => {
             borderBottomColor: "grey.300",
           }}
         >
-          <Typography variant="body1">My Services</Typography>
+          <Typography variant="body1">My Parcel</Typography>
 
           {!isEmpty && (
             <Typography
               variant="body2"
               component={Link}
-              to="/services"
+              to="/orders"
               color="primary.main"
             >
               See All
@@ -79,7 +77,7 @@ export const PassengerDashboard = () => {
           )}
         </Stack>
 
-        {isEmpty ? <EmptyService /> : <ServiceList data={mockServices} />}
+        {isEmpty ? <EmptyOrder /> : <OrderList orders={recentOrders} />}
       </Stack>
     </>
   );

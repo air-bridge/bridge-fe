@@ -5,13 +5,22 @@ type Props = {
   status: ServiceStatus;
 };
 
-const chipColor: Record<ServiceStatus, ChipProps["color"]> = {
+export const chipColor: Record<ServiceStatus, ChipProps["color"]> = {
   [ServiceStatus.Draft]: "secondary",
-  [ServiceStatus.Open]: "success",
-  [ServiceStatus.Pending]: "warning",
-  [ServiceStatus.Requested]: "info",
+  [ServiceStatus.Open]: "info",
+  [ServiceStatus.Active]: "warning",
+  [ServiceStatus.Matched]: "success",
+  [ServiceStatus.Completed]: "success",
+  [ServiceStatus.Stale]: "error",
 };
 
 export const ServiceStatusLabel = ({ status }: Props) => {
-  return <Chip label={status} size="small" color={chipColor[status]} />;
+  return (
+    <Chip
+      label={status}
+      size="small"
+      color={chipColor[status]}
+      sx={{ textTransform: "capitalize" }}
+    />
+  );
 };

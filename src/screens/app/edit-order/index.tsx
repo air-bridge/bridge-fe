@@ -6,13 +6,15 @@ import { OrderFormValues, OrderStatus } from "../../../types/order.ts";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { boolean, string } from "yup";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { OrderDetails } from "../../../components/order-form/order-details.tsx";
-import { useMutation } from "@tanstack/react-query";
-import { createOrder } from "../../../api/order.ts";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getOrder, updateOrder } from "../../../api/order.ts";
 import { useNotificationContext } from "../../../context/notification/util.ts";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { isValidPhoneNumber } from "../../../utils/validate-phone.ts";
+import { Loading } from "../../../components/loading";
+import { ErrorInfo } from "../../../components/error-info";
 
 const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
   title: yup.string().required("Title is required"),
@@ -54,29 +56,43 @@ const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
   image3: yup.mixed<File | string>().nullable().notRequired(),
 });
 
-const initialValues: OrderFormValues = {
-  title: "",
-  package_type: ["box"],
-  weight: null,
-  destination_address: "",
-  destination_country: "",
-  destination_state: "",
-  pickup_address: "",
-  pickup_country: "",
-  pickup_state: "",
-  receiver_firstname: "",
-  receiver_lastname: "",
-  receiver_phone: "",
-  delivery_note: "",
-  status: OrderStatus.Inactive, // todo: change to draft
-  terms: true,
-  image1: null,
-  image2: null,
-  image3: null,
-};
-
-export const CreateOrderScreen = () => {
+export const EditOrderScreen = () => {
   const [showReview, setShowReview] = useState(false);
+  const { orderId = "" } = useParams();
+  const {
+    data: order,
+    isLoading,
+    isError: isGetOrder,
+    error: fetchOrderError,
+  } = useQuery({
+    queryKey: ["edit-order-details", orderId],
+    queryFn: () => getOrder(orderId),
+    enabled: !!orderId,
+  });
+
+  const initialValues = useMemo(() => {
+    return {
+      title: order?.title || "",
+      package_type: order?.package_type || ["box"],
+      weight: order?.weight || null,
+      destination_address: order?.destination_address || "",
+      destination_country: order?.destination_country || "",
+      destination_state: order?.destination_state || "",
+      pickup_address: order?.pickup_address || "",
+      pickup_country: order?.pickup_country || "",
+      pickup_state: order?.pickup_state || "",
+      receiver_firstname: order?.receiver_firstname || "",
+      receiver_lastname: order?.receiver_lastname || "",
+      receiver_phone: order?.receiver_phone || "",
+      delivery_note: order?.delivery_note || "",
+      status: order?.status || OrderStatus.Inactive, // todo: change to draft
+      terms: true,
+      image1: order?.image1 || null,
+      image2: order?.image2 || null,
+      image3: order?.image3 || null,
+    };
+  }, [order]);
+
   const methods = useForm<OrderFormValues>({
     resolver: yupResolver(schema),
     defaultValues: initialValues,
@@ -86,7 +102,7 @@ export const CreateOrderScreen = () => {
   const navigate = useNavigate();
 
   const { mutate, isPending, isError, error } = useMutation({
-    mutationFn: createOrder,
+    mutationFn: (payload: OrderFormValues) => updateOrder(orderId, payload),
     onSuccess: () => {
       if (!showReview) {
         openNotification("Order saved for later successfully");
@@ -102,15 +118,12 @@ export const CreateOrderScreen = () => {
   });
 
   const onSubmit: SubmitHandler<OrderFormValues> = (data) => {
-    if (showReview) {
-      // TODO: further validation update
-      mutate({
-        ...data,
-        status: OrderStatus.Active,
-      });
-    } else {
-      mutate(data);
-    }
+    // TODO: further validation update
+    // TODO: confirm status for order when ready for matching
+    mutate({
+      ...data,
+      status: showReview ? OrderStatus.Active : OrderStatus.Inactive,
+    });
   };
 
   const handleShowReview = async () => {
@@ -119,6 +132,18 @@ export const CreateOrderScreen = () => {
       setShowReview(true);
     }
   };
+
+  useEffect(() => {
+    methods.reset(initialValues);
+  }, [initialValues]);
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (isGetOrder) {
+    return <ErrorInfo message={fetchOrderError?.message} />;
+  }
 
   return (
     <FormProvider {...methods}>
@@ -129,6 +154,7 @@ export const CreateOrderScreen = () => {
             onSetShowReview={handleShowReview}
             onBack={() => setShowReview(false)}
             isPending={isPending}
+            isEdit
           />
 
           <Container
@@ -144,7 +170,7 @@ export const CreateOrderScreen = () => {
                 {error?.message}
               </Alert>
             )}
-            {showReview ? <OrderDetails /> : <OrderForm />}
+            {showReview ? <OrderDetails /> : <OrderForm editMode />}
           </Container>
         </Stack>
       </form>

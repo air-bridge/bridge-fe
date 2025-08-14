@@ -16,6 +16,7 @@ import PoolListScreen from "../../screens/app/pool-list";
 import { EditOrderScreen } from "../../screens/app/edit-order";
 import { CreateServiceScreen } from "../../screens/app/create-service";
 import { ServiceDetailsScreen } from "../../screens/app/service-details";
+import ServicesListScreen from "../../screens/app/service-list";
 
 export const Router = () => {
   return (
@@ -48,6 +49,7 @@ export const Router = () => {
           <Route path="orders/:orderId" element={<OrderDetailsScreen />} />
 
           {/* Services */}
+          <Route path="services" element={<ServicesListScreen />} />
           <Route path="create-service" element={<CreateServiceScreen />} />
           <Route
             path="requests/:serviceId"

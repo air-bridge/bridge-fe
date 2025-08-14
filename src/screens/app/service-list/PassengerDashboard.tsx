@@ -8,7 +8,6 @@ import { useMemo } from "react";
 import { useUserContext } from "../../../context/user/util.ts";
 import { OverviewStats } from "../../../components/stats/OverViewStats.tsx";
 import { HomepageTabs } from "../../../components/homepage-tabs";
-import { mockServices } from "../../../mocks/service.ts";
 
 export const PassengerDashboard = () => {
   const { isPassenger } = useUserContext();
@@ -79,7 +78,7 @@ export const PassengerDashboard = () => {
           )}
         </Stack>
 
-        {isEmpty ? <EmptyService /> : <ServiceList data={mockServices} />}
+        {isEmpty ? <EmptyService /> : <ServiceList data={[]} />}
       </Stack>
     </>
   );

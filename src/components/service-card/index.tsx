@@ -4,86 +4,71 @@ import { ServiceTimeline } from "./ServiceTimeline.tsx";
 import dayjs from "dayjs";
 import { Service } from "../../types/service.ts";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
-import { transportTypes } from "../service-form/util.ts";
-import { ButtonChip } from "../button-chip";
 
 type Props = {
   data: Service;
-  onOpen: (arg: Service) => void;
 };
 
-const ServiceCard = ({ data, onOpen }: Props) => {
-  const transportType = transportTypes.find(
-    (transport) => transport.value === data.transport_type,
-  );
-
+const ServiceCard = ({ data }: Props) => {
   return (
-    <Card onClick={() => onOpen(data)} sx={{ cursor: "pointer" }}>
-      <CardContent>
-        <Stack gap={2}>
-          <Stack gap={1}>
-            <Typography variant="subtitle1" noWrap>
-              {data.title}
-            </Typography>
-
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="flex-start"
-            >
-              <Typography variant="caption">
-                Created on{" "}
-                {dayjs(data.created_at).format("MMMM D, YYYY h:mm A")}
-              </Typography>
-              {data.status && <ServiceStatusLabel status={data.status} />}
-            </Stack>
-
-            <Typography variant="body2" color="text.secondary">
-              Transport Type:&nbsp;
-              <strong style={{ color: "black" }}>{data.transport_type}</strong>
-            </Typography>
-
-            <Typography variant="body2" color="text.secondary">
-              Available Weight:&nbsp;
-              <strong style={{ color: "black" }}>{data.weight}KG</strong>
-            </Typography>
-          </Stack>
-
-          <Divider />
+    <Card>
+      <CardContent component={Stack} gap={1.5}>
+        <Stack gap={0.5}>
+          <Typography
+            variant="subtitle1"
+            noWrap
+            sx={{ "&:first-letter": { textTransform: "uppercase" } }}
+          >
+            {data.title}
+          </Typography>
 
           <Stack
             direction="row"
+            justifyContent="space-between"
             alignItems="center"
-            spacing={2}
-            sx={{
-              px: 2,
-              py: 1,
-              borderRadius: 5,
-              bgcolor: "info.light",
-              width: "fit-content",
-            }}
           >
-            <Typography variant="subtitle2">
-              {`${data.price_per_kg} ${data.currency} per KG`}
+            <Typography variant="caption">
+              Created on {dayjs(data.created_at).format("MMMM D, YYYY h:mm A")}
             </Typography>
-            <LocalAtmIcon />
+            <ServiceStatusLabel status={data.status} />
           </Stack>
 
-          <ServiceTimeline data={data} />
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            textTransform="capitalize"
+          >
+            Transport Type:&nbsp;
+            {data.transport_type || "-"}
+          </Typography>
 
-          {transportType && (
-            <Stack gap={0.5}>
-              <Typography color="text.secondary" variant="body2">
-                Trip Type
-              </Typography>
-
-              <ButtonChip
-                label={transportType.name}
-                Icon={transportType.icon}
-              />
-            </Stack>
-          )}
+          <Typography variant="body2" color="text.secondary">
+            Available Weight:&nbsp;
+            <strong style={{ color: "black" }}>{data.weight}KG</strong>
+          </Typography>
         </Stack>
+
+        <Divider />
+
+        <Stack
+          direction="row"
+          alignItems="center"
+          spacing={2}
+          sx={{
+            px: 1.5,
+            py: 0.75,
+            borderRadius: 5,
+            bgcolor: "primary.light",
+            width: "fit-content",
+          }}
+        >
+          <Typography variant="h6">
+            {`${data.price_per_kg} ${data.currency.toUpperCase()} per KG`}
+          </Typography>
+          <LocalAtmIcon />
+        </Stack>
+
+        <ServiceTimeline data={data} />
       </CardContent>
     </Card>
   );

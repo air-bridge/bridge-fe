@@ -7,7 +7,7 @@ import { Cancel } from "@mui/icons-material";
 type Props = {
   onChange: (file: File | string) => void;
   file?: string | File | null;
-  editable: boolean;
+  editable?: boolean;
 };
 export const PhotoInput = ({ onChange, editable, file }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);

@@ -1,16 +1,16 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { ServiceList } from "../index.tsx";
-import { orders } from "../../../mocks/order.ts";
+import { mockServices } from "../../../mocks/service.ts";
 
 describe("Service List Component", () => {
   beforeEach(() => {
-    render(<ServiceList orders={orders} />);
+    render(<ServiceList data={mockServices} />);
   });
 
   it("renders Service List", () => {
-    expect(screen.getByText(orders[0].title)).toBeInTheDocument();
-    expect(screen.getByText(orders[1].title)).toBeInTheDocument();
-    expect(screen.getByText(orders[2].title)).toBeInTheDocument();
+    expect(screen.getByText(mockServices[0].title)).toBeInTheDocument();
+    expect(screen.getByText(mockServices[1].title)).toBeInTheDocument();
+    expect(screen.getByText(mockServices[2].title)).toBeInTheDocument();
   });
 });

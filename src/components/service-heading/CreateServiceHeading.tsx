@@ -17,7 +17,7 @@ type Props = {
   onSetShowReview: () => void;
   onBack: () => void;
 };
-export const CreateOrderHeading = ({
+export const CreateServiceHeading = ({
   onBack,
   isPending,
   isEdit,
@@ -56,7 +56,7 @@ export const CreateOrderHeading = ({
           variant="h6"
           sx={{ pl: 1, borderLeft: "solid 1px", borderLeftColor: "grey.300" }}
         >
-          {isEdit ? "Edit Order" : "Create Order"}
+          {isEdit ? "Edit Service" : "Create Service"}
         </Typography>
       </Stack>
 

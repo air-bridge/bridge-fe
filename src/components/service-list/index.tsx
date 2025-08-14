@@ -1,16 +1,16 @@
-import OrderCard from "../order-card";
 import { Grid2 } from "@mui/material";
-import { Order } from "../../types/order.ts";
+import { Service } from "../../types/service.ts";
+import ServiceCard from "../service-card";
 
 type Props = {
-  orders: Order[];
+  data: Service[];
 };
-export const ServiceList = ({ orders }: Props) => {
+export const ServiceList = ({ data }: Props) => {
   return (
     <Grid2 container spacing={2}>
-      {orders.map((order) => (
-        <Grid2 key={order.id} size={{ xs: 12, lg: 4 }}>
-          <OrderCard order={order} />
+      {data.map((service) => (
+        <Grid2 key={service.id} size={{ xs: 12, lg: 4 }}>
+          <ServiceCard data={service} />
         </Grid2>
       ))}
     </Grid2>

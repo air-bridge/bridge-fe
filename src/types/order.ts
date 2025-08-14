@@ -1,9 +1,9 @@
 export enum OrderStatus {
-  Draft = "Draft",
+  Draft = "draft",
   Inactive = "inactive",
-  Open = "Open",
-  Pending = "Pending",
-  Requested = "Requested",
+  Open = "open",
+  Pending = "pending",
+  Active = "active",
 }
 export interface Order {
   id: number;
@@ -35,7 +35,6 @@ export type OrderFormValues = {
   title: string;
   package_type: string[];
   weight?: number | null;
-  delivery_date: string;
   destination_address: string;
   destination_state: string;
   destination_country: string;
@@ -44,10 +43,11 @@ export type OrderFormValues = {
   pickup_country: string;
   receiver_firstname?: string | null;
   receiver_lastname?: string | null;
-  receiver_phone: string;
+  receiver_phone?: string | null;
   delivery_note?: string | null;
   image1?: File | string | null;
   image2?: File | string | null;
   image3?: File | string | null;
   terms: boolean;
+  status?: OrderStatus | null;
 };

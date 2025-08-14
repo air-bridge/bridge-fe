@@ -2,18 +2,18 @@ import { Button, IconButton, Stack, Theme, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { Link, useNavigate } from "react-router-dom";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { OrderStatus } from "../../types/order.ts";
+import { ServiceStatus } from "../../types/service.ts";
 
 type Props = {
   showAction: boolean;
-  status?: OrderStatus;
-  orderId?: number;
+  status?: ServiceStatus;
+  serviceId?: number;
   onOpen: () => void;
 };
-export const OrderDetailsHeading = ({
+export const ServiceDetailsHeading = ({
   showAction,
   status,
-  orderId,
+  serviceId,
   onOpen,
 }: Props) => {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ export const OrderDetailsHeading = ({
     theme.breakpoints.down("lg"),
   );
 
-  const isActive = status === OrderStatus.Active;
+  const isActive = status === ServiceStatus.Active;
 
   return (
     <>
@@ -51,20 +51,20 @@ export const OrderDetailsHeading = ({
             variant="h6"
             sx={{ pl: 1, borderLeft: "solid 1px", borderLeftColor: "grey.300" }}
           >
-            Order Details
+            Service Details
           </Typography>
         </Stack>
 
         {!isMobile && showAction && (
           <Stack gap={2} alignItems="center" direction="row">
-            {orderId && (
+            {serviceId && (
               <Button
                 variant={isActive ? "outlined" : "contained"}
                 color="primary"
                 type="submit"
                 sx={{ px: 5 }}
                 component={Link}
-                to={`/edit-order/${orderId}`}
+                to={`/edit-order/${serviceId}`}
               >
                 Edit
               </Button>

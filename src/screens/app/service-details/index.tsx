@@ -8,24 +8,24 @@ import {
   Stack,
   Theme,
 } from "@mui/material";
-import { OrderDetailsHeading } from "../../../components/order-heading/OrderDetailsHeading.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { getOrder } from "../../../api/order.ts";
 import { Loading } from "../../../components/loading";
 import { ErrorInfo } from "../../../components/error-info";
-import { OrderDetails } from "../../../components/order-details";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { MatchTrigger } from "../../../components/match-trigger";
+import { getService } from "../../../api/service.ts";
+import { ServiceDetailsHeading } from "../../../components/service-heading/ServiceDetailsHeading.tsx";
+import { ServiceDetails } from "../../../components/service-details";
 
-export const OrderDetailsScreen = () => {
+export const ServiceDetailsScreen = () => {
   const [open, setOpen] = useState(false);
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
   );
-  const { orderId = "" } = useParams();
+  const { serviceId = "" } = useParams();
 
   const closeDrawer = () => {
     setOpen(false);
@@ -42,9 +42,9 @@ export const OrderDetailsScreen = () => {
   };
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["order-details", orderId],
-    queryFn: () => getOrder(orderId),
-    enabled: !!orderId,
+    queryKey: ["service-details", serviceId],
+    queryFn: () => getService(serviceId),
+    enabled: !!serviceId,
   });
 
   const showAction = !isError && !isLoading;
@@ -52,11 +52,11 @@ export const OrderDetailsScreen = () => {
   return (
     <>
       <Stack gap={{ xs: 2, lg: 3 }}>
-        <OrderDetailsHeading
+        <ServiceDetailsHeading
           showAction={showAction}
           onOpen={openDrawer}
           status={data?.status}
-          orderId={data?.id}
+          serviceId={data?.id}
         />
 
         <Container
@@ -70,7 +70,7 @@ export const OrderDetailsScreen = () => {
           <Stack gap={2}>
             {isError && <ErrorInfo message={error?.message} />}
             {isLoading && <Loading />}
-            {data && <OrderDetails data={data} />}
+            {data && <ServiceDetails data={data} />}
 
             {isMobile && showAction && (
               <Button

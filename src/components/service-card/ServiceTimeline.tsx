@@ -36,8 +36,8 @@ export const ServiceTimeline = ({ data }: Props) => {
           <RadioButtonUncheckedIcon fontSize="small" />
         </Avatar>
         <Box ml={2}>
-          <Typography variant="h6">{`${data.departure_city}`}</Typography>
-          <Typography variant="body2" color="text.secondary" noWrap>
+          <Typography variant="subtitle2">{`${data.departure_city}`}</Typography>
+          <Typography variant="caption" color="text.secondary" noWrap>
             {`Trip Date -  ${dayjs(data.departure_date).format("ll")}`}
           </Typography>
           <Typography
@@ -57,8 +57,11 @@ export const ServiceTimeline = ({ data }: Props) => {
         <Avatar sx={{ width: 17, height: 20, bgcolor: "white", mt: 3 }}>
           <LocationOnIcon fontSize="small" sx={{ color: "black" }} />
         </Avatar>
-        <Box ml={2} mt={2.5}>
-          <Typography fontWeight="bold" textTransform="capitalize">
+        <Box ml={2} mt={0.75}>
+          <Typography variant="caption" color="text.secondary" noWrap>
+            {`Arrival Date - ${dayjs(data.departure_date).format("ll")}`}
+          </Typography>
+          <Typography variant="subtitle2" textTransform="capitalize">
             {data.arrival_city}
           </Typography>
         </Box>

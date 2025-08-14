@@ -7,11 +7,9 @@ import {
   Typography,
   Grid2,
   Theme,
-  MenuItem,
   FormHelperText,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { DatePicker } from "@mui/x-date-pickers";
 import { Controller, useFormContext } from "react-hook-form";
 import { luggageCategories } from "./util.ts";
 import { OrderFormValues } from "../../types/order.ts";
@@ -23,9 +21,11 @@ import { useMemo } from "react";
 import { getStates } from "../../utils/country-state.ts";
 import Autocomplete from "@mui/material/Autocomplete";
 import { MuiTelInput } from "mui-tel-input";
-import dayjs from "dayjs";
 
-export const OrderForm = () => {
+type Props = {
+  editMode?: boolean;
+};
+export const OrderForm = ({ editMode }: Props) => {
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
   );
@@ -38,11 +38,11 @@ export const OrderForm = () => {
 
   const countries = Country.getAllCountries();
   const packageType = watch("package_type");
+  const receiverPhone = watch("receiver_phone");
 
   // Watch for country changes to update state options
   const selectedDestinationCountry = watch("destination_country");
   const selectedPickupCountry = watch("pickup_country");
-  const deliveryDate = watch("delivery_date");
   const image1 = watch("image1");
   const image2 = watch("image2");
   const image3 = watch("image3");
@@ -52,7 +52,9 @@ export const OrderForm = () => {
       return [];
     }
 
-    const country = countries.find((c) => c.name === selectedPickupCountry);
+    const country = countries.find(
+      (c) => c.name.toLowerCase() === selectedPickupCountry.toLowerCase(),
+    );
     return getStates(country?.isoCode);
   }, [selectedPickupCountry]);
 
@@ -62,7 +64,7 @@ export const OrderForm = () => {
     }
 
     const country = countries.find(
-      (c) => c.name === selectedDestinationCountry,
+      (c) => c.name.toLowerCase() === selectedDestinationCountry.toLowerCase(),
     );
     return getStates(country?.isoCode);
   }, [selectedDestinationCountry]);
@@ -119,6 +121,9 @@ export const OrderForm = () => {
             );
           })}
         </Stack>
+        {errors.package_type && (
+          <FormHelperText error>{errors.package_type?.message}</FormHelperText>
+        )}
       </Box>
 
       <Grid container spacing={{ xs: 1, lg: 2 }}>
@@ -207,7 +212,10 @@ export const OrderForm = () => {
                       options={countries}
                       getOptionLabel={(option) => option.name}
                       value={
-                        countries.find((c) => c.name === field.value) || null
+                        countries.find(
+                          (c) =>
+                            c.name.toLowerCase() === field.value.toLowerCase(),
+                        ) || null
                       }
                       onChange={(_, value) => {
                         customSetInputValue(
@@ -242,24 +250,32 @@ export const OrderForm = () => {
                 <InputLabel htmlFor="pickup_state">State</InputLabel>
                 <Controller
                   {...field}
-                  name="pickup_state"
                   control={control}
                   render={({ field }) => (
-                    <TextField
+                    <Autocomplete
                       {...field}
-                      id="pickup_state"
-                      variant="outlined"
-                      select
-                      fullWidth
-                      error={!!errors.pickup_state}
-                      helperText={errors.pickup_state?.message}
-                    >
-                      {pickupStateOptions.map((option) => (
-                        <MenuItem key={option.isoCode} value={option.name}>
-                          {option.name}
-                        </MenuItem>
-                      ))}
-                    </TextField>
+                      id="state"
+                      options={pickupStateOptions}
+                      getOptionLabel={(option) => option.name}
+                      value={
+                        pickupStateOptions.find(
+                          (c) =>
+                            c.name.toLowerCase() === field.value.toLowerCase(),
+                        ) || null
+                      }
+                      onChange={(_, value) => {
+                        customSetInputValue("pickup_state", value?.name || "");
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          fullWidth
+                          placeholder="Select state"
+                          error={!!errors.pickup_state}
+                          helperText={errors.pickup_state?.message}
+                        />
+                      )}
+                    />
                   )}
                 />
               </Box>
@@ -327,6 +343,7 @@ export const OrderForm = () => {
                     <MuiTelInput
                       {...field}
                       id="receiver_phone"
+                      value={receiverPhone || ""}
                       fullWidth
                       forceCallingCode
                       defaultCountry="NG"
@@ -383,7 +400,10 @@ export const OrderForm = () => {
                       options={countries}
                       getOptionLabel={(option) => option.name}
                       value={
-                        countries.find((c) => c.name === field.value) || null
+                        countries.find(
+                          (c) =>
+                            c.name.toLowerCase() === field.value.toLowerCase(),
+                        ) || null
                       }
                       onChange={(_, value) => {
                         customSetInputValue(
@@ -415,66 +435,40 @@ export const OrderForm = () => {
             control={control}
             render={({ field }) => (
               <Box>
-                <InputLabel htmlFor="destination_state">State</InputLabel>
-                <Controller
-                  {...field}
-                  name="destination_state"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      id="destination_state"
-                      variant="outlined"
-                      select
-                      fullWidth
-                      error={!!errors.destination_state}
-                      helperText={errors.destination_state?.message}
-                    >
-                      {destinationStateOptions.map((option) => (
-                        <MenuItem key={option.isoCode} value={option.name}>
-                          {option.name}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  )}
-                />
-              </Box>
-            )}
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12 }}>
-          <Controller
-            name="delivery_date"
-            control={control}
-            render={({ field }) => (
-              <Box>
-                <InputLabel htmlFor="delivery_date">Delivery date</InputLabel>
+                <InputLabel htmlFor="pickup_state">State</InputLabel>
                 <Controller
                   {...field}
                   control={control}
                   render={({ field }) => (
-                    <DatePicker
+                    <Autocomplete
                       {...field}
-                      value={deliveryDate ? dayjs(deliveryDate) : null}
-                      sx={{
-                        width: "100%",
-                      }}
-                      format="YYYY-MM-DD"
-                      onChange={(date) => {
+                      id="state"
+                      options={destinationStateOptions}
+                      getOptionLabel={(option) => option.name}
+                      value={
+                        destinationStateOptions.find(
+                          (c) =>
+                            c.name.toLowerCase() === field.value.toLowerCase(),
+                        ) || null
+                      }
+                      onChange={(_, value) => {
                         customSetInputValue(
-                          "delivery_date",
-                          dayjs(date).format("YYYY-MM-DD"),
+                          "destination_state",
+                          value?.name || "",
                         );
                       }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          fullWidth
+                          placeholder="Select state"
+                          error={!!errors.destination_state}
+                          helperText={errors.destination_state?.message}
+                        />
+                      )}
                     />
                   )}
                 />
-                {errors.delivery_date && (
-                  <FormHelperText error>
-                    {errors.delivery_date?.message}
-                  </FormHelperText>
-                )}
               </Box>
             )}
           />
@@ -509,18 +503,21 @@ export const OrderForm = () => {
       <Grid2 container spacing={1}>
         <Grid2 size={{ xs: 12, lg: 4 }}>
           <PhotoInput
+            editable={!editMode}
             onChange={(file) => setValue("image1", file)}
             file={image1}
           />
         </Grid2>
         <Grid2 size={{ xs: 12, lg: 4 }}>
           <PhotoInput
+            editable={!editMode}
             onChange={(file) => setValue("image2", file)}
             file={image2}
           />
         </Grid2>
         <Grid2 size={{ xs: 12, lg: 4 }}>
           <PhotoInput
+            editable={!editMode}
             onChange={(file) => setValue("image3", file)}
             file={image3}
           />

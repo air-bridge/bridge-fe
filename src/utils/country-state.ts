@@ -7,3 +7,22 @@ export const getStates = (countryIsoCode?: string | null) => {
     return [];
   }
 };
+
+export const currencies = [
+  {
+    label: "USD",
+    value: "USD",
+  },
+  {
+    label: "EUR",
+    value: "EUR",
+  },
+  {
+    label: "GBP",
+    value: "GBP",
+  },
+  {
+    label: "NGN",
+    value: "NGN",
+  },
+];

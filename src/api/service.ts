@@ -1,5 +1,6 @@
-import { getAPI, postAPI, putAPI } from "./api.ts";
+import { postAPI, putAPI } from "./api.ts";
 import { Service, ServiceFormValues } from "../types/service.ts";
+import { mockCompletedService, mockDraftService } from "../mocks/service.ts";
 
 export const createService = async (payload: ServiceFormValues) => {
   const res = await postAPI("passengers/services", payload);
@@ -59,24 +60,27 @@ export const updateService = async (
 };
 
 export const getService = async (id: string) => {
-  const res = await getAPI(`passengers/services/${id}`);
+  // TODO: integrate services when ready
 
-  if (!res.ok) {
-    const errorData = (await res.json()) as {
-      message: string;
-      error: string;
-    };
-
-    throw new Error(
-      errorData.error ||
-        errorData.message ||
-        "Fail to fetch service data, please try again!",
-    );
-  }
-
-  const response: {
-    data: Service;
-  } = await res.json();
-
-  return response.data;
+  return id ? mockDraftService : mockCompletedService;
+  // const res = await getAPI(`passengers/services/${id}`);
+  //
+  // if (!res.ok) {
+  //   const errorData = (await res.json()) as {
+  //     message: string;
+  //     error: string;
+  //   };
+  //
+  //   throw new Error(
+  //     errorData.error ||
+  //       errorData.message ||
+  //       "Fail to fetch service data, please try again!",
+  //   );
+  // }
+  //
+  // const response: {
+  //   data: Service;
+  // } = await res.json();
+  //
+  // return response.data;
 };

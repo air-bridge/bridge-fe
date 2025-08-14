@@ -5,7 +5,6 @@ export const mockDraftService: Service = {
   title: "20KG Space in my luggage",
   weight: "30",
   transport_type: "Air",
-  package_type: ["box", "luggage"],
   status: ServiceStatus.Draft,
   currency: "Eur",
   arrival_city: "Berlin",
@@ -25,7 +24,6 @@ export const mockOpenService: Service = {
   title: "40KG Space in my Box",
   weight: "30",
   transport_type: "Air",
-  package_type: ["box", "luggage"],
   status: ServiceStatus.Open,
   currency: "EUR",
   arrival_city: "London",
@@ -40,13 +38,12 @@ export const mockOpenService: Service = {
   updated_at: "2025-07-31T08:54:38.978959Z",
 };
 
-export const mockPendingService: Service = {
+export const mockActiveService: Service = {
   id: 3,
   title: "3KG Space in my Box",
   weight: "30",
   transport_type: "Air",
-  package_type: ["box"],
-  status: ServiceStatus.Pending,
+  status: ServiceStatus.Active,
   currency: "EUR",
   arrival_city: "Berlin",
   arrival_country: "Germany",
@@ -60,13 +57,50 @@ export const mockPendingService: Service = {
   updated_at: "2025-07-31T08:54:38.978959Z",
 };
 
-export const mockRequestedService: Service = {
+export const mockMatchedService: Service = {
   id: 3,
   title: "12KG Space in my Hand luggage",
   weight: "30",
   transport_type: "Air",
-  package_type: ["box"],
-  status: ServiceStatus.Requested,
+  status: ServiceStatus.Matched,
+  currency: "EUR",
+  arrival_city: "Berlin",
+  arrival_country: "Germany",
+  arrival_date: "2025-10-11",
+  departure_city: "Lagos",
+  departure_country: "Nigeria",
+  departure_date: "2025-10-10",
+  phone: "028390883983",
+  price_per_kg: "20",
+  created_at: "2025-07-31T08:54:38.978959Z",
+  updated_at: "2025-07-31T08:54:38.978959Z",
+};
+
+export const mockStaleService: Service = {
+  id: 3,
+  title: "50KG Space in my Hand luggage",
+  weight: "30",
+  transport_type: "Air",
+  status: ServiceStatus.Stale,
+  currency: "EUR",
+  arrival_city: "Berlin",
+  arrival_country: "Germany",
+  arrival_date: "2025-10-11",
+  departure_city: "Lagos",
+  departure_country: "Nigeria",
+  departure_date: "2025-10-10",
+  phone: "028390883983",
+  price_per_kg: "20",
+  created_at: "2025-07-31T08:54:38.978959Z",
+  updated_at: "2025-07-31T08:54:38.978959Z",
+};
+
+export const mockCompletedService: Service = {
+  id: 3,
+  title: "10KG Space in my Hand luggage",
+  weight: "30",
+  transport_type: "Air",
+  status: ServiceStatus.Completed,
   currency: "EUR",
   arrival_city: "Berlin",
   arrival_country: "Germany",
@@ -82,9 +116,10 @@ export const mockRequestedService: Service = {
 
 export const mockServices: Service[] = [
   mockDraftService,
-  mockPendingService,
-  mockRequestedService,
+  mockActiveService,
+  mockMatchedService,
+  mockStaleService,
   mockOpenService,
   mockDraftService,
-  mockRequestedService,
+  mockCompletedService,
 ];

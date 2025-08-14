@@ -35,7 +35,10 @@ export const OrderTimeline = ({ order }: Props) => {
           <RadioButtonUncheckedIcon fontSize="small" />
         </Avatar>
         <Box ml={2}>
-          <Typography variant="h6">{`${order.pickup_state}, ${order.pickup_country}`}</Typography>
+          <Typography
+            variant="h6"
+            textTransform="capitalize"
+          >{`${order.pickup_state}, ${order.pickup_country}`}</Typography>
           <Typography variant="body2" color="text.secondary" noWrap>
             {order.pickup_address}
           </Typography>

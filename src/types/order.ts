@@ -1,9 +1,9 @@
 export enum OrderStatus {
-  Draft = "Draft",
+  Draft = "draft",
   Inactive = "inactive",
-  Open = "Open",
-  Pending = "Pending",
-  Requested = "Requested",
+  Open = "open",
+  Pending = "pending",
+  Active = "active",
 }
 export interface Order {
   id: number;

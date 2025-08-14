@@ -10,9 +10,16 @@ const chipColor: Record<OrderStatus, ChipProps["color"]> = {
   [OrderStatus.Draft]: "secondary",
   [OrderStatus.Open]: "success",
   [OrderStatus.Pending]: "warning",
-  [OrderStatus.Requested]: "warning",
+  [OrderStatus.Active]: "success",
 };
 
 export const OrderStatusLabel = ({ status }: Props) => {
-  return <Chip label={status} size="small" color={chipColor[status]} />;
+  return (
+    <Chip
+      label={status}
+      size="small"
+      color={chipColor[status]}
+      sx={{ textTransform: "capitalize" }}
+    />
+  );
 };

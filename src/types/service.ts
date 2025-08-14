@@ -1,8 +1,10 @@
 export enum ServiceStatus {
-  Draft = "Draft",
-  Open = "Open",
-  Pending = "Pending",
-  Requested = "Requested",
+  Draft = "draft",
+  Open = "open",
+  Active = "active",
+  Stale = "stale",
+  Matched = "matched",
+  Completed = "completed",
 }
 export interface Service {
   id: number;

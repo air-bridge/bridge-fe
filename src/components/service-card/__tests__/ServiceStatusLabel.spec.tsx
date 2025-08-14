@@ -24,18 +24,18 @@ describe("Screen Header", () => {
 
   it("renders chip with correct label and color for pending status", () => {
     const { getByText } = render(
-      <ServiceStatusLabel status={ServiceStatus.Pending} />,
+      <ServiceStatusLabel status={ServiceStatus.Open} />,
     );
-    const chip = getByText(ServiceStatus.Pending);
+    const chip = getByText(ServiceStatus.Open);
     expect(chip).toBeInTheDocument();
     expect(chip.parentElement).toHaveClass("MuiChip-colorWarning");
   });
 
   it("renders chip with correct label and color for requested status", () => {
     const { getByText } = render(
-      <ServiceStatusLabel status={ServiceStatus.Requested} />,
+      <ServiceStatusLabel status={ServiceStatus.Completed} />,
     );
-    const chip = getByText(ServiceStatus.Requested);
+    const chip = getByText(ServiceStatus.Completed);
     expect(chip).toBeInTheDocument();
     expect(chip.parentElement).toHaveClass("MuiChip-colorWarning");
   });

@@ -31,12 +31,12 @@ describe("Screen Header", () => {
     expect(chip.parentElement).toHaveClass("MuiChip-colorWarning");
   });
 
-  it("renders chip with correct label and color for requested status", () => {
+  it("renders chip with correct label and color for open status", () => {
     const { getByText } = render(
-      <OrderStatusLabel status={OrderStatus.Requested} />,
+      <OrderStatusLabel status={OrderStatus.Open} />,
     );
-    const chip = getByText(OrderStatus.Requested);
+    const chip = getByText(OrderStatus.Open);
     expect(chip).toBeInTheDocument();
-    expect(chip.parentElement).toHaveClass("MuiChip-colorWarning");
+    expect(chip.parentElement).toHaveClass("MuiChip-colorInfo");
   });
 });

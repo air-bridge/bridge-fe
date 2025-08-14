@@ -14,9 +14,8 @@ import { OrderFormValues } from "../../types/order.ts";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Link } from "react-router-dom";
 import { PhotoPreview } from "../photo-input/PhotoPreview.tsx";
-import { luggageCategories } from "./util.ts";
 
-export const OrderDetails = () => {
+export const ServiceDetails = () => {
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
   );
@@ -25,11 +24,6 @@ export const OrderDetails = () => {
     watch,
     formState: { errors },
   } = useFormContext<OrderFormValues>();
-
-  const packageTypeValue = watch("package_type");
-  const packageTypes = packageTypeValue.map((pv) => {
-    return luggageCategories.find((l) => l.value === pv);
-  });
 
   const title = watch("title");
   const weight = watch("weight");
@@ -52,24 +46,6 @@ export const OrderDetails = () => {
 
   return (
     <Stack gap={{ xs: 2, lg: 3 }}>
-      <Stack gap={0.75} alignItems="flex-start">
-        <Typography color="text.secondary" variant="body2">
-          Package Type
-        </Typography>
-        <Stack direction="row" gap={1}>
-          {packageTypes.map((pv) => (
-            <Button
-              variant="outlined"
-              color={"primary"}
-              size="small"
-              startIcon={pv ? <pv.icon /> : null}
-            >
-              {pv?.name}
-            </Button>
-          ))}
-        </Stack>
-      </Stack>
-
       <Grid container spacing={{ xs: 1, lg: 2 }}>
         <Grid size={{ xs: 12 }}>
           <Stack>

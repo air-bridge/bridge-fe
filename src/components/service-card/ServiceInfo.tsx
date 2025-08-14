@@ -47,34 +47,6 @@ export const ServiceInfo = ({ data }: Props) => {
         </Stack>
 
         <ServiceTimeline data={data} />
-
-        <Stack alignItems="center" gap={1} direction="row" minHeight={20}>
-          {data.package_type.length > 0 && (
-            <>
-              <Typography color="text.secondary" variant="body2">
-                Package type:
-              </Typography>
-
-              <Stack direction="row" alignItems="center" gap={0.5}>
-                {data.package_type.map((c, index) => (
-                  <Typography
-                    variant="caption"
-                    key={index}
-                    sx={{
-                      borderRadius: 1.5,
-                      px: 0.5,
-                      py: 0.25,
-                      bgcolor: "success.light",
-                      textTransform: "capitalize",
-                    }}
-                  >
-                    {c}
-                  </Typography>
-                ))}
-              </Stack>
-            </>
-          )}
-        </Stack>
       </Stack>
     </Stack>
   );

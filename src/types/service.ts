@@ -9,8 +9,7 @@ export enum ServiceStatus {
 export interface Service {
   id: number;
   title: string;
-  transport_type: string;
-  package_type: string[];
+  transport_type: string | null;
   status: ServiceStatus;
   weight: string;
   arrival_city: string;
@@ -28,10 +27,17 @@ export interface Service {
 
 export type ServiceFormValues = {
   title: string;
-  luggageType: string;
-  weight?: number | null;
-  destination?: string | null;
-  origin?: string | null;
-  receiver?: string | null;
-  address?: string | null;
+  weight: number;
+  arrival_city: string;
+  arrival_country: string;
+  arrival_date: string;
+  currency: string;
+  departure_city: string;
+  departure_country: string;
+  departure_date: string;
+  phone: string;
+  price_per_kg: number;
+  status?: ServiceStatus | null;
+  transport_type?: string | null;
+  delivery_note?: string | null;
 };

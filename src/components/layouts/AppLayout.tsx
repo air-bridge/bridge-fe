@@ -12,6 +12,9 @@ const fullScreenPaths = [
   "create-order",
   "orders/:orderId",
   "edit-order/:orderId",
+  "create-service",
+  "services/:serviceId",
+  "edit-service/:serviceId",
 ];
 const AppLayout = () => {
   const [isAllowed, setIsAllowed] = useState(false);

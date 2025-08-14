@@ -14,6 +14,7 @@ import ProfileScreen from "../../screens/app/profile";
 import { OrderDetailsScreen } from "../../screens/app/order-details";
 import PoolListScreen from "../../screens/app/pool-list";
 import { EditOrderScreen } from "../../screens/app/edit-order";
+import { CreateServiceScreen } from "../../screens/app/create-service";
 
 export const Router = () => {
   return (
@@ -39,10 +40,15 @@ export const Router = () => {
           errorElement={<InternalError />}
         >
           <Route index element={<HomeScreen />} />
+          {/* Orders */}
           <Route path="orders" element={<OrdersScreen />} />
           <Route path="create-order" element={<CreateOrderScreen />} />
           <Route path="edit-order/:orderId" element={<EditOrderScreen />} />
           <Route path="orders/:orderId" element={<OrderDetailsScreen />} />
+
+          {/* Services */}
+          <Route path="create-service" element={<CreateServiceScreen />} />
+
           <Route path="pool-list" element={<PoolListScreen />} />
           <Route path="profile" element={<ProfileScreen />} />
         </Route>

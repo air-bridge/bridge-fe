@@ -39,10 +39,21 @@ export const OrderTimeline = ({ order }: Props) => {
             variant="h6"
             textTransform="capitalize"
           >{`${order.pickup_state}, ${order.pickup_country}`}</Typography>
-          <Typography variant="body2" color="text.secondary" noWrap>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            noWrap
+            sx={{ "&:first-letter": { textTransform: "uppercase" } }}
+          >
             {order.pickup_address}
           </Typography>
-          <Typography variant="subtitle2" color="success.main" mt={3} noWrap>
+          <Typography
+            variant="subtitle2"
+            color="success.main"
+            mt={3}
+            noWrap
+            sx={{ "&:first-letter": { textTransform: "uppercase" } }}
+          >
             {order.destination_address}
           </Typography>
         </Box>

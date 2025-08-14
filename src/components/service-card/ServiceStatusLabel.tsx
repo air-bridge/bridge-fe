@@ -5,7 +5,7 @@ type Props = {
   status: ServiceStatus;
 };
 
-const chipColor: Record<ServiceStatus, ChipProps["color"]> = {
+export const chipColor: Record<ServiceStatus, ChipProps["color"]> = {
   [ServiceStatus.Draft]: "secondary",
   [ServiceStatus.Open]: "info",
   [ServiceStatus.Active]: "warning",

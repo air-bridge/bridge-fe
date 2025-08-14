@@ -21,6 +21,7 @@ export interface Service {
   departure_date: string;
   phone: string;
   price_per_kg: string;
+  delivery_note: string;
   created_at: string;
   updated_at: string;
 }

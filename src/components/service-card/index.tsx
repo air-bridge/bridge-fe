@@ -4,6 +4,8 @@ import { ServiceTimeline } from "./ServiceTimeline.tsx";
 import dayjs from "dayjs";
 import { Service } from "../../types/service.ts";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
+import { transportTypes } from "../service-form/util.ts";
+import { ButtonChip } from "../button-chip";
 
 type Props = {
   data: Service;
@@ -11,6 +13,10 @@ type Props = {
 };
 
 const ServiceCard = ({ data, onOpen }: Props) => {
+  const transportType = transportTypes.find(
+    (transport) => transport.value === data.transport_type,
+  );
+
   return (
     <Card onClick={() => onOpen(data)} sx={{ cursor: "pointer" }}>
       <CardContent>
@@ -65,33 +71,18 @@ const ServiceCard = ({ data, onOpen }: Props) => {
 
           <ServiceTimeline data={data} />
 
-          <Stack alignItems="center" gap={1} direction="row" minHeight={20}>
-            {data.package_type.length > 0 && (
-              <>
-                <Typography color="text.secondary" variant="body2">
-                  Package type:
-                </Typography>
+          {transportType && (
+            <Stack gap={0.5}>
+              <Typography color="text.secondary" variant="body2">
+                Trip Type
+              </Typography>
 
-                <Stack direction="row" alignItems="center" gap={0.5}>
-                  {data.package_type.map((c, index) => (
-                    <Typography
-                      variant="caption"
-                      key={index}
-                      sx={{
-                        borderRadius: 1.5,
-                        px: 0.5,
-                        py: 0.25,
-                        bgcolor: "success.light",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      {c}
-                    </Typography>
-                  ))}
-                </Stack>
-              </>
-            )}
-          </Stack>
+              <ButtonChip
+                label={transportType.name}
+                Icon={transportType.icon}
+              />
+            </Stack>
+          )}
         </Stack>
       </CardContent>
     </Card>

@@ -13,7 +13,7 @@ const fullScreenPaths = [
   "orders/:orderId",
   "edit-order/:orderId",
   "create-service",
-  "services/:serviceId",
+  "requests/:serviceId",
   "edit-service/:serviceId",
 ];
 const AppLayout = () => {

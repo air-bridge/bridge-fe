@@ -50,7 +50,7 @@ export const Router = () => {
           {/* Services */}
           <Route path="create-service" element={<CreateServiceScreen />} />
           <Route
-            path="services/:serviceId"
+            path="requests/:serviceId"
             element={<ServiceDetailsScreen />}
           />
 

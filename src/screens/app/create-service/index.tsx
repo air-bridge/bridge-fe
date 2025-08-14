@@ -84,14 +84,12 @@ export const CreateServiceScreen = () => {
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: createService,
-    onSuccess: (data) => {
-      if (!showReview) {
-        openNotification("Service saved for later successfully");
-        navigate("/");
-      } else {
-        openNotification("Service created successfully");
-        navigate(`/services/${data.id}`);
-      }
+    onSuccess: () => {
+      const message = showReview
+        ? "Service created successfully"
+        : "Service saved for later successfully";
+      openNotification(message);
+      navigate("/");
     },
     onError: () => {
       setShowReview(false);

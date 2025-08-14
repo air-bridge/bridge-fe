@@ -23,6 +23,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { MuiTelInput } from "mui-tel-input";
 import { transportTypes } from "./util.ts";
+import { ButtonChip } from "../button-chip";
 
 export const ServiceForm = () => {
   const isMobile = useMediaQuery<Theme>((theme) =>
@@ -488,18 +489,14 @@ export const ServiceForm = () => {
             {transportTypes.map((category) => {
               const isSelected = transportType === category.value;
               return (
-                <Button
-                  key={category.value}
-                  variant="outlined"
-                  color={isSelected ? "primary" : "secondary"}
-                  startIcon={<category.icon />}
+                <ButtonChip
+                  selected={isSelected}
+                  label={category.name}
+                  Icon={category.icon}
                   onClick={() => {
                     setValue("transport_type", category.value);
                   }}
-                  sx={{ flexShrink: 0 }}
-                >
-                  {category.name}
-                </Button>
+                />
               );
             })}
           </Stack>

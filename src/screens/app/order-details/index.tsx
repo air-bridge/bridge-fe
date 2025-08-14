@@ -52,7 +52,12 @@ export const OrderDetailsScreen = () => {
   return (
     <>
       <Stack gap={{ xs: 2, lg: 3 }}>
-        <OrderDetailsHeading showAction={showAction} onOpen={openDrawer} />
+        <OrderDetailsHeading
+          showAction={showAction}
+          onOpen={openDrawer}
+          status={data?.status}
+          orderId={data?.id}
+        />
 
         <Container
           sx={{

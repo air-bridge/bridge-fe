@@ -7,8 +7,9 @@ import { Cancel } from "@mui/icons-material";
 type Props = {
   onChange: (file: File | string) => void;
   file?: string | File | null;
+  editable: boolean;
 };
-export const PhotoInput = ({ onChange, file }: Props) => {
+export const PhotoInput = ({ onChange, editable, file }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [photoSource, setPhotoSource] = useState<string | null>(null);
 
@@ -62,9 +63,10 @@ export const PhotoInput = ({ onChange, file }: Props) => {
   return (
     <StyledUploadContainer
       filled={photoSource ? "true" : "false"}
+      editable={editable ? "true" : "false"}
       data-testid="upload-container"
       onClick={() => {
-        if (!photoSource) {
+        if (!photoSource && editable) {
           inputRef.current?.click();
         }
       }}
@@ -105,35 +107,36 @@ export const PhotoInput = ({ onChange, file }: Props) => {
   );
 };
 
-export const StyledUploadContainer = styled(Stack)<{ filled?: string }>(
-  ({ theme, filled }) => ({
-    border: "dashed 1px",
-    borderColor: "grey.900",
-    borderRadius: theme.shape.borderRadius * 2,
-    justifyContent: "center",
-    position: "relative",
-    alignItems: "center",
-    height: "150px",
-    maxHeight: "150px",
-    overflow: "hidden",
-    "& input[type='file']": {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      opacity: 0,
-      width: "100%",
-      height: "100%",
-      pointerEvents: "none",
-    },
-    ...(filled === "false" && {
-      cursor: "pointer",
-    }),
-    ...(filled === "true" && {
-      borderColor: "transparent",
-      height: "unset",
-    }),
-    [theme.breakpoints.down("lg")]: {
-      height: "90px",
-    },
+export const StyledUploadContainer = styled(Stack)<{
+  filled?: string;
+  editable?: string;
+}>(({ theme, filled, editable }) => ({
+  border: "dashed 1px",
+  borderColor: "grey.900",
+  borderRadius: theme.shape.borderRadius * 2,
+  justifyContent: "center",
+  position: "relative",
+  alignItems: "center",
+  height: "150px",
+  maxHeight: "150px",
+  overflow: "hidden",
+  "& input[type='file']": {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    opacity: 0,
+    width: "100%",
+    height: "100%",
+    pointerEvents: "none",
+  },
+  ...(editable === "true" && {
+    cursor: "pointer",
   }),
-);
+  ...(filled === "true" && {
+    borderColor: "transparent",
+    height: "unset",
+  }),
+  [theme.breakpoints.down("lg")]: {
+    height: "90px",
+  },
+}));

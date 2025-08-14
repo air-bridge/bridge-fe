@@ -91,7 +91,7 @@ export const PoolList = () => {
               variant="contained"
               color="primary"
               onClick={mutateRequest}
-              disabled={activeService?.status === ServiceStatus.Requested}
+              disabled={activeService?.status === ServiceStatus.Matched}
             >
               Request for service
             </Button>

@@ -11,6 +11,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
+  isEdit?: boolean;
   isPending: boolean;
   showReview: boolean;
   onSetShowReview: () => void;
@@ -19,6 +20,7 @@ type Props = {
 export const CreateOrderHeading = ({
   onBack,
   isPending,
+  isEdit,
   showReview,
   onSetShowReview,
 }: Props) => {
@@ -46,7 +48,7 @@ export const CreateOrderHeading = ({
       }}
     >
       <Stack gap={1} alignItems="center" direction="row">
-        <IconButton onClick={() => navigate(-1)} data-testid="close-button">
+        <IconButton onClick={() => navigate("/")} data-testid="close-button">
           <CloseIcon fontSize="small" />
         </IconButton>
 
@@ -54,7 +56,7 @@ export const CreateOrderHeading = ({
           variant="h6"
           sx={{ pl: 1, borderLeft: "solid 1px", borderLeftColor: "grey.300" }}
         >
-          Create Order
+          {isEdit ? "Edit Order" : "Create Order"}
         </Typography>
       </Stack>
 

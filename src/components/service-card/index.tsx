@@ -29,7 +29,7 @@ const ServiceCard = ({ data, onOpen }: Props) => {
                 Created on{" "}
                 {dayjs(data.created_at).format("MMMM D, YYYY h:mm A")}
               </Typography>
-              <ServiceStatusLabel status={data.status} />
+              {data.status && <ServiceStatusLabel status={data.status} />}
             </Stack>
 
             <Typography variant="body2" color="text.secondary">

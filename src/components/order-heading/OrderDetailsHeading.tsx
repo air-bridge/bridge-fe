@@ -1,17 +1,27 @@
-import { Button, IconButton, Stack, Typography, Theme } from "@mui/material";
+import { Button, IconButton, Stack, Theme, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { OrderStatus } from "../../types/order.ts";
 
 type Props = {
   showAction: boolean;
+  status?: OrderStatus;
+  orderId?: number;
   onOpen: () => void;
 };
-export const OrderDetailsHeading = ({ showAction, onOpen }: Props) => {
+export const OrderDetailsHeading = ({
+  showAction,
+  status,
+  orderId,
+  onOpen,
+}: Props) => {
   const navigate = useNavigate();
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
   );
+
+  const isActive = status === OrderStatus.Active;
 
   return (
     <>
@@ -33,7 +43,7 @@ export const OrderDetailsHeading = ({ showAction, onOpen }: Props) => {
         }}
       >
         <Stack gap={1} alignItems="center" direction="row">
-          <IconButton onClick={() => navigate(-1)} data-testid="close-button">
+          <IconButton onClick={() => navigate("/")} data-testid="close-button">
             <CloseIcon fontSize="small" />
           </IconButton>
 
@@ -47,15 +57,31 @@ export const OrderDetailsHeading = ({ showAction, onOpen }: Props) => {
 
         {!isMobile && showAction && (
           <Stack gap={2} alignItems="center" direction="row">
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              sx={{ px: 3 }}
-              onClick={onOpen}
-            >
-              Check Availability
-            </Button>
+            {orderId && (
+              <Button
+                variant={isActive ? "outlined" : "contained"}
+                color="primary"
+                type="submit"
+                sx={{ px: 5 }}
+                component={Link}
+                to={`/edit-order/${orderId}`}
+              >
+                Edit
+              </Button>
+            )}
+
+            {/*  TODO: confirm status for order ready for matching */}
+            {isActive && (
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                sx={{ px: 3 }}
+                onClick={onOpen}
+              >
+                Check Availability
+              </Button>
+            )}
           </Stack>
         )}
       </Stack>

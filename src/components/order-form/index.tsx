@@ -7,7 +7,7 @@ import {
   Typography,
   Grid2,
   Theme,
-  MenuItem,
+  FormHelperText,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { Controller, useFormContext } from "react-hook-form";
@@ -22,7 +22,10 @@ import { getStates } from "../../utils/country-state.ts";
 import Autocomplete from "@mui/material/Autocomplete";
 import { MuiTelInput } from "mui-tel-input";
 
-export const OrderForm = () => {
+type Props = {
+  editMode?: boolean;
+};
+export const OrderForm = ({ editMode }: Props) => {
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
   );
@@ -49,7 +52,9 @@ export const OrderForm = () => {
       return [];
     }
 
-    const country = countries.find((c) => c.name === selectedPickupCountry);
+    const country = countries.find(
+      (c) => c.name.toLowerCase() === selectedPickupCountry.toLowerCase(),
+    );
     return getStates(country?.isoCode);
   }, [selectedPickupCountry]);
 
@@ -59,7 +64,7 @@ export const OrderForm = () => {
     }
 
     const country = countries.find(
-      (c) => c.name === selectedDestinationCountry,
+      (c) => c.name.toLowerCase() === selectedDestinationCountry.toLowerCase(),
     );
     return getStates(country?.isoCode);
   }, [selectedDestinationCountry]);
@@ -116,6 +121,9 @@ export const OrderForm = () => {
             );
           })}
         </Stack>
+        {errors.package_type && (
+          <FormHelperText error>{errors.package_type?.message}</FormHelperText>
+        )}
       </Box>
 
       <Grid container spacing={{ xs: 1, lg: 2 }}>
@@ -204,7 +212,10 @@ export const OrderForm = () => {
                       options={countries}
                       getOptionLabel={(option) => option.name}
                       value={
-                        countries.find((c) => c.name === field.value) || null
+                        countries.find(
+                          (c) =>
+                            c.name.toLowerCase() === field.value.toLowerCase(),
+                        ) || null
                       }
                       onChange={(_, value) => {
                         customSetInputValue(
@@ -239,24 +250,32 @@ export const OrderForm = () => {
                 <InputLabel htmlFor="pickup_state">State</InputLabel>
                 <Controller
                   {...field}
-                  name="pickup_state"
                   control={control}
                   render={({ field }) => (
-                    <TextField
+                    <Autocomplete
                       {...field}
-                      id="pickup_state"
-                      variant="outlined"
-                      select
-                      fullWidth
-                      error={!!errors.pickup_state}
-                      helperText={errors.pickup_state?.message}
-                    >
-                      {pickupStateOptions.map((option) => (
-                        <MenuItem key={option.isoCode} value={option.name}>
-                          {option.name}
-                        </MenuItem>
-                      ))}
-                    </TextField>
+                      id="state"
+                      options={pickupStateOptions}
+                      getOptionLabel={(option) => option.name}
+                      value={
+                        pickupStateOptions.find(
+                          (c) =>
+                            c.name.toLowerCase() === field.value.toLowerCase(),
+                        ) || null
+                      }
+                      onChange={(_, value) => {
+                        customSetInputValue("pickup_state", value?.name || "");
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          fullWidth
+                          placeholder="Select state"
+                          error={!!errors.pickup_state}
+                          helperText={errors.pickup_state?.message}
+                        />
+                      )}
+                    />
                   )}
                 />
               </Box>
@@ -381,7 +400,10 @@ export const OrderForm = () => {
                       options={countries}
                       getOptionLabel={(option) => option.name}
                       value={
-                        countries.find((c) => c.name === field.value) || null
+                        countries.find(
+                          (c) =>
+                            c.name.toLowerCase() === field.value.toLowerCase(),
+                        ) || null
                       }
                       onChange={(_, value) => {
                         customSetInputValue(
@@ -413,27 +435,38 @@ export const OrderForm = () => {
             control={control}
             render={({ field }) => (
               <Box>
-                <InputLabel htmlFor="destination_state">State</InputLabel>
+                <InputLabel htmlFor="pickup_state">State</InputLabel>
                 <Controller
                   {...field}
-                  name="destination_state"
                   control={control}
                   render={({ field }) => (
-                    <TextField
+                    <Autocomplete
                       {...field}
-                      id="destination_state"
-                      variant="outlined"
-                      select
-                      fullWidth
-                      error={!!errors.destination_state}
-                      helperText={errors.destination_state?.message}
-                    >
-                      {destinationStateOptions.map((option) => (
-                        <MenuItem key={option.isoCode} value={option.name}>
-                          {option.name}
-                        </MenuItem>
-                      ))}
-                    </TextField>
+                      id="state"
+                      options={destinationStateOptions}
+                      getOptionLabel={(option) => option.name}
+                      value={
+                        destinationStateOptions.find(
+                          (c) =>
+                            c.name.toLowerCase() === field.value.toLowerCase(),
+                        ) || null
+                      }
+                      onChange={(_, value) => {
+                        customSetInputValue(
+                          "destination_state",
+                          value?.name || "",
+                        );
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          fullWidth
+                          placeholder="Select state"
+                          error={!!errors.destination_state}
+                          helperText={errors.destination_state?.message}
+                        />
+                      )}
+                    />
                   )}
                 />
               </Box>
@@ -470,18 +503,21 @@ export const OrderForm = () => {
       <Grid2 container spacing={1}>
         <Grid2 size={{ xs: 12, lg: 4 }}>
           <PhotoInput
+            editable={!editMode}
             onChange={(file) => setValue("image1", file)}
             file={image1}
           />
         </Grid2>
         <Grid2 size={{ xs: 12, lg: 4 }}>
           <PhotoInput
+            editable={!editMode}
             onChange={(file) => setValue("image2", file)}
             file={image2}
           />
         </Grid2>
         <Grid2 size={{ xs: 12, lg: 4 }}>
           <PhotoInput
+            editable={!editMode}
             onChange={(file) => setValue("image3", file)}
             file={image3}
           />

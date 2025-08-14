@@ -8,7 +8,11 @@ import { NotificationContextProvider } from "../../context/notification";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
-const fullScreenPaths = ["create-order", "orders/:orderId"];
+const fullScreenPaths = [
+  "create-order",
+  "orders/:orderId",
+  "edit-order/:orderId",
+];
 const AppLayout = () => {
   const [isAllowed, setIsAllowed] = useState(false);
   const navigate = useNavigate();

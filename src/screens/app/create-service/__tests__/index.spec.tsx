@@ -1,11 +1,11 @@
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
-import { CreateOrderScreen } from "../index.tsx";
+import { CreateServiceScreen } from "../index.tsx";
 
-describe("Create Order Screen", () => {
-  it("renders the Create Order Screen", () => {
-    const { getByText } = render(<CreateOrderScreen />);
+describe("Create service Screen", () => {
+  it("renders the Create Service Screen", () => {
+    const { getByText } = render(<CreateServiceScreen />);
 
-    expect(getByText("Create Order")).toBeInTheDocument();
+    expect(getByText("Create Service")).toBeInTheDocument();
   });
 });

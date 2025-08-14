@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -50,7 +51,13 @@ export const PoolList = () => {
       <Grid2 container spacing={2}>
         {mockServices.map((service) => (
           <Grid2 key={service.id} size={{ xs: 12, lg: 4 }}>
-            <ServiceCard data={service} onOpen={openDrawer} />
+            <Box
+              onClick={() => {
+                openDrawer(service);
+              }}
+            >
+              <ServiceCard data={service} />
+            </Box>
           </Grid2>
         ))}
       </Grid2>

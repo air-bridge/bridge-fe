@@ -21,7 +21,7 @@ export const luggageCategories: LuggageCategory[] = [
   {
     name: "Documents",
     icon: ArticleIcon,
-    value: "documents",
+    value: "document",
   },
   {
     name: "Luggage",

@@ -1,11 +1,21 @@
 import { CreateOrderHeading } from "../../../components/order-heading/CreateOrderHeading.tsx";
 import { OrderForm } from "../../../components/order-form";
-import { Alert, Container, Stack } from "@mui/material";
+import {
+  Alert,
+  Button,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Stack,
+  Theme,
+  Typography,
+} from "@mui/material";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { OrderFormValues, OrderStatus } from "../../../types/order.ts";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { boolean, string } from "yup";
+import { string } from "yup";
 import { useState } from "react";
 import { OrderDetails } from "../../../components/order-form/order-details.tsx";
 import { useMutation } from "@tanstack/react-query";
@@ -13,6 +23,9 @@ import { createOrder } from "../../../api/order.ts";
 import { useNotificationContext } from "../../../context/notification/util.ts";
 import { useNavigate } from "react-router-dom";
 import { isValidPhoneNumber } from "../../../utils/validate-phone.ts";
+import Lottie from "lottie-react";
+import animationJson from "../../../assets/animation/plane.json";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
   title: yup.string().required("Title is required"),
@@ -45,9 +58,6 @@ const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
 
       return isValidPhoneNumber(value);
     }),
-  terms: boolean()
-    .required("You need to agree to our terms & condition to continue")
-    .oneOf([true], "You need to agree to our terms & condition to continue"),
   delivery_note: yup.string().nullable().notRequired(),
   image1: yup.mixed<File | string>().nullable().notRequired(),
   image2: yup.mixed<File | string>().nullable().notRequired(),
@@ -76,7 +86,12 @@ const initialValues: OrderFormValues = {
 
 export const CreateOrderScreen = () => {
   const [errorMessage, setErrorMessage] = useState("");
+  const [orderId, setOrderId] = useState("");
+  const [openSuccess, setOpenSuccess] = useState(false);
   const [showReview, setShowReview] = useState(false);
+  const isMobile = useMediaQuery<Theme>((theme) =>
+    theme.breakpoints.down("lg"),
+  );
   const methods = useForm<OrderFormValues>({
     resolver: yupResolver(schema),
     defaultValues: initialValues,
@@ -87,14 +102,14 @@ export const CreateOrderScreen = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: createOrder,
-    onSuccess: () => {
+    onSuccess: (data) => {
       setErrorMessage("");
       if (!showReview) {
         openNotification("Order saved for later successfully");
         navigate("/");
       } else {
-        // TODO: add order id to URL
-        navigate("/pool-list");
+        setOpenSuccess(true);
+        setOrderId(`${data.id}`);
       }
     },
     onError: (data) => {
@@ -116,6 +131,8 @@ export const CreateOrderScreen = () => {
   };
 
   const handleShowReview = async () => {
+    setErrorMessage("");
+
     const isValidForm = await methods.trigger();
     if (isValidForm) {
       setShowReview(true);
@@ -123,33 +140,79 @@ export const CreateOrderScreen = () => {
   };
 
   return (
-    <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
-        <Stack gap={{ xs: 2, lg: 3 }}>
-          <CreateOrderHeading
-            showReview={showReview}
-            onSetShowReview={handleShowReview}
-            onBack={() => setShowReview(false)}
-            isPending={isPending}
-          />
+    <>
+      <FormProvider {...methods}>
+        <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
+          <Stack gap={{ xs: 2, lg: 3 }}>
+            <CreateOrderHeading
+              showReview={showReview}
+              onSetShowReview={handleShowReview}
+              onBack={() => setShowReview(false)}
+              isPending={isPending}
+            />
 
-          <Container
-            sx={{
-              maxWidth: { xs: "100%", lg: "620px" },
-              px: { xs: 2, lg: 0 },
-              py: 3,
-              pt: { xs: 0, lg: "100px" },
+            <Container
+              sx={{
+                maxWidth: { xs: "100%", lg: "620px" },
+                px: { xs: 2, lg: 0 },
+                py: 3,
+                pt: { xs: 0, lg: "100px" },
+              }}
+            >
+              {errorMessage && (
+                <Alert severity="error" variant="filled" sx={{ mb: 1 }}>
+                  {errorMessage}
+                </Alert>
+              )}
+              {showReview ? <OrderDetails /> : <OrderForm />}
+            </Container>
+          </Stack>
+        </form>
+      </FormProvider>
+      {/* Success info Dialog */}
+      <Dialog
+        open={openSuccess}
+        onClose={() => setOpenSuccess(false)}
+        disableEscapeKeyDown
+        fullScreen={isMobile}
+      >
+        <DialogContent
+          sx={{
+            borderBottom: "solid 1px",
+            borderBottomColor: "divider",
+            maxWidth: { xs: "100%", lg: 400 },
+          }}
+        >
+          <Stack alignItems="center" justifyContent="center" gap={2}>
+            <Lottie
+              loop
+              animationData={animationJson}
+              style={{ width: 100, height: 100 }}
+            />
+
+            <Typography variant="h4" textAlign="center">
+              Order Created Successfully
+            </Typography>
+            <Typography textAlign="center" color="text.secondary">
+              You have successfully created your parcel order. Please proceed to
+              check availability
+            </Typography>
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={() => {
+              setOpenSuccess(false);
+              navigate(`/orders/${orderId}`);
             }}
           >
-            {errorMessage && (
-              <Alert severity="error" variant="filled" sx={{ mb: 1 }}>
-                {errorMessage}
-              </Alert>
-            )}
-            {showReview ? <OrderDetails /> : <OrderForm />}
-          </Container>
-        </Stack>
-      </form>
-    </FormProvider>
+            Okay
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };

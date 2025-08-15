@@ -24,16 +24,13 @@ export const ServiceDetailsScreen = () => {
   const showAction =
     !isError &&
     !isLoading &&
+    !!data?.status &&
     [ServiceStatus.Draft, ServiceStatus.Open].includes(data?.status);
 
   return (
     <>
       <Stack gap={{ xs: 2, lg: 3 }}>
-        <ServiceDetailsHeading
-          showAction={showAction}
-          status={data?.status}
-          serviceId={data?.id}
-        />
+        <ServiceDetailsHeading showAction={showAction} serviceId={data?.id} />
 
         <Container
           sx={{

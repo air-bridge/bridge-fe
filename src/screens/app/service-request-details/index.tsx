@@ -52,12 +52,7 @@ export const ServiceRequestDetailsScreen = () => {
   return (
     <>
       <Stack gap={{ xs: 2, lg: 3 }}>
-        <ServiceDetailsHeading
-          showAction={showAction}
-          onOpen={openDrawer}
-          status={data?.status}
-          serviceId={data?.id}
-        />
+        <ServiceDetailsHeading showAction={showAction} serviceId={data?.id} />
 
         <Container
           sx={{

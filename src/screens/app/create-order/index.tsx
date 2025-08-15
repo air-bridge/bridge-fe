@@ -69,7 +69,6 @@ const initialValues: OrderFormValues = {
   receiver_phone: "",
   delivery_note: "",
   status: OrderStatus.Inactive, // todo: change to draft
-  terms: true,
   image1: null,
   image2: null,
   image3: null,

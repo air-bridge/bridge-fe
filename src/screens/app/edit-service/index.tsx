@@ -8,7 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Loading } from "../../../components/loading";
 import { ErrorInfo } from "../../../components/error-info";
 import { getService, updateService } from "../../../api/service.ts";
-import { ServiceFormValues } from "../../../types/service.ts";
+import { ServiceFormValues, ServiceStatus } from "../../../types/service.ts";
 import { serviceFormSchema } from "../../../components/service-form/util.ts";
 import { ServiceForm } from "../../../components/service-form";
 import { ServiceDetails } from "../../../components/service-form/service-details.tsx";
@@ -32,9 +32,9 @@ export const EditServiceScreen = () => {
   const initialValues = useMemo(() => {
     return {
       title: service?.title || "",
-      weight: service?.weight || "",
-      price_per_kg: service?.price_per_kg || "",
-      status: service?.status || "",
+      weight: service?.weight,
+      price_per_kg: service?.price_per_kg,
+      status: service?.status || ServiceStatus.Draft,
       arrival_city: service?.arrival_city || "",
       arrival_country: service?.arrival_country || "",
       arrival_date: service?.arrival_date || "",
@@ -122,7 +122,7 @@ export const EditServiceScreen = () => {
                 {errorMessage}
               </Alert>
             )}
-            {showReview ? <ServiceDetails /> : <ServiceForm editMode />}
+            {showReview ? <ServiceDetails /> : <ServiceForm />}
           </Container>
         </Stack>
       </form>

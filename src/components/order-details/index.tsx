@@ -1,16 +1,20 @@
-import { Button, Grid2, Stack, Typography } from "@mui/material";
+import { Grid2, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { Order } from "../../types/order.ts";
 import { PhotoPreview } from "../photo-input/PhotoPreview.tsx";
-import { luggageCategories } from "../order-form/util.ts";
+import { luggageCategories, LuggageCategory } from "../order-form/util.ts";
 import { ButtonChip } from "../button-chip";
 
 type Props = {
   data: Order;
 };
 export const OrderDetails = ({ data }: Props) => {
-  const packageTypes = data.package_type.map((pv) => {
-    return luggageCategories.find((l) => l.value === pv);
+  const packageTypes: LuggageCategory[] = [];
+  data.package_type.forEach((pv) => {
+    const cat = luggageCategories.find((l) => l.value === pv);
+    if (cat) {
+      packageTypes.push(cat);
+    }
   });
 
   const noImage = !data.image1 && !data.image2 && !data.image3;

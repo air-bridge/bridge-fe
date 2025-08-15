@@ -81,19 +81,21 @@ export const ServiceDetails = () => {
           </Grid>
 
           <Grid size={{ xs: 6 }}>
-            <Stack>
-              <Typography color="text.secondary" variant="body2">
-                Status
-              </Typography>
-              <Typography
-                sx={{
-                  textTransform: "capitalize",
-                  color: serviceStatusColor[status],
-                }}
-              >
-                {status}
-              </Typography>
-            </Stack>
+            {status && (
+              <Stack>
+                <Typography color="text.secondary" variant="body2">
+                  Status
+                </Typography>
+                <Typography
+                  sx={{
+                    textTransform: "capitalize",
+                    color: serviceStatusColor[status],
+                  }}
+                >
+                  {status}
+                </Typography>
+              </Stack>
+            )}
           </Grid>
         </Grid>
 

@@ -1,5 +1,3 @@
-import { RegistrationPayload } from "./user.ts";
-
 export enum ServiceStatus {
   Draft = "draft",
   Open = "open",
@@ -13,7 +11,7 @@ export interface Service {
   title: string;
   transport_type: string | null;
   status: ServiceStatus;
-  weight: string;
+  weight: number;
   arrival_city: string;
   arrival_country: string;
   arrival_date: string;
@@ -22,7 +20,7 @@ export interface Service {
   departure_country: string;
   departure_date: string;
   phone: string;
-  price_per_kg: string;
+  price_per_kg: number;
   delivery_note: string;
   created_at: string;
   updated_at: string;

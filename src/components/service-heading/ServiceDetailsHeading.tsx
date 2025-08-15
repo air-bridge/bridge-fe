@@ -2,18 +2,12 @@ import { Button, IconButton, Stack, Theme, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { Link, useNavigate } from "react-router-dom";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { ServiceStatus } from "../../types/service.ts";
 
 type Props = {
   showAction: boolean;
-  status?: ServiceStatus;
   serviceId?: number;
 };
-export const ServiceDetailsHeading = ({
-  showAction,
-  status,
-  serviceId,
-}: Props) => {
+export const ServiceDetailsHeading = ({ showAction, serviceId }: Props) => {
   const navigate = useNavigate();
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),

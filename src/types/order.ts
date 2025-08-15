@@ -48,6 +48,5 @@ export type OrderFormValues = {
   image1?: File | string | null;
   image2?: File | string | null;
   image3?: File | string | null;
-  terms: boolean;
   status?: OrderStatus | null;
 };

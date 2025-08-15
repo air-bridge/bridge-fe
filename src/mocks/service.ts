@@ -3,7 +3,7 @@ import { Service, ServiceStatus } from "../types/service.ts";
 export const mockDraftService: Service = {
   id: 1,
   title: "20KG Space in my luggage",
-  weight: "30",
+  weight: 30,
   transport_type: "air",
   status: ServiceStatus.Draft,
   currency: "Eur",
@@ -15,7 +15,7 @@ export const mockDraftService: Service = {
   departure_date: "2025-10-10",
   phone: "028390883983",
   delivery_note: "This is a special offer to humanity! Treat with urgency",
-  price_per_kg: "20",
+  price_per_kg: 20,
   created_at: "2025-07-31T08:54:38.978959Z",
   updated_at: "2025-07-31T08:54:38.978959Z",
 };
@@ -23,7 +23,7 @@ export const mockDraftService: Service = {
 export const mockOpenService: Service = {
   id: 2,
   title: "40KG Space in my Box",
-  weight: "30",
+  weight: 30,
   transport_type: "air",
   status: ServiceStatus.Open,
   currency: "EUR",
@@ -35,7 +35,7 @@ export const mockOpenService: Service = {
   departure_date: "2025-10-10",
   phone: "028390883983",
   delivery_note: "This is a special offer to humanity! Treat with urgency",
-  price_per_kg: "20",
+  price_per_kg: 5,
   created_at: "2025-07-31T08:54:38.978959Z",
   updated_at: "2025-07-31T08:54:38.978959Z",
 };
@@ -43,7 +43,7 @@ export const mockOpenService: Service = {
 export const mockActiveService: Service = {
   id: 3,
   title: "3KG Space in my Box",
-  weight: "30",
+  weight: 40,
   transport_type: "Air",
   status: ServiceStatus.Active,
   currency: "EUR",
@@ -55,7 +55,7 @@ export const mockActiveService: Service = {
   departure_date: "2025-10-10",
   phone: "028390883983",
   delivery_note: "This is a special offer to humanity! Treat with urgency",
-  price_per_kg: "20",
+  price_per_kg: 10,
   created_at: "2025-07-31T08:54:38.978959Z",
   updated_at: "2025-07-31T08:54:38.978959Z",
 };
@@ -63,7 +63,7 @@ export const mockActiveService: Service = {
 export const mockMatchedService: Service = {
   id: 3,
   title: "12KG Space in my Hand luggage",
-  weight: "30",
+  weight: 65,
   transport_type: "Air",
   status: ServiceStatus.Matched,
   currency: "EUR",
@@ -75,7 +75,7 @@ export const mockMatchedService: Service = {
   departure_date: "2025-10-10",
   phone: "028390883983",
   delivery_note: "This is a special offer to humanity! Treat with urgency",
-  price_per_kg: "20",
+  price_per_kg: 25,
   created_at: "2025-07-31T08:54:38.978959Z",
   updated_at: "2025-07-31T08:54:38.978959Z",
 };
@@ -83,7 +83,7 @@ export const mockMatchedService: Service = {
 export const mockStaleService: Service = {
   id: 3,
   title: "50KG Space in my Hand luggage",
-  weight: "30",
+  weight: 15,
   transport_type: "Air",
   status: ServiceStatus.Stale,
   currency: "EUR",
@@ -95,7 +95,7 @@ export const mockStaleService: Service = {
   departure_date: "2025-10-10",
   phone: "028390883983",
   delivery_note: "This is a special offer to humanity! Treat with urgency",
-  price_per_kg: "20",
+  price_per_kg: 5,
   created_at: "2025-07-31T08:54:38.978959Z",
   updated_at: "2025-07-31T08:54:38.978959Z",
 };
@@ -103,7 +103,7 @@ export const mockStaleService: Service = {
 export const mockCompletedService: Service = {
   id: 3,
   title: "10KG Space in my Hand luggage",
-  weight: "30",
+  weight: 10,
   transport_type: "Air",
   status: ServiceStatus.Completed,
   currency: "EUR",
@@ -115,7 +115,7 @@ export const mockCompletedService: Service = {
   departure_date: "2025-10-10",
   phone: "028390883983",
   delivery_note: "This is a special offer to humanity! Treat with urgency",
-  price_per_kg: "20",
+  price_per_kg: 40,
   created_at: "2025-07-31T08:54:38.978959Z",
   updated_at: "2025-07-31T08:54:38.978959Z",
 };

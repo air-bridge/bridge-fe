@@ -4,19 +4,22 @@ import { EmptyService } from "../../../components/service-list/EmptyService.tsx"
 import { ServiceList } from "../../../components/service-list";
 import { mockServices } from "../../../mocks/service.ts";
 import { ServiceTabs } from "../../../components/service-tabs";
+import { ServiceSearchContextProvider } from "../../../context/services-search";
 
 const ServicesListScreen = () => {
   const servicesCount = mockServices.length || 0;
   const isEmpty = servicesCount === 0;
 
   return (
-    <Stack gap={2}>
-      <HomepageTabs showAction={!isEmpty} />
-      <ServiceTabs />
-      <Stack gap={4}>
-        {isEmpty ? <EmptyService /> : <ServiceList data={mockServices} />}
+    <ServiceSearchContextProvider>
+      <Stack gap={{ xs: 2, lg: 3 }}>
+        <HomepageTabs showAction={!isEmpty} />
+        <ServiceTabs />
+        <Stack gap={4}>
+          {isEmpty ? <EmptyService /> : <ServiceList data={mockServices} />}
+        </Stack>
       </Stack>
-    </Stack>
+    </ServiceSearchContextProvider>
   );
 };
 

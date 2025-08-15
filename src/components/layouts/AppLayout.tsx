@@ -11,10 +11,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 const fullScreenPaths = [
   "create-order",
   "orders/:orderId",
-  "edit-order/:orderId",
+  "orders/edit/:orderId",
   "create-service",
+  "services/:serviceId",
+  "services/edit/:serviceId",
   "requests/:serviceId",
-  "edit-service/:serviceId",
 ];
 const AppLayout = () => {
   const [isAllowed, setIsAllowed] = useState(false);

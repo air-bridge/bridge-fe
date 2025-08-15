@@ -1,3 +1,5 @@
+import { RegistrationPayload } from "./user.ts";
+
 export enum ServiceStatus {
   Draft = "draft",
   Open = "open",
@@ -42,3 +44,10 @@ export type ServiceFormValues = {
   transport_type?: string | null;
   delivery_note?: string | null;
 };
+
+export type ServiceSearchPayload = {
+  status: string;
+  query: string;
+};
+
+export type ServiceInput = Partial<Record<keyof ServiceSearchPayload, string>>;

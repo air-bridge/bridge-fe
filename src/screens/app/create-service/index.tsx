@@ -1,62 +1,29 @@
-import { Alert, Container, Stack } from "@mui/material";
+import {
+  Alert,
+  Button,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Stack,
+  Theme,
+  Typography,
+} from "@mui/material";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import dayjs from "dayjs";
-import { string, mixed, number, object, ObjectSchema } from "yup";
 import { useState } from "react";
-import { OrderDetails } from "../../../components/order-form/order-details.tsx";
 import { useMutation } from "@tanstack/react-query";
 import { useNotificationContext } from "../../../context/notification/util.ts";
 import { useNavigate } from "react-router-dom";
-import { isValidPhoneNumber } from "../../../utils/validate-phone.ts";
 import { CreateServiceHeading } from "../../../components/service-heading/CreateServiceHeading.tsx";
 import { ServiceForm } from "../../../components/service-form";
 import { ServiceFormValues, ServiceStatus } from "../../../types/service.ts";
 import { createService } from "../../../api/service.ts";
-
-const schema: ObjectSchema<ServiceFormValues> = object({
-  title: string().required("Title is required"),
-  currency: string().required("Currency is required"),
-  status: mixed<ServiceStatus>().notRequired().nullable(),
-  transport_type: string().notRequired().nullable(),
-  weight: number()
-    .required("Weight is required")
-    .typeError("Weight must be a number")
-    .positive("Weight must be a positive number"),
-  price_per_kg: number()
-    .required("Price per KG is required")
-    .typeError("Price must be a number")
-    .positive("Price must be a positive number"),
-  departure_city: string().required("Departure city is required"),
-  departure_country: string().required("Departure country is required"),
-  departure_date: string().required("Departure date is required"),
-  arrival_city: string().required("Arrival city is required"),
-  arrival_country: string().required("Arrival country is required"),
-  arrival_date: string()
-    .required("Arrival date is required")
-    .test(
-      "is-valid-arrival",
-      "Arrival date should not be before departure data",
-      function (value: string) {
-        if (this.parent.departure_date) {
-          return (
-            dayjs(this.parent.departure_date).isSame(dayjs(value), "date") ||
-            dayjs(this.parent.departure_date).isBefore(dayjs(value), "date")
-          );
-        }
-      },
-    ),
-  phone: string()
-    .required("Phone is required")
-    .test("is-valid-phone", "Phone number is not valid", function (value) {
-      if (!value) {
-        return true;
-      }
-
-      return isValidPhoneNumber(value);
-    }),
-  delivery_note: string().nullable().notRequired(),
-});
+import { serviceFormSchema } from "../../../components/service-form/util.ts";
+import Lottie from "lottie-react";
+import animationJson from "../../../assets/animation/plane.json";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { ServiceDetails } from "../../../components/service-form/service-details.tsx";
 
 const initialValues: ServiceFormValues = {
   title: "",
@@ -74,25 +41,33 @@ const initialValues: ServiceFormValues = {
 
 export const CreateServiceScreen = () => {
   const [showReview, setShowReview] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const isMobile = useMediaQuery<Theme>((theme) =>
+    theme.breakpoints.down("lg"),
+  );
   const methods = useForm<ServiceFormValues>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(serviceFormSchema),
     defaultValues: initialValues,
     mode: "onChange",
   });
   const { openNotification } = useNotificationContext();
   const navigate = useNavigate();
 
-  const { mutate, isPending, isError, error } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: createService,
     onSuccess: () => {
-      const message = showReview
-        ? "Service created successfully"
-        : "Service saved for later successfully";
-      openNotification(message);
-      navigate("/");
+      setErrorMessage("");
+      if (showReview) {
+        setOpenSuccess(true);
+      } else {
+        openNotification("Service saved for later successfully");
+        navigate("/");
+      }
     },
-    onError: () => {
+    onError: (data) => {
       setShowReview(false);
+      setErrorMessage(data.message);
     },
   });
 
@@ -109,42 +84,91 @@ export const CreateServiceScreen = () => {
   };
 
   const handleShowReview = async () => {
+    setErrorMessage("");
     const isValidForm = await methods.trigger();
     if (isValidForm) {
       setShowReview(true);
     }
   };
 
-  console.log("err", methods.formState.errors);
-
   return (
-    <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
-        <Stack gap={{ xs: 2, lg: 3 }}>
-          <CreateServiceHeading
-            showReview={showReview}
-            onSetShowReview={handleShowReview}
-            onBack={() => setShowReview(false)}
-            isPending={isPending}
-          />
+    <>
+      <FormProvider {...methods}>
+        <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
+          <Stack gap={{ xs: 2, lg: 3 }}>
+            <CreateServiceHeading
+              showReview={showReview}
+              onSetShowReview={handleShowReview}
+              onBack={() => {
+                setErrorMessage("");
+                setShowReview(false);
+              }}
+              isPending={isPending}
+            />
 
-          <Container
-            sx={{
-              maxWidth: { xs: "100%", lg: "620px" },
-              px: { xs: 2, lg: 0 },
-              py: 3,
-              pt: { xs: 0, lg: "100px" },
+            <Container
+              sx={{
+                maxWidth: { xs: "100%", lg: "620px" },
+                px: { xs: 2, lg: 0 },
+                py: 3,
+                pt: { xs: 0, lg: "100px" },
+              }}
+            >
+              {errorMessage && (
+                <Alert severity="error" variant="filled" sx={{ mb: 1 }}>
+                  {errorMessage}
+                </Alert>
+              )}
+              {showReview ? <ServiceDetails /> : <ServiceForm />}
+            </Container>
+          </Stack>
+        </form>
+      </FormProvider>
+
+      {/* Success info Dialog */}
+      <Dialog
+        open={openSuccess}
+        onClose={() => setOpenSuccess(false)}
+        disableEscapeKeyDown
+        fullScreen={isMobile}
+      >
+        <DialogContent
+          sx={{
+            borderBottom: "solid 1px",
+            borderBottomColor: "divider",
+            maxWidth: { xs: "100%", lg: 400 },
+          }}
+        >
+          <Stack alignItems="center" justifyContent="center" gap={2}>
+            <Lottie
+              loop
+              animationData={animationJson}
+              style={{ width: 100, height: 100 }}
+            />
+
+            <Typography variant="h4" textAlign="center">
+              Service Created Successfully
+            </Typography>
+            <Typography textAlign="center" color="text.secondary">
+              You have successfully created your service. You will be notified
+              when requests are made on your service.
+            </Typography>
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={() => {
+              setOpenSuccess(false);
+              navigate("/");
             }}
           >
-            {isError && (
-              <Alert severity="error" variant="filled" sx={{ mb: 1 }}>
-                {error?.message}
-              </Alert>
-            )}
-            {showReview ? <OrderDetails /> : <ServiceForm />}
-          </Container>
-        </Stack>
-      </form>
-    </FormProvider>
+            Okay
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };

@@ -2,26 +2,16 @@ import { Button, IconButton, Stack, Theme, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { Link, useNavigate } from "react-router-dom";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { ServiceStatus } from "../../types/service.ts";
 
 type Props = {
   showAction: boolean;
-  status?: ServiceStatus;
   serviceId?: number;
-  onOpen: () => void;
 };
-export const ServiceDetailsHeading = ({
-  showAction,
-  status,
-  serviceId,
-  onOpen,
-}: Props) => {
+export const ServiceDetailsHeading = ({ showAction, serviceId }: Props) => {
   const navigate = useNavigate();
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
   );
-
-  const isActive = status === ServiceStatus.Active;
 
   return (
     <>
@@ -58,29 +48,21 @@ export const ServiceDetailsHeading = ({
         {!isMobile && showAction && (
           <Stack gap={2} alignItems="center" direction="row">
             {serviceId && (
-              <Button
-                variant={isActive ? "outlined" : "contained"}
-                color="primary"
-                type="submit"
-                sx={{ px: 5 }}
-                component={Link}
-                to={`/edit-order/${serviceId}`}
-              >
-                Edit
-              </Button>
-            )}
+              <>
+                <Button variant="outlined" color="error" sx={{ px: 5 }}>
+                  Delete
+                </Button>
 
-            {/*  TODO: confirm status for order ready for matching */}
-            {isActive && (
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                sx={{ px: 3 }}
-                onClick={onOpen}
-              >
-                Check Availability
-              </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{ px: 5 }}
+                  component={Link}
+                  to={`/services/edit/${serviceId}`}
+                >
+                  Edit
+                </Button>
+              </>
             )}
           </Stack>
         )}

@@ -64,7 +64,7 @@ export const OrderDetailsHeading = ({
                 type="submit"
                 sx={{ px: 5 }}
                 component={Link}
-                to={`/edit-order/${orderId}`}
+                to={`/orders/edit/${orderId}`}
               >
                 Edit
               </Button>

@@ -15,6 +15,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { Link } from "react-router-dom";
 import { PhotoPreview } from "../photo-input/PhotoPreview.tsx";
 import { luggageCategories } from "./util.ts";
+import { ButtonChip } from "../button-chip";
 
 export const OrderDetails = () => {
   const isMobile = useMediaQuery<Theme>((theme) =>
@@ -58,14 +59,7 @@ export const OrderDetails = () => {
         </Typography>
         <Stack direction="row" gap={1}>
           {packageTypes.map((pv) => (
-            <Button
-              variant="outlined"
-              color={"primary"}
-              size="small"
-              startIcon={pv ? <pv.icon /> : null}
-            >
-              {pv?.name}
-            </Button>
+            <ButtonChip selected label={pv.name} Icon={pv.icon} />
           ))}
         </Stack>
       </Stack>

@@ -58,6 +58,7 @@ const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
 
 export const EditOrderScreen = () => {
   const [showReview, setShowReview] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const { orderId = "" } = useParams();
   const {
     data: order,
@@ -101,9 +102,10 @@ export const EditOrderScreen = () => {
   const { openNotification } = useNotificationContext();
   const navigate = useNavigate();
 
-  const { mutate, isPending, isError, error } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: (payload: OrderFormValues) => updateOrder(orderId, payload),
     onSuccess: () => {
+      setErrorMessage("");
       if (!showReview) {
         openNotification("Order saved for later successfully");
         navigate("/");
@@ -112,7 +114,8 @@ export const EditOrderScreen = () => {
         navigate("/pool-list");
       }
     },
-    onError: () => {
+    onError: (data) => {
+      setErrorMessage(data.message);
       setShowReview(false);
     },
   });
@@ -165,9 +168,9 @@ export const EditOrderScreen = () => {
               pt: { xs: 0, lg: "100px" },
             }}
           >
-            {isError && (
+            {errorMessage && (
               <Alert severity="error" variant="filled" sx={{ mb: 1 }}>
-                {error?.message}
+                {errorMessage}
               </Alert>
             )}
             {showReview ? <OrderDetails /> : <OrderForm editMode />}

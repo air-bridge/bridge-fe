@@ -76,6 +76,7 @@ const initialValues: OrderFormValues = {
 };
 
 export const CreateOrderScreen = () => {
+  const [errorMessage, setErrorMessage] = useState("");
   const [showReview, setShowReview] = useState(false);
   const methods = useForm<OrderFormValues>({
     resolver: yupResolver(schema),
@@ -85,9 +86,10 @@ export const CreateOrderScreen = () => {
   const { openNotification } = useNotificationContext();
   const navigate = useNavigate();
 
-  const { mutate, isPending, isError, error } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: createOrder,
     onSuccess: () => {
+      setErrorMessage("");
       if (!showReview) {
         openNotification("Order saved for later successfully");
         navigate("/");
@@ -96,7 +98,8 @@ export const CreateOrderScreen = () => {
         navigate("/pool-list");
       }
     },
-    onError: () => {
+    onError: (data) => {
+      setErrorMessage(data.message);
       setShowReview(false);
     },
   });
@@ -139,9 +142,9 @@ export const CreateOrderScreen = () => {
               pt: { xs: 0, lg: "100px" },
             }}
           >
-            {isError && (
+            {errorMessage && (
               <Alert severity="error" variant="filled" sx={{ mb: 1 }}>
-                {error?.message}
+                {errorMessage}
               </Alert>
             )}
             {showReview ? <OrderDetails /> : <OrderForm />}

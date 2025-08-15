@@ -135,6 +135,7 @@ export const ServiceDetails = () => {
                 </Typography>
 
                 <ButtonChip
+                  selected
                   label={transportType.name}
                   Icon={transportType.icon}
                 />

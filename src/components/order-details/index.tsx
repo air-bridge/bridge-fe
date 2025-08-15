@@ -3,6 +3,7 @@ import Grid from "@mui/material/Grid2";
 import { Order } from "../../types/order.ts";
 import { PhotoPreview } from "../photo-input/PhotoPreview.tsx";
 import { luggageCategories } from "../order-form/util.ts";
+import { ButtonChip } from "../button-chip";
 
 type Props = {
   data: Order;
@@ -22,14 +23,7 @@ export const OrderDetails = ({ data }: Props) => {
         </Typography>
         <Stack direction="row" gap={1}>
           {packageTypes.map((pv) => (
-            <Button
-              variant="outlined"
-              color={"primary"}
-              size="small"
-              startIcon={pv ? <pv.icon /> : null}
-            >
-              {pv?.name}
-            </Button>
+            <ButtonChip selected label={pv.name} Icon={pv.icon} />
           ))}
         </Stack>
       </Stack>

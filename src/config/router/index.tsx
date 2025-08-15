@@ -44,6 +44,7 @@ export const Router = () => {
           errorElement={<InternalError />}
         >
           <Route index element={<HomeScreen />} />
+
           {/* Orders */}
           <Route path="orders" element={<OrdersScreen />} />
           <Route path="create-order" element={<CreateOrderScreen />} />

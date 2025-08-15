@@ -1,45 +1,19 @@
-import {
-  Box,
-  Button,
-  Container,
-  Dialog,
-  DialogContent,
-  IconButton,
-  Stack,
-  Theme,
-} from "@mui/material";
+import { Button, Container, Stack, Theme } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Loading } from "../../../components/loading";
 import { ErrorInfo } from "../../../components/error-info";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useState } from "react";
-import CloseIcon from "@mui/icons-material/Close";
-import { MatchTrigger } from "../../../components/match-trigger";
 import { getService } from "../../../api/service.ts";
 import { ServiceDetailsHeading } from "../../../components/service-heading/ServiceDetailsHeading.tsx";
 import { ServiceDetails } from "../../../components/service-details";
+import { ServiceStatus } from "../../../types/service.ts";
 
 export const ServiceDetailsScreen = () => {
-  const [open, setOpen] = useState(false);
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
   );
   const { serviceId = "" } = useParams();
-
-  const closeDrawer = () => {
-    setOpen(false);
-  };
-
-  const handleCloseDrawer = (_: unknown, reason: string) => {
-    if (reason === "backdropClick") return;
-
-    closeDrawer();
-  };
-
-  const openDrawer = () => {
-    setOpen(true);
-  };
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["service-details", serviceId],
@@ -47,17 +21,16 @@ export const ServiceDetailsScreen = () => {
     enabled: !!serviceId,
   });
 
-  const showAction = !isError && !isLoading;
+  const showAction =
+    !isError &&
+    !isLoading &&
+    !!data?.status &&
+    [ServiceStatus.Draft, ServiceStatus.Open].includes(data?.status);
 
   return (
     <>
       <Stack gap={{ xs: 2, lg: 3 }}>
-        <ServiceDetailsHeading
-          showAction={showAction}
-          onOpen={openDrawer}
-          status={data?.status}
-          serviceId={data?.id}
-        />
+        <ServiceDetailsHeading showAction={showAction} serviceId={data?.id} />
 
         <Container
           sx={{
@@ -76,36 +49,16 @@ export const ServiceDetailsScreen = () => {
               <Button
                 variant="contained"
                 color="primary"
-                size="large"
                 fullWidth
-                onClick={openDrawer}
+                component={Link}
+                to={`/services/edit/${serviceId}`}
               >
-                Check Availability
+                Edit
               </Button>
             )}
           </Stack>
         </Container>
       </Stack>
-
-      <Dialog open={open} onClose={handleCloseDrawer} disableEscapeKeyDown>
-        <DialogContent
-          sx={{
-            bgcolor: "black",
-            px: { xs: 3, lg: 10 },
-            pt: { xs: 2, lg: 6 },
-            pb: { xs: 5, lg: 6 },
-          }}
-        >
-          {isMobile && (
-            <Box sx={{ textAlign: "right" }}>
-              <IconButton onClick={closeDrawer}>
-                <CloseIcon sx={{ color: "white" }} />
-              </IconButton>
-            </Box>
-          )}
-          <MatchTrigger onClose={closeDrawer} />
-        </DialogContent>
-      </Dialog>
     </>
   );
 };

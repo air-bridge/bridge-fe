@@ -21,6 +21,7 @@ import { useMemo } from "react";
 import { getStates } from "../../utils/country-state.ts";
 import Autocomplete from "@mui/material/Autocomplete";
 import { MuiTelInput } from "mui-tel-input";
+import { ButtonChip } from "../button-chip";
 
 type Props = {
   editMode?: boolean;
@@ -98,12 +99,10 @@ export const OrderForm = ({ editMode }: Props) => {
           {luggageCategories.map((category) => {
             const isSelected = packageType.includes(category.value);
             return (
-              <Button
-                key={category.value}
-                variant="outlined"
-                color={isSelected ? "primary" : "secondary"}
-                size="small"
-                startIcon={<category.icon />}
+              <ButtonChip
+                selected={isSelected}
+                label={category.name}
+                Icon={category.icon}
                 onClick={() => {
                   if (isSelected) {
                     const newValues = packageType.filter(
@@ -114,10 +113,7 @@ export const OrderForm = ({ editMode }: Props) => {
                     setValue("package_type", [...packageType, category.value]);
                   }
                 }}
-                sx={{ flexShrink: 0 }}
-              >
-                {category.name}
-              </Button>
+              />
             );
           })}
         </Stack>

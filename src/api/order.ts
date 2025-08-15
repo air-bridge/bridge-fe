@@ -1,5 +1,6 @@
 import { getAPI, postFormDataAPI, putAPI } from "./api.ts";
 import { Order, OrderFormValues } from "../types/order.ts";
+import { MatchService } from "../types/service.ts";
 
 export const createOrder = async (payload: OrderFormValues) => {
   const res = await postFormDataAPI("senders/orders", payload);
@@ -76,6 +77,38 @@ export const getOrder = async (id: string) => {
 
   const response: {
     data: Order;
+  } = await res.json();
+
+  return response.data;
+};
+
+export const findMatching = async (
+  id: string,
+  startDate: string,
+  endDate: string,
+) => {
+  const res = await getAPI(
+    `senders/orders/${id}/matching?start_date=${startDate}&end_date=${endDate}`,
+  );
+
+  if (!res.ok) {
+    const errorData = (await res.json()) as {
+      message: string;
+      error: string;
+    };
+
+    throw new Error(
+      errorData.error ||
+        errorData.message ||
+        "Fail to match order, please try again!",
+    );
+  }
+
+  const response: {
+    data: {
+      total_matches: number;
+      services: MatchService[];
+    };
   } = await res.json();
 
   return response.data;

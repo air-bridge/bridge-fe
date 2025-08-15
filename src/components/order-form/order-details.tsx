@@ -1,34 +1,25 @@
-import {
-  Button,
-  Checkbox,
-  FormControlLabel,
-  FormHelperText,
-  Grid2,
-  Stack,
-  Theme,
-  Typography,
-} from "@mui/material";
+import { Button, Grid2, Stack, Theme, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { Controller, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { OrderFormValues } from "../../types/order.ts";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Link } from "react-router-dom";
 import { PhotoPreview } from "../photo-input/PhotoPreview.tsx";
-import { luggageCategories } from "./util.ts";
+import { luggageCategories, LuggageCategory } from "./util.ts";
+import { ButtonChip } from "../button-chip";
 
 export const OrderDetails = () => {
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
   );
-  const {
-    control,
-    watch,
-    formState: { errors },
-  } = useFormContext<OrderFormValues>();
+  const { watch } = useFormContext<OrderFormValues>();
 
-  const packageTypeValue = watch("package_type");
-  const packageTypes = packageTypeValue.map((pv) => {
-    return luggageCategories.find((l) => l.value === pv);
+  const packageTypeValue = watch("package_type") || [];
+  const packageTypes: LuggageCategory[] = [];
+  packageTypeValue.forEach((pv) => {
+    const cat = luggageCategories.find((l) => l.value === pv);
+    if (cat) {
+      packageTypes.push(cat);
+    }
   });
 
   const title = watch("title");
@@ -43,12 +34,15 @@ export const OrderDetails = () => {
   const receiverLastName = watch("receiver_lastname");
   const receiverPhone = watch("receiver_phone");
   const deliveryNote = watch("delivery_note");
-  const terms = watch("terms");
   const image1 = watch("image1");
   const image2 = watch("image2");
   const image3 = watch("image3");
 
   const noImage = !image1 && !image2 && !image3;
+  const receiverName =
+    !receiverFirstName && !receiverLastName
+      ? ""
+      : `${receiverFirstName} ${receiverLastName}`;
 
   return (
     <Stack gap={{ xs: 2, lg: 3 }}>
@@ -58,14 +52,7 @@ export const OrderDetails = () => {
         </Typography>
         <Stack direction="row" gap={1}>
           {packageTypes.map((pv) => (
-            <Button
-              variant="outlined"
-              color={"primary"}
-              size="small"
-              startIcon={pv ? <pv.icon /> : null}
-            >
-              {pv?.name}
-            </Button>
+            <ButtonChip selected label={pv.name} Icon={pv.icon} />
           ))}
         </Stack>
       </Stack>
@@ -127,7 +114,7 @@ export const OrderDetails = () => {
             <Typography color="text.secondary" variant="body2">
               Full Name
             </Typography>
-            <Typography>{`${receiverFirstName} ${receiverLastName}`}</Typography>
+            <Typography>{receiverName || "-"}</Typography>
           </Stack>
         </Grid>
 
@@ -136,7 +123,7 @@ export const OrderDetails = () => {
             <Typography color="text.secondary" variant="body2">
               Phone Number
             </Typography>
-            <Typography>{receiverPhone}</Typography>
+            <Typography>{receiverPhone || "-"}</Typography>
           </Stack>
         </Grid>
 
@@ -184,30 +171,6 @@ export const OrderDetails = () => {
           <Typography>{deliveryNote}</Typography>
         </Stack>
       )}
-      <Grid size={{ xs: 12 }}>
-        <Controller
-          name="terms"
-          control={control}
-          render={({ field }) => (
-            <FormControlLabel
-              {...field}
-              control={<Checkbox color="info" />}
-              checked={Boolean(terms)}
-              label={
-                <Typography variant="body2">
-                  Review the GDPR policy and proceed if you comply to
-                  Airbridge&nbsp;
-                  <Link to="/">terms & privacy policy</Link>
-                </Typography>
-              }
-            />
-          )}
-        />
-
-        {errors.terms && (
-          <FormHelperText error>{errors.terms?.message}</FormHelperText>
-        )}
-      </Grid>
 
       {isMobile && (
         <Button type="submit" variant="contained" color="primary">

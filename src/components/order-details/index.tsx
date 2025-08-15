@@ -1,38 +1,43 @@
-import { Button, Grid2, Stack, Typography } from "@mui/material";
+import { Grid2, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { Order } from "../../types/order.ts";
 import { PhotoPreview } from "../photo-input/PhotoPreview.tsx";
-import { luggageCategories } from "../order-form/util.ts";
+import { luggageCategories, LuggageCategory } from "../order-form/util.ts";
+import { ButtonChip } from "../button-chip";
 
 type Props = {
   data: Order;
 };
 export const OrderDetails = ({ data }: Props) => {
-  const packageTypes = data.package_type.map((pv) => {
-    return luggageCategories.find((l) => l.value === pv);
+  const packageTypes: LuggageCategory[] = [];
+  data.package_type.forEach((pv) => {
+    const cat = luggageCategories.find((l) => l.value === pv);
+    if (cat) {
+      packageTypes.push(cat);
+    }
   });
 
   const noImage = !data.image1 && !data.image2 && !data.image3;
+  const receiver =
+    !data?.receiver_firstname && !data?.receiver_lastname
+      ? "-"
+      : `${data?.receiver_firstname} ${data?.receiver_lastname}`;
+  const hasPackageType = packageTypes.length > 0;
 
   return (
     <Stack gap={{ xs: 2, lg: 3 }}>
-      <Stack gap={0.75} alignItems="flex-start">
-        <Typography color="text.secondary" variant="body2">
-          Package Type
-        </Typography>
-        <Stack direction="row" gap={1}>
-          {packageTypes.map((pv) => (
-            <Button
-              variant="outlined"
-              color={"primary"}
-              size="small"
-              startIcon={pv ? <pv.icon /> : null}
-            >
-              {pv?.name}
-            </Button>
-          ))}
+      {hasPackageType && (
+        <Stack gap={0.75} alignItems="flex-start">
+          <Typography color="text.secondary" variant="body2">
+            Package Type
+          </Typography>
+          <Stack direction="row" gap={1}>
+            {packageTypes.map((pv) => (
+              <ButtonChip selected label={pv.name} Icon={pv.icon} />
+            ))}
+          </Stack>
         </Stack>
-      </Stack>
+      )}
 
       <Grid container spacing={{ xs: 1, lg: 2 }}>
         <Grid size={{ xs: 12 }}>
@@ -49,7 +54,7 @@ export const OrderDetails = ({ data }: Props) => {
             <Typography color="text.secondary" variant="body2">
               Package weight
             </Typography>
-            <Typography>{`${data.weight}KG`}</Typography>
+            <Typography fontWeight={500}>{`${data.weight}KG`}</Typography>
           </Stack>
         </Grid>
 
@@ -62,19 +67,41 @@ export const OrderDetails = ({ data }: Props) => {
           </Typography>
         </Grid>
 
-        <Grid size={{ xs: 12 }}>
+        <Grid size={{ xs: 6 }}>
           <Stack>
             <Typography color="text.secondary" variant="body2">
-              From (Pickup address)
+              From
             </Typography>
-            <Typography>{`${data.pickup_address}, ${data.pickup_state}, ${data.pickup_country}`}</Typography>
+            <Typography textTransform="capitalize">
+              {`${data.pickup_state}, ${data.pickup_country}`}
+            </Typography>
           </Stack>
         </Grid>
 
-        <Grid size={{ xs: 12 }}>
+        <Grid size={{ xs: 6 }}>
           <Stack>
             <Typography color="text.secondary" variant="body2">
-              To (Destination address)
+              Pickup Address
+            </Typography>
+            <Typography>{`${data.pickup_address}, ${data.pickup_state}`}</Typography>
+          </Stack>
+        </Grid>
+
+        <Grid size={{ xs: 6 }}>
+          <Stack>
+            <Typography color="text.secondary" variant="body2">
+              To
+            </Typography>
+            <Typography textTransform="capitalize">
+              {`${data.destination_state}, ${data.destination_country}`}
+            </Typography>
+          </Stack>
+        </Grid>
+
+        <Grid size={{ xs: 6 }}>
+          <Stack>
+            <Typography color="text.secondary" variant="body2">
+              Destination address
             </Typography>
             <Typography>{`${data.destination_address}, ${data.destination_state}, ${data.destination_country}`}</Typography>
           </Stack>
@@ -86,21 +113,21 @@ export const OrderDetails = ({ data }: Props) => {
           </Typography>
         </Grid>
 
-        <Grid size={{ xs: 12 }}>
+        <Grid size={{ xs: 6 }}>
           <Stack>
             <Typography color="text.secondary" variant="body2">
               Full Name
             </Typography>
-            <Typography>{`${data.receiver_firstname} ${data.receiver_lastname}`}</Typography>
+            <Typography>{receiver}</Typography>
           </Stack>
         </Grid>
 
-        <Grid size={{ xs: 12 }}>
+        <Grid size={{ xs: 6 }}>
           <Stack>
             <Typography color="text.secondary" variant="body2">
               Phone Number
             </Typography>
-            <Typography>{data.receiver_phone}</Typography>
+            <Typography>{data.receiver_phone || "-"}</Typography>
           </Stack>
         </Grid>
 

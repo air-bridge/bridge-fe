@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogTitle,
   Grid2,
-  IconButton,
   Stack,
   TextField,
   Theme,
@@ -181,12 +180,6 @@ export const PoolList = () => {
         disableEscapeKeyDown
         fullScreen={isMobile}
       >
-        <DialogTitle sx={{ textAlign: "right" }}>
-          <IconButton onClick={() => setOpenSuccess(false)}>
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-
         <DialogContent
           sx={{
             borderBottom: "solid 1px",

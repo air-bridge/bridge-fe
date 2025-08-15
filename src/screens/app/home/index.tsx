@@ -6,7 +6,7 @@ import { PassengerDashboard } from "./PassengerDashboard.tsx";
 const HomeScreen = () => {
   const { isSender } = useUserContext();
   return (
-    <Stack gap={2}>
+    <Stack gap={3}>
       {isSender ? <SenderDashboard /> : <PassengerDashboard />}
     </Stack>
   );

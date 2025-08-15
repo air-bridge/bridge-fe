@@ -48,6 +48,12 @@ export type OrderFormValues = {
   image1?: File | string | null;
   image2?: File | string | null;
   image3?: File | string | null;
-  terms: boolean;
   status?: OrderStatus | null;
 };
+
+export type OrderSearchPayload = {
+  status: string;
+  query: string;
+};
+
+export type OrderInput = Partial<Record<keyof OrderSearchPayload, string>>;

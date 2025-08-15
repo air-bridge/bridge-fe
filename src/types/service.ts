@@ -43,6 +43,19 @@ export type ServiceFormValues = {
   delivery_note?: string | null;
 };
 
+export type MatchService = {
+  service: Service;
+  passenger_name: string;
+  match_score: number;
+  days_difference: number;
+  price_estimate: number;
+};
+
+export type MatchServicePayload = {
+  start_date: string;
+  end_date: string;
+};
+
 export type ServiceSearchPayload = {
   status: string;
   query: string;

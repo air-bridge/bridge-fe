@@ -22,19 +22,22 @@ export const OrderDetails = ({ data }: Props) => {
     !data?.receiver_firstname && !data?.receiver_lastname
       ? "-"
       : `${data?.receiver_firstname} ${data?.receiver_lastname}`;
+  const hasPackageType = packageTypes.length > 0;
 
   return (
     <Stack gap={{ xs: 2, lg: 3 }}>
-      <Stack gap={0.75} alignItems="flex-start">
-        <Typography color="text.secondary" variant="body2">
-          Package Type
-        </Typography>
-        <Stack direction="row" gap={1}>
-          {packageTypes.map((pv) => (
-            <ButtonChip selected label={pv.name} Icon={pv.icon} />
-          ))}
+      {hasPackageType && (
+        <Stack gap={0.75} alignItems="flex-start">
+          <Typography color="text.secondary" variant="body2">
+            Package Type
+          </Typography>
+          <Stack direction="row" gap={1}>
+            {packageTypes.map((pv) => (
+              <ButtonChip selected label={pv.name} Icon={pv.icon} />
+            ))}
+          </Stack>
         </Stack>
-      </Stack>
+      )}
 
       <Grid container spacing={{ xs: 1, lg: 2 }}>
         <Grid size={{ xs: 12 }}>

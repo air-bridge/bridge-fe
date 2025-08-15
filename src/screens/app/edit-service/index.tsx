@@ -15,7 +15,8 @@ import { ServiceDetails } from "../../../components/service-form/service-details
 import { CreateServiceHeading } from "../../../components/service-heading/CreateServiceHeading.tsx";
 
 export const EditServiceScreen = () => {
-  const [showReview, setShowReview] = useState(true);
+  const [showReview, setShowReview] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const { serviceId = "" } = useParams();
   const {
     data: service,
@@ -55,15 +56,17 @@ export const EditServiceScreen = () => {
   const { openNotification } = useNotificationContext();
   const navigate = useNavigate();
 
-  const { mutate, isPending, isError, error } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: (payload: ServiceFormValues) =>
       updateService(serviceId, payload),
     onSuccess: () => {
+      setErrorMessage("");
       openNotification("Service saved for later successfully");
       navigate("/services");
     },
-    onError: () => {
+    onError: (data) => {
       setShowReview(false);
+      setErrorMessage(data.message || "");
     },
   });
 
@@ -72,6 +75,7 @@ export const EditServiceScreen = () => {
   };
 
   const handleShowReview = async () => {
+    setErrorMessage("");
     const isValidForm = await methods.trigger();
     if (isValidForm) {
       setShowReview(true);
@@ -97,7 +101,10 @@ export const EditServiceScreen = () => {
           <CreateServiceHeading
             showReview={showReview}
             onSetShowReview={handleShowReview}
-            onBack={() => setShowReview(false)}
+            onBack={() => {
+              setErrorMessage("");
+              setShowReview(false);
+            }}
             isPending={isPending}
             isEdit
           />
@@ -110,9 +117,9 @@ export const EditServiceScreen = () => {
               pt: { xs: 0, lg: "100px" },
             }}
           >
-            {isError && (
+            {errorMessage && (
               <Alert severity="error" variant="filled" sx={{ mb: 1 }}>
-                {error?.message}
+                {errorMessage}
               </Alert>
             )}
             {showReview ? <ServiceDetails /> : <ServiceForm editMode />}

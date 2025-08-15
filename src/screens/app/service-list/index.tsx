@@ -3,7 +3,7 @@ import { HomepageTabs } from "../../../components/homepage-tabs";
 import { EmptyService } from "../../../components/service-list/EmptyService.tsx";
 import { ServiceList } from "../../../components/service-list";
 import { mockServices } from "../../../mocks/service.ts";
-import { ServiceTabs } from "../../../components/service-tabs";
+import { ServiceFilters } from "../../../components/service-filters";
 import { ServiceSearchContextProvider } from "../../../context/services-search";
 
 const ServicesListScreen = () => {
@@ -14,7 +14,7 @@ const ServicesListScreen = () => {
     <ServiceSearchContextProvider>
       <Stack gap={{ xs: 2, lg: 3 }}>
         <HomepageTabs showAction={!isEmpty} />
-        <ServiceTabs />
+        <ServiceFilters />
         <Stack gap={4}>
           {isEmpty ? <EmptyService /> : <ServiceList data={mockServices} />}
         </Stack>

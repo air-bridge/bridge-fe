@@ -50,3 +50,10 @@ export type OrderFormValues = {
   image3?: File | string | null;
   status?: OrderStatus | null;
 };
+
+export type OrderSearchPayload = {
+  status: string;
+  query: string;
+};
+
+export type OrderInput = Partial<Record<keyof OrderSearchPayload, string>>;

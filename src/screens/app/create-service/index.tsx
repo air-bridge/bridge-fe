@@ -12,7 +12,6 @@ import {
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
-import { OrderDetails } from "../../../components/order-form/order-details.tsx";
 import { useMutation } from "@tanstack/react-query";
 import { useNotificationContext } from "../../../context/notification/util.ts";
 import { useNavigate } from "react-router-dom";
@@ -24,6 +23,7 @@ import { serviceFormSchema } from "../../../components/service-form/util.ts";
 import Lottie from "lottie-react";
 import animationJson from "../../../assets/animation/plane.json";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { ServiceDetails } from "../../../components/service-form/service-details.tsx";
 
 const initialValues: ServiceFormValues = {
   title: "",
@@ -119,7 +119,7 @@ export const CreateServiceScreen = () => {
                   {errorMessage}
                 </Alert>
               )}
-              {showReview ? <OrderDetails /> : <ServiceForm />}
+              {showReview ? <ServiceDetails /> : <ServiceForm />}
             </Container>
           </Stack>
         </form>

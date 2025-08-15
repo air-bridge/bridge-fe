@@ -1,11 +1,11 @@
 import { Box, Stack, TextField, Typography } from "@mui/material";
 import { serviceCategories } from "./util.ts";
-import { useServiceSearchContext } from "../../context/services-search/util.ts";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
+import { useOrderSearchContext } from "../../context/orders-search/util.ts";
 
-export const ServiceTabs = () => {
-  const { payload, setPayload } = useServiceSearchContext();
+export const OrderFilters = () => {
+  const { payload, setPayload } = useOrderSearchContext();
 
   return (
     <Stack

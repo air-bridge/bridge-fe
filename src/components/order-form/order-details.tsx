@@ -39,6 +39,10 @@ export const OrderDetails = () => {
   const image3 = watch("image3");
 
   const noImage = !image1 && !image2 && !image3;
+  const receiverName =
+    !receiverFirstName && !receiverLastName
+      ? ""
+      : `${receiverFirstName} ${receiverLastName}`;
 
   return (
     <Stack gap={{ xs: 2, lg: 3 }}>
@@ -110,7 +114,7 @@ export const OrderDetails = () => {
             <Typography color="text.secondary" variant="body2">
               Full Name
             </Typography>
-            <Typography>{`${receiverFirstName} ${receiverLastName}`}</Typography>
+            <Typography>{receiverName || "-"}</Typography>
           </Stack>
         </Grid>
 
@@ -119,7 +123,7 @@ export const OrderDetails = () => {
             <Typography color="text.secondary" variant="body2">
               Phone Number
             </Typography>
-            <Typography>{receiverPhone}</Typography>
+            <Typography>{receiverPhone || "-"}</Typography>
           </Stack>
         </Grid>
 

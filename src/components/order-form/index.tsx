@@ -8,6 +8,7 @@ import {
   Grid2,
   Theme,
   FormHelperText,
+  CircularProgress,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { Controller, useFormContext } from "react-hook-form";
@@ -25,8 +26,10 @@ import { ButtonChip } from "../button-chip";
 
 type Props = {
   editMode?: boolean;
+  onSetShowReview: () => void;
+  isPending: boolean;
 };
-export const OrderForm = ({ editMode }: Props) => {
+export const OrderForm = ({ editMode, isPending, onSetShowReview }: Props) => {
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
   );
@@ -497,21 +500,21 @@ export const OrderForm = ({ editMode }: Props) => {
       </Stack>
 
       <Grid2 container spacing={1}>
-        <Grid2 size={{ xs: 12, lg: 4 }}>
+        <Grid2 size={{ xs: 4 }}>
           <PhotoInput
             editable={!editMode}
             onChange={(file) => setValue("image1", file)}
             file={image1}
           />
         </Grid2>
-        <Grid2 size={{ xs: 12, lg: 4 }}>
+        <Grid2 size={{ xs: 4 }}>
           <PhotoInput
             editable={!editMode}
             onChange={(file) => setValue("image2", file)}
             file={image2}
           />
         </Grid2>
-        <Grid2 size={{ xs: 12, lg: 4 }}>
+        <Grid2 size={{ xs: 4 }}>
           <PhotoInput
             editable={!editMode}
             onChange={(file) => setValue("image3", file)}
@@ -541,9 +544,30 @@ export const OrderForm = ({ editMode }: Props) => {
       />
 
       {isMobile && (
-        <Button type="submit" variant="contained" color="primary">
-          Submit
-        </Button>
+        <Stack gap={2} my={1}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            onClick={(e) => {
+              e.preventDefault();
+              onSetShowReview();
+            }}
+            loading={isPending}
+            loadingIndicator={<CircularProgress size={22} />}
+          >
+            Review
+          </Button>
+          <Button
+            type="submit"
+            variant="outlined"
+            color="primary"
+            loading={isPending}
+            loadingIndicator={<CircularProgress size={22} />}
+          >
+            Save for later
+          </Button>
+        </Stack>
       )}
     </Stack>
   );

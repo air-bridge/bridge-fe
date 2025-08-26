@@ -8,7 +8,6 @@ import {
   DialogActions,
   DialogContent,
   Stack,
-  Theme,
   Typography,
 } from "@mui/material";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
@@ -25,7 +24,6 @@ import { useNavigate } from "react-router-dom";
 import { isValidPhoneNumber } from "../../../utils/validate-phone.ts";
 import Lottie from "lottie-react";
 import animationJson from "../../../assets/animation/plane.json";
-import useMediaQuery from "@mui/material/useMediaQuery";
 
 const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
   title: yup.string().required("Title is required"),
@@ -89,9 +87,6 @@ export const CreateOrderScreen = () => {
   const [orderId, setOrderId] = useState("");
   const [openSuccess, setOpenSuccess] = useState(false);
   const [showReview, setShowReview] = useState(false);
-  const isMobile = useMediaQuery<Theme>((theme) =>
-    theme.breakpoints.down("lg"),
-  );
   const methods = useForm<OrderFormValues>({
     resolver: yupResolver(schema),
     defaultValues: initialValues,
@@ -164,7 +159,17 @@ export const CreateOrderScreen = () => {
                   {errorMessage}
                 </Alert>
               )}
-              {showReview ? <OrderDetails /> : <OrderForm />}
+              {showReview ? (
+                <OrderDetails
+                  onBack={() => setShowReview(false)}
+                  isPending={isPending}
+                />
+              ) : (
+                <OrderForm
+                  isPending={isPending}
+                  onSetShowReview={handleShowReview}
+                />
+              )}
             </Container>
           </Stack>
         </form>
@@ -174,7 +179,6 @@ export const CreateOrderScreen = () => {
         open={openSuccess}
         onClose={() => setOpenSuccess(false)}
         disableEscapeKeyDown
-        fullScreen={isMobile}
       >
         <DialogContent
           sx={{

@@ -22,7 +22,7 @@ import {
 } from "react-hook-form";
 import { OrderDetailsHeading } from "../../../components/order-heading/OrderDetailsHeading.tsx";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { findMatching, getOrder } from "../../../api/order.ts";
 import { Loading } from "../../../components/loading";
 import { ErrorInfo } from "../../../components/error-info";
@@ -38,6 +38,7 @@ import { string } from "yup";
 import dayjs from "dayjs";
 import Grid from "@mui/material/Grid2";
 import { DatePicker } from "@mui/x-date-pickers";
+import { OrderStatus } from "../../../types/order.ts";
 
 const schema: yup.ObjectSchema<MatchServicePayload> = yup.object({
   start_date: string().required("Start date is required"),
@@ -145,6 +146,7 @@ export const OrderDetailsScreen = () => {
   const start_date = watch("start_date");
   const end_date = watch("end_date");
   const showAction = !isError && !isLoading;
+  const isActive = data?.status === OrderStatus.Active;
 
   return (
     <>
@@ -170,15 +172,29 @@ export const OrderDetailsScreen = () => {
             {data && <OrderDetails data={data} />}
 
             {isMobile && showAction && (
-              <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                fullWidth
-                onClick={openDrawer}
-              >
-                Check Availability
-              </Button>
+              <Stack gap={2}>
+                {isActive && (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    fullWidth
+                    onClick={openDrawer}
+                  >
+                    Check Availability
+                  </Button>
+                )}
+
+                <Button
+                  variant={isActive ? "outlined" : "contained"}
+                  color="primary"
+                  fullWidth
+                  component={Link}
+                  to={`/orders/edit/${orderId}`}
+                >
+                  Edit
+                </Button>
+              </Stack>
             )}
           </Stack>
         </Container>

@@ -173,7 +173,18 @@ export const EditOrderScreen = () => {
                 {errorMessage}
               </Alert>
             )}
-            {showReview ? <OrderDetails /> : <OrderForm editMode />}
+            {showReview ? (
+              <OrderDetails
+                isPending={isPending}
+                onBack={() => setShowReview(false)}
+              />
+            ) : (
+              <OrderForm
+                editMode
+                isPending={isPending}
+                onSetShowReview={handleShowReview}
+              />
+            )}
           </Container>
         </Stack>
       </form>

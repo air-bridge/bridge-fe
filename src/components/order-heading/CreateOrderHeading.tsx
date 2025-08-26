@@ -82,7 +82,7 @@ export const CreateOrderHeading = ({
                 type="submit"
                 sx={{ px: 5 }}
                 loading={isPending}
-                loadingIndicator={<CircularProgress />}
+                loadingIndicator={<CircularProgress size={22} />}
               >
                 Submit
               </Button>
@@ -94,6 +94,8 @@ export const CreateOrderHeading = ({
                 color="primary"
                 type="submit"
                 sx={{ px: 5 }}
+                loading={isPending}
+                loadingIndicator={<CircularProgress size={22} />}
               >
                 Save for later
               </Button>

@@ -1,10 +1,14 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { OrderForm } from "../index";
 
 describe("OrderForm", () => {
+  const mockOnSetShowReview = vi.fn();
+
   it("renders all fields", () => {
-    render(<OrderForm />);
+    render(
+      <OrderForm isPending={false} onSetShowReview={mockOnSetShowReview} />,
+    );
     expect(
       screen.getByLabelText("Order Title (e.g I want to deliver a 3kg box)"),
     ).toBeInTheDocument();
@@ -17,7 +21,9 @@ describe("OrderForm", () => {
   });
 
   it("renders luggage types", () => {
-    render(<OrderForm />);
+    render(
+      <OrderForm isPending={false} onSetShowReview={mockOnSetShowReview} />,
+    );
     expect(screen.getByRole("button", { name: "Box" })).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Documents" }),
@@ -29,13 +35,17 @@ describe("OrderForm", () => {
   });
 
   it("shows validation errors for required fields", async () => {
-    render(<OrderForm />);
+    render(
+      <OrderForm isPending={false} onSetShowReview={mockOnSetShowReview} />,
+    );
     fireEvent.click(screen.getByRole("button", { name: /submit/i }));
     expect(await screen.findByText(/title is required/i)).toBeInTheDocument();
   });
 
   it("submits when required fields are filled", async () => {
-    render(<OrderForm />);
+    render(
+      <OrderForm isPending={false} onSetShowReview={mockOnSetShowReview} />,
+    );
     fireEvent.change(screen.getByLabelText(/order title/i), {
       target: { value: "Test Order" },
     });
@@ -49,7 +59,9 @@ describe("OrderForm", () => {
   });
 
   it("changes luggage type selection and color", () => {
-    render(<OrderForm />);
+    render(
+      <OrderForm isPending={false} onSetShowReview={mockOnSetShowReview} />,
+    );
     const documentsButton = screen.getByRole("button", { name: "Documents" });
     fireEvent.click(documentsButton);
     // After click, Documents should be primary, Box should be secondary
@@ -59,7 +71,9 @@ describe("OrderForm", () => {
   });
 
   it("shows error for invalid inputs weight", async () => {
-    render(<OrderForm />);
+    render(
+      <OrderForm isPending={false} onSetShowReview={mockOnSetShowReview} />,
+    );
 
     fireEvent.change(screen.getByLabelText(/package weight/i), {
       target: { value: "-5" },

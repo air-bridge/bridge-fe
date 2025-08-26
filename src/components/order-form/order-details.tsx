@@ -1,4 +1,11 @@
-import { Button, Grid2, Stack, Theme, Typography } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  Grid2,
+  Stack,
+  Theme,
+  Typography,
+} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { useFormContext } from "react-hook-form";
 import { OrderFormValues } from "../../types/order.ts";
@@ -7,7 +14,12 @@ import { PhotoPreview } from "../photo-input/PhotoPreview.tsx";
 import { luggageCategories, LuggageCategory } from "./util.ts";
 import { ButtonChip } from "../button-chip";
 
-export const OrderDetails = () => {
+type Props = {
+  isPending: boolean;
+  onBack: () => void;
+};
+
+export const OrderDetails = ({ isPending, onBack }: Props) => {
   const isMobile = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("lg"),
   );
@@ -72,7 +84,7 @@ export const OrderDetails = () => {
             <Typography color="text.secondary" variant="body2">
               Package weight
             </Typography>
-            <Typography>{`${weight}KG`}</Typography>
+            <Typography>{weight ? `${weight}KG` : "-"}</Typography>
           </Stack>
         </Grid>
 
@@ -173,9 +185,29 @@ export const OrderDetails = () => {
       )}
 
       {isMobile && (
-        <Button type="submit" variant="contained" color="primary">
-          Submit
-        </Button>
+        <Stack gap={2} my={1}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            loading={isPending}
+            loadingIndicator={<CircularProgress size={22} />}
+          >
+            Save
+          </Button>
+
+          <Button
+            type="button"
+            variant="outlined"
+            color="primary"
+            onClick={(e) => {
+              e.preventDefault();
+              onBack();
+            }}
+          >
+            Back
+          </Button>
+        </Stack>
       )}
     </Stack>
   );

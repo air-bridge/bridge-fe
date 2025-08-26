@@ -164,7 +164,17 @@ export const CreateOrderScreen = () => {
                   {errorMessage}
                 </Alert>
               )}
-              {showReview ? <OrderDetails /> : <OrderForm />}
+              {showReview ? (
+                <OrderDetails
+                  onBack={() => setShowReview(false)}
+                  isPending={isPending}
+                />
+              ) : (
+                <OrderForm
+                  isPending={isPending}
+                  onSetShowReview={handleShowReview}
+                />
+              )}
             </Container>
           </Stack>
         </form>
@@ -183,7 +193,12 @@ export const CreateOrderScreen = () => {
             maxWidth: { xs: "100%", lg: 400 },
           }}
         >
-          <Stack alignItems="center" justifyContent="center" gap={2}>
+          <Stack
+            alignItems="center"
+            justifyContent="center"
+            gap={2}
+            sx={{ height: "95vh" }}
+          >
             <Lottie
               loop
               animationData={animationJson}

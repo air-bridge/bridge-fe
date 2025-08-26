@@ -1,9 +1,11 @@
 import { getAPI, postFormDataAPI, putAPI } from "./api.ts";
 import { Order, OrderFormValues } from "../types/order.ts";
 import { MatchService } from "../types/service.ts";
+import { trimPayload } from "../utils/form.ts";
 
 export const createOrder = async (payload: OrderFormValues) => {
-  const res = await postFormDataAPI("senders/orders", payload);
+  const refinedPayload = trimPayload(payload);
+  const res = await postFormDataAPI("senders/orders", refinedPayload);
 
   if (!res.ok) {
     const errorData = (await res.json()) as {

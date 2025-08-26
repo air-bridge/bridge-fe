@@ -72,7 +72,7 @@ export const OrderDetails = () => {
             <Typography color="text.secondary" variant="body2">
               Package weight
             </Typography>
-            <Typography>{`${weight}KG`}</Typography>
+            <Typography>{weight ? `${weight}KG` : "-"}</Typography>
           </Stack>
         </Grid>
 

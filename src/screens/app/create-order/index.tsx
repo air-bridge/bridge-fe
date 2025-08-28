@@ -31,13 +31,12 @@ const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
   package_type: yup
     .array()
     .of(yup.string().required("Package Type is required"))
-    .min(1, "Select at least one item")
     .required("Package Type is required"),
   weight: yup
     .number()
-    .nullable()
     .typeError("Weight must be a number")
-    .positive("Weight must be a positive number"),
+    .required("Weight is required")
+    .positive("Weight must be at least 1KG"),
   destination_address: yup.string().required("Destination address is required"),
   destination_state: yup.string().required("Destination state is required"),
   destination_country: yup.string().required("Destination country is required"),
@@ -64,8 +63,8 @@ const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
 
 const initialValues: OrderFormValues = {
   title: "",
-  package_type: ["box"],
-  weight: null,
+  package_type: [],
+  weight: 1,
   destination_address: "",
   destination_country: "",
   destination_state: "",

@@ -197,8 +197,8 @@ export const CreateOrderScreen = () => {
               Order Created Successfully
             </Typography>
             <Typography textAlign="center" color="text.secondary">
-              You have successfully created your parcel order. Please proceed to
-              check availability
+              Your parcel order has been created successfully. Please continue
+              to check if someone is available to pick it up.
             </Typography>
           </Stack>
         </DialogContent>

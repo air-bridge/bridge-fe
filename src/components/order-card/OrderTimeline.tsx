@@ -38,12 +38,13 @@ export const OrderTimeline = ({ order }: Props) => {
           <Typography
             variant="h6"
             textTransform="capitalize"
+            sx={{ lineHeight: "1rem" }}
           >{`${order.pickup_state}`}</Typography>
           <Typography
             variant="body2"
             color="text.secondary"
             noWrap
-            sx={{ "&:first-letter": { textTransform: "uppercase" } }}
+            textTransform="capitalize"
           >
             {order.pickup_country}
           </Typography>
@@ -60,11 +61,15 @@ export const OrderTimeline = ({ order }: Props) => {
             variant="body2"
             color="text.secondary"
             noWrap
-            sx={{ "&:first-letter": { textTransform: "uppercase" } }}
+            textTransform="capitalize"
           >
             {order.destination_country}
           </Typography>
-          <Typography fontWeight="bold" textTransform="capitalize">
+          <Typography
+            fontWeight="bold"
+            textTransform="capitalize"
+            sx={{ lineHeight: "1rem" }}
+          >
             {order.destination_state}
           </Typography>
         </Box>

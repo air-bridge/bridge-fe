@@ -156,19 +156,19 @@ export const OrderDetails = ({ isPending, onBack }: Props) => {
       )}
 
       <Grid2 container spacing={1}>
-        {image1 instanceof File && (
+        {image1 && (
           <Grid2 size={{ xs: 12, lg: 4 }}>
             <PhotoPreview file={image1} />
           </Grid2>
         )}
 
-        {image2 instanceof File && (
+        {image2 && (
           <Grid2 size={{ xs: 12, lg: 4 }}>
             <PhotoPreview file={image2} />
           </Grid2>
         )}
 
-        {image3 instanceof File && (
+        {image3 && (
           <Grid2 size={{ xs: 12, lg: 4 }}>
             <PhotoPreview file={image3} />
           </Grid2>

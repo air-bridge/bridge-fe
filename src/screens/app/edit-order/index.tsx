@@ -1,6 +1,15 @@
 import { CreateOrderHeading } from "../../../components/order-heading/CreateOrderHeading.tsx";
 import { OrderForm } from "../../../components/order-form";
-import { Alert, Container, Stack } from "@mui/material";
+import {
+  Alert,
+  Button,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { OrderFormValues, OrderStatus } from "../../../types/order.ts";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -15,6 +24,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { isValidPhoneNumber } from "../../../utils/validate-phone.ts";
 import { Loading } from "../../../components/loading";
 import { ErrorInfo } from "../../../components/error-info";
+import Lottie from "lottie-react";
+import animationJson from "../../../assets/animation/plane.json";
 
 const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
   title: yup.string().required("Title is required"),
@@ -22,13 +33,12 @@ const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
   package_type: yup
     .array()
     .of(yup.string().required("Package Type is required"))
-    .min(1, "Select at least one item")
     .required("Package Type is required"),
   weight: yup
     .number()
-    .nullable()
     .typeError("Weight must be a number")
-    .positive("Weight must be a positive number"),
+    .required("Weight is required")
+    .positive("Weight must be at least 1KG"),
   destination_address: yup.string().required("Destination address is required"),
   destination_state: yup.string().required("Destination state is required"),
   destination_country: yup.string().required("Destination country is required"),
@@ -58,6 +68,7 @@ const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
 
 export const EditOrderScreen = () => {
   const [showReview, setShowReview] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const { orderId = "" } = useParams();
   const {
@@ -74,8 +85,8 @@ export const EditOrderScreen = () => {
   const initialValues = useMemo(() => {
     return {
       title: order?.title || "",
-      package_type: order?.package_type || ["box"],
-      weight: order?.weight || null,
+      package_type: order?.package_type || [],
+      weight: order?.weight || 1,
       destination_address: order?.destination_address || "",
       destination_country: order?.destination_country || "",
       destination_state: order?.destination_state || "",
@@ -86,7 +97,7 @@ export const EditOrderScreen = () => {
       receiver_lastname: order?.receiver_lastname || "",
       receiver_phone: order?.receiver_phone || "",
       delivery_note: order?.delivery_note || "",
-      status: order?.status || OrderStatus.Inactive, // todo: change to draft
+      status: order?.status || OrderStatus.Draft,
       terms: true,
       image1: order?.image1 || null,
       image2: order?.image2 || null,
@@ -110,8 +121,7 @@ export const EditOrderScreen = () => {
         openNotification("Order saved for later successfully");
         navigate("/");
       } else {
-        // TODO: add order id to URL
-        navigate("/pool-list");
+        setOpenSuccess(true);
       }
     },
     onError: (data) => {
@@ -149,45 +159,91 @@ export const EditOrderScreen = () => {
   }
 
   return (
-    <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
-        <Stack gap={{ xs: 2, lg: 3 }}>
-          <CreateOrderHeading
-            showReview={showReview}
-            onSetShowReview={handleShowReview}
-            onBack={() => setShowReview(false)}
-            isPending={isPending}
-            isEdit
-          />
+    <>
+      <FormProvider {...methods}>
+        <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
+          <Stack gap={{ xs: 2, lg: 3 }}>
+            <CreateOrderHeading
+              showReview={showReview}
+              onSetShowReview={handleShowReview}
+              onBack={() => setShowReview(false)}
+              isPending={isPending}
+              isEdit
+            />
 
-          <Container
-            sx={{
-              maxWidth: { xs: "100%", lg: "620px" },
-              px: { xs: 2, lg: 0 },
-              py: 3,
-              pt: { xs: 0, lg: "100px" },
+            <Container
+              sx={{
+                maxWidth: { xs: "100%", lg: "620px" },
+                px: { xs: 2, lg: 0 },
+                py: 3,
+                pt: { xs: 0, lg: "100px" },
+              }}
+            >
+              {errorMessage && (
+                <Alert severity="error" variant="filled" sx={{ mb: 1 }}>
+                  {errorMessage}
+                </Alert>
+              )}
+              {showReview ? (
+                <OrderDetails
+                  isPending={isPending}
+                  onBack={() => setShowReview(false)}
+                />
+              ) : (
+                <OrderForm
+                  editMode
+                  isPending={isPending}
+                  onSetShowReview={handleShowReview}
+                />
+              )}
+            </Container>
+          </Stack>
+        </form>
+      </FormProvider>
+
+      {/* Success info Dialog */}
+      <Dialog
+        open={openSuccess}
+        onClose={() => setOpenSuccess(false)}
+        disableEscapeKeyDown
+      >
+        <DialogContent
+          sx={{
+            borderBottom: "solid 1px",
+            borderBottomColor: "divider",
+            maxWidth: { xs: "100%", lg: 400 },
+          }}
+        >
+          <Stack alignItems="center" justifyContent="center" gap={2}>
+            <Lottie
+              loop
+              animationData={animationJson}
+              style={{ width: 100, height: 100 }}
+            />
+
+            <Typography variant="h4" textAlign="center">
+              Order Updated Successfully
+            </Typography>
+            <Typography textAlign="center" color="text.secondary">
+              Your parcel order has been updated successfully. Please continue
+              to check if someone is available to pick it up.
+            </Typography>
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={() => {
+              setOpenSuccess(false);
+              navigate(`/orders/${orderId}`);
             }}
           >
-            {errorMessage && (
-              <Alert severity="error" variant="filled" sx={{ mb: 1 }}>
-                {errorMessage}
-              </Alert>
-            )}
-            {showReview ? (
-              <OrderDetails
-                isPending={isPending}
-                onBack={() => setShowReview(false)}
-              />
-            ) : (
-              <OrderForm
-                editMode
-                isPending={isPending}
-                onSetShowReview={handleShowReview}
-              />
-            )}
-          </Container>
-        </Stack>
-      </form>
-    </FormProvider>
+            Okay
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };

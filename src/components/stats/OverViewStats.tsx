@@ -71,7 +71,7 @@ export const OverviewStats = ({
                   alignItems="center"
                   gap={1}
                 >
-                  <Typography color="text.secondary" variant="body2">
+                  <Typography color="text.secondary" variant="body1">
                     {item.name}
                   </Typography>
 

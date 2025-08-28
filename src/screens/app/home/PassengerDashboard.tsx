@@ -35,7 +35,7 @@ export const PassengerDashboard = () => {
           color: "warning.main",
         },
         {
-          name: "Total Request",
+          name: "Successful Package Delivered",
           count: data.total_requests,
           background: "success.light",
           color: "success.main",

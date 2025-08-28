@@ -322,6 +322,7 @@ const theme = createTheme({
     MuiDialogActions: Components.DialogActions,
     MuiDialogContent: Components.DialogContent,
     MuiLink: Components.Link,
+    MuiTooltip: Components.Tooltip,
   },
 });
 

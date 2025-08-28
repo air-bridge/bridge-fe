@@ -4,6 +4,7 @@ import LuggageIcon from "@mui/icons-material/Luggage";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { SvgIconTypeMap } from "@mui/material";
+import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 
 export type LuggageCategory = {
   name: string;
@@ -32,5 +33,10 @@ export const luggageCategories: LuggageCategory[] = [
     name: "Hand Luggage",
     icon: BusinessCenterIcon,
     value: "hand_luggage",
+  },
+  {
+    name: "Others",
+    icon: CardGiftcardIcon,
+    value: "others",
   },
 ];

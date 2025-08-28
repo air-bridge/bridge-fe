@@ -51,7 +51,7 @@ export const serviceFormSchema: ObjectSchema<ServiceFormValues> = object({
   price_per_kg: number()
     .required("Price per KG is required")
     .typeError("Price must be a number")
-    .positive("Price must be a positive number"),
+    .min(0, "Price must be a positive number"),
   departure_city: string().required("Departure city is required"),
   departure_country: string().required("Departure country is required"),
   departure_date: string().required("Departure date is required"),

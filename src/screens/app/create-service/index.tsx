@@ -31,6 +31,7 @@ const initialValues: ServiceFormValues = {
   arrival_country: "",
   arrival_date: "",
   currency: "USD",
+  price_per_kg: 0,
   departure_city: "",
   departure_country: "",
   departure_date: "",

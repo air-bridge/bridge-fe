@@ -7,3 +7,4 @@ export { default as DialogActions } from "./dialog-actions.ts";
 export { default as DialogContent } from "./dialog-content.ts";
 export { default as Dialog } from "./dialog.ts";
 export { default as Link } from "./link.ts";
+export { default as Tooltip } from "./tooltip.ts";

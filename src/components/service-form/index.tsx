@@ -24,6 +24,8 @@ import dayjs from "dayjs";
 import { MuiTelInput } from "mui-tel-input";
 import { transportTypes } from "./util.ts";
 import { ButtonChip } from "../button-chip";
+import Tooltip from "@mui/material/Tooltip";
+import InfoOutlineIcon from "@mui/icons-material/InfoOutlined";
 
 export const ServiceForm = () => {
   const isMobile = useMediaQuery<Theme>((theme) =>
@@ -130,7 +132,12 @@ export const ServiceForm = () => {
             control={control}
             render={({ field }) => (
               <Box>
-                <InputLabel htmlFor="weight">Price per KG</InputLabel>
+                <Stack direction="row" gap={1} alignItems="center">
+                  <InputLabel htmlFor="weight">Price per KG</InputLabel>
+                  <Tooltip title="You can offer free service by setting price as 0">
+                    <InfoOutlineIcon sx={{ fontSize: 16, mb: "5px" }} />
+                  </Tooltip>
+                </Stack>
                 <TextField
                   {...field}
                   id="price_per_kg"

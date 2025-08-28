@@ -23,6 +23,8 @@ import { getStates } from "../../utils/country-state.ts";
 import Autocomplete from "@mui/material/Autocomplete";
 import { MuiTelInput } from "mui-tel-input";
 import { ButtonChip } from "../button-chip";
+import InfoOutlineIcon from "@mui/icons-material/InfoOutlined";
+import Tooltip from "@mui/material/Tooltip";
 
 type Props = {
   editMode?: boolean;
@@ -153,7 +155,12 @@ export const OrderForm = ({ editMode, isPending, onSetShowReview }: Props) => {
             control={control}
             render={({ field }) => (
               <Box>
-                <InputLabel htmlFor="weight">Package weight (KG)</InputLabel>
+                <Stack direction="row" gap={1} alignItems="center">
+                  <InputLabel htmlFor="weight">Package weight (KG)</InputLabel>
+                  <Tooltip title="The minimum weight allowed is 1KG">
+                    <InfoOutlineIcon sx={{ fontSize: 16, mb: "5px" }} />
+                  </Tooltip>
+                </Stack>
                 <TextField
                   {...field}
                   id="weight"

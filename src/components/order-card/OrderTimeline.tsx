@@ -15,14 +15,14 @@ export const OrderTimeline = ({ order }: Props) => {
           position: "absolute",
           left: 8,
           top: 12,
-          bottom: 0,
+          bottom: 8,
           borderLeft: "dashed 1px",
           borderLeftColor: "grey.400",
         }}
       />
 
       {/* Origin */}
-      <Box display="flex" alignItems="flex-start" mb={2}>
+      <Box display="flex" alignItems="flex-start" mb={3}>
         <Avatar
           sx={{
             width: 15,
@@ -38,37 +38,40 @@ export const OrderTimeline = ({ order }: Props) => {
           <Typography
             variant="h6"
             textTransform="capitalize"
-          >{`${order.pickup_state}, ${order.pickup_country}`}</Typography>
+            sx={{ lineHeight: "1rem" }}
+          >{`${order.pickup_state}`}</Typography>
           <Typography
             variant="body2"
             color="text.secondary"
             noWrap
-            sx={{ "&:first-letter": { textTransform: "uppercase" } }}
+            textTransform="capitalize"
           >
-            {order.pickup_address}
-          </Typography>
-          <Typography
-            variant="subtitle2"
-            color="success.main"
-            mt={3}
-            noWrap
-            sx={{ "&:first-letter": { textTransform: "uppercase" } }}
-          >
-            {order.destination_address}
+            {order.pickup_country}
           </Typography>
         </Box>
       </Box>
 
       {/* Destination */}
       <Box display="flex" alignItems="center">
-        <Avatar sx={{ width: 17, height: 20, bgcolor: "white", mt: 3 }}>
+        <Avatar sx={{ width: 17, height: 20, bgcolor: "white", mt: 4 }}>
           <LocationOnIcon fontSize="small" sx={{ color: "black" }} />
         </Avatar>
-        <Box ml={2} mt={2.5}>
+        <Box ml={2} mt={2}>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            noWrap
+            textTransform="capitalize"
+          >
+            {order.destination_country}
+          </Typography>
           <Typography
             fontWeight="bold"
             textTransform="capitalize"
-          >{`${order.destination_state}, ${order.destination_country}`}</Typography>
+            sx={{ lineHeight: "1rem" }}
+          >
+            {order.destination_state}
+          </Typography>
         </Box>
       </Box>
     </Box>

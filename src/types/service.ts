@@ -59,6 +59,16 @@ export type MatchServicePayload = {
 export type ServiceSearchPayload = {
   status: string;
   query: string;
+  offset: string;
+  limit: string;
+  page: string;
 };
 
 export type ServiceInput = Partial<Record<keyof ServiceSearchPayload, string>>;
+
+export type ServiceSearchResponse = {
+  data: Service[];
+  pagination: {
+    total_items: number;
+  };
+};

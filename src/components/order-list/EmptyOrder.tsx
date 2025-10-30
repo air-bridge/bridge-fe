@@ -24,7 +24,7 @@ export const EmptyOrder = () => {
           textAlign="center"
           fontWeight={400}
         >
-          You do not have any order yet
+          There are no matching order
         </Typography>
         <Button
           component={Link}

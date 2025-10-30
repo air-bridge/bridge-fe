@@ -21,6 +21,6 @@ export const serviceCategories = [
   },
   {
     label: "Completed Orders",
-    value: "complete",
+    value: "completed",
   },
 ];

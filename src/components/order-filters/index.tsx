@@ -2,7 +2,10 @@ import { Box, Stack, TextField, Typography } from "@mui/material";
 import { serviceCategories } from "./util.ts";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
-import { useOrderSearchContext } from "../../context/orders-search/util.ts";
+import {
+  initialPayload,
+  useOrderSearchContext,
+} from "../../context/orders-search/util.ts";
 
 export const OrderFilters = () => {
   const { payload, setPayload } = useOrderSearchContext();
@@ -29,7 +32,9 @@ export const OrderFilters = () => {
               bgcolor={isActive ? "primary.light" : "transparent"}
               color={isActive ? "primary.main" : "text.secondary"}
               fontWeight={isActive ? 500 : 400}
-              onClick={() => setPayload({ status: category.value })}
+              onClick={() => {
+                setPayload({ ...initialPayload, status: category.value });
+              }}
               sx={{
                 cursor: "pointer",
                 "&:hover": {

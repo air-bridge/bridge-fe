@@ -1,5 +1,5 @@
 import { getAPI, postFormDataAPI, putAPI } from "./api.ts";
-import { Order, OrderFormValues } from "../types/order.ts";
+import { Order, OrderFormValues, OrderSearchPayload } from "../types/order.ts";
 import { MatchService } from "../types/service.ts";
 import { trimPayload } from "../utils/form.ts";
 
@@ -79,6 +79,42 @@ export const getOrder = async (id: string) => {
 
   const response: {
     data: Order;
+  } = await res.json();
+
+  return response.data;
+};
+
+export const getOrders = async (payload: OrderSearchPayload) => {
+  const params = new URLSearchParams({
+    offset: payload.offset.toString(),
+    limit: payload.limit.toString(),
+    ...(payload.status && {
+      status: payload.status,
+    }),
+  });
+
+  const res = await getAPI(`senders/orders?${params.toString()}`);
+
+  if (!res.ok) {
+    const errorData = (await res.json()) as {
+      message: string;
+      error: string;
+    };
+
+    throw new Error(
+      errorData.error ||
+        errorData.message ||
+        "Fail to fetch orders, please try again!",
+    );
+  }
+
+  const response: {
+    data: {
+      data: Order[];
+      pagination: {
+        total_items: number;
+      };
+    };
   } = await res.json();
 
   return response.data;

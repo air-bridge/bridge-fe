@@ -7,12 +7,13 @@ import { getOrders } from "../../../api/order.ts";
 import { useOrderSearchContext } from "../../../context/orders-search/util.ts";
 import { OrderSearchResponse } from "../../../types/order.ts";
 import { EmptyOrder } from "../../../components/order-list/EmptyOrder.tsx";
+import { Loading } from "../../../components/loading";
 
 const OrdersScreen = () => {
   const { payload, setPayload } = useOrderSearchContext();
   const { limit, offset, status, page } = payload;
 
-  const { data } = useQuery<OrderSearchResponse>({
+  const { data, isPending } = useQuery<OrderSearchResponse>({
     queryKey: ["orders", limit, offset, page, status],
     queryFn: () => getOrders(payload),
   });
@@ -28,6 +29,7 @@ const OrdersScreen = () => {
       <HomepageTabs showAction={true} />
       <OrderFilters />
       <Stack gap={3}>
+        {isPending && <Loading />}
         {isEmpty ? <EmptyOrder /> : <OrderList orders={orders} />}
 
         <Stack sx={{ direction: "row", alignItems: "flex-end" }}>

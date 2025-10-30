@@ -7,12 +7,10 @@ import {
   Typography,
   Grid2,
   Theme,
-  FormHelperText,
   CircularProgress,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { Controller, useFormContext } from "react-hook-form";
-import { luggageCategories } from "./util.ts";
 import { OrderFormValues } from "../../types/order.ts";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { PhotoInput } from "../photo-input";
@@ -22,7 +20,6 @@ import { useMemo } from "react";
 import { getStates } from "../../utils/country-state.ts";
 import Autocomplete from "@mui/material/Autocomplete";
 import { MuiTelInput } from "mui-tel-input";
-import { ButtonChip } from "../button-chip";
 import InfoOutlineIcon from "@mui/icons-material/InfoOutlined";
 import Tooltip from "@mui/material/Tooltip";
 
@@ -43,7 +40,7 @@ export const OrderForm = ({ editMode, isPending, onSetShowReview }: Props) => {
   } = useFormContext<OrderFormValues>();
 
   const countries = Country.getAllCountries();
-  const packageType = watch("package_type");
+  // const packageType = watch("package_type");
   const receiverPhone = watch("receiver_phone");
 
   // Watch for country changes to update state options
@@ -85,7 +82,8 @@ export const OrderForm = ({ editMode, isPending, onSetShowReview }: Props) => {
 
   return (
     <Stack gap={{ xs: 2, lg: 3 }}>
-      <Box>
+      {/* Info: package type fixed
+       <Box>
         <InputLabel>Package Type</InputLabel>
         <Stack
           direction="row"
@@ -125,7 +123,7 @@ export const OrderForm = ({ editMode, isPending, onSetShowReview }: Props) => {
         {errors.package_type && (
           <FormHelperText error>{errors.package_type?.message}</FormHelperText>
         )}
-      </Box>
+      </Box>*/}
 
       <Grid container spacing={{ xs: 1, lg: 2 }}>
         <Grid size={{ xs: 12 }}>

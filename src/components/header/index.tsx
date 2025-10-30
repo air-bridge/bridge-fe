@@ -5,7 +5,7 @@ import {
   Stack,
   Theme,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
@@ -25,12 +25,14 @@ export const Header = () => {
   );
   const { isSender, refetchProfile } = useUserContext();
   const { openNotification } = useNotificationContext();
+  const navigate = useNavigate();
 
   const { mutate, isPending } = useMutation({
     mutationFn: switchRole,
     onSuccess: () => {
       refetchProfile();
       openNotification("Role switched successfully.");
+      navigate("/");
     },
     onError: (error) => {
       openNotification(error?.message, AlertType.ERROR);

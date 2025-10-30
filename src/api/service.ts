@@ -1,5 +1,10 @@
-import { postAPI, putAPI } from "./api.ts";
-import { Service, ServiceFormValues } from "../types/service.ts";
+import { getAPI, postAPI, putAPI } from "./api.ts";
+import {
+  Service,
+  ServiceFormValues,
+  ServiceSearchPayload,
+  ServiceSearchResponse,
+} from "../types/service.ts";
 import { mockCompletedService, mockDraftService } from "../mocks/service.ts";
 
 export const createService = async (payload: ServiceFormValues) => {
@@ -83,4 +88,35 @@ export const getService = async (id: string) => {
   // } = await res.json();
   //
   // return response.data;
+};
+
+export const getServices = async (payload: ServiceSearchPayload) => {
+  const params = new URLSearchParams({
+    offset: payload.offset.toString(),
+    limit: payload.limit.toString(),
+    ...(payload.status && {
+      status: payload.status,
+    }),
+  });
+
+  const res = await getAPI(`passengers/services?${params.toString()}`);
+
+  if (!res.ok) {
+    const errorData = (await res.json()) as {
+      message: string;
+      error: string;
+    };
+
+    throw new Error(
+      errorData.error ||
+        errorData.message ||
+        "Fail to fetch services, please try again!",
+    );
+  }
+
+  const response: {
+    data: ServiceSearchResponse;
+  } = await res.json();
+
+  return response.data;
 };

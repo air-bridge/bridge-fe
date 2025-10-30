@@ -21,6 +21,6 @@ export const serviceCategories = [
   },
   {
     label: "Completed Request",
-    value: "complete",
+    value: "completed",
   },
 ];

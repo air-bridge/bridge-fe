@@ -9,6 +9,9 @@ type Props = {
 export const initialPayload = {
   status: "",
   query: "",
+  offset: "0",
+  limit: "9",
+  page: "1",
 };
 
 export const ServiceSearchContext = createContext<Props>({

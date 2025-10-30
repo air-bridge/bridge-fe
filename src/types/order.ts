@@ -54,6 +54,16 @@ export type OrderFormValues = {
 export type OrderSearchPayload = {
   status: string;
   query: string;
+  offset: string;
+  limit: string;
+  page: string;
 };
 
 export type OrderInput = Partial<Record<keyof OrderSearchPayload, string>>;
+
+export type OrderSearchResponse = {
+  data: Order[];
+  pagination: {
+    total_items: number;
+  };
+};

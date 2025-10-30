@@ -63,7 +63,7 @@ const schema: yup.ObjectSchema<OrderFormValues> = yup.object({
 
 const initialValues: OrderFormValues = {
   title: "",
-  package_type: [],
+  package_type: ["document"],
   weight: 1,
   destination_address: "",
   destination_country: "",
@@ -75,7 +75,7 @@ const initialValues: OrderFormValues = {
   receiver_lastname: "",
   receiver_phone: "",
   delivery_note: "",
-  status: OrderStatus.Inactive, // todo: change to draft
+  status: OrderStatus.Draft,
   image1: null,
   image2: null,
   image3: null,

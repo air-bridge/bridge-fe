@@ -24,7 +24,7 @@ export const EmptyService = () => {
           textAlign="center"
           fontWeight={400}
         >
-          You do not have any service yet
+          There are no matching service
         </Typography>
         <Button
           component={Link}

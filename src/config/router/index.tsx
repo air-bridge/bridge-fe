@@ -19,6 +19,8 @@ import { ServiceDetailsScreen } from "../../screens/app/service-details";
 import ServicesListScreen from "../../screens/app/service-list";
 import { ServiceRequestDetailsScreen } from "../../screens/app/service-request-details";
 import EditServiceScreen from "../../screens/app/edit-service";
+import { ServiceSearchContextProvider } from "../../context/services-search";
+import { OrderSearchContextProvider } from "../../context/orders-search";
 
 export const Router = () => {
   return (
@@ -46,13 +48,27 @@ export const Router = () => {
           <Route index element={<HomeScreen />} />
 
           {/* Orders */}
-          <Route path="orders" element={<OrdersScreen />} />
+          <Route
+            path="orders"
+            element={
+              <OrderSearchContextProvider>
+                <OrdersScreen />
+              </OrderSearchContextProvider>
+            }
+          />
           <Route path="create-order" element={<CreateOrderScreen />} />
           <Route path="orders/edit/:orderId" element={<EditOrderScreen />} />
           <Route path="orders/:orderId" element={<OrderDetailsScreen />} />
 
           {/* Services */}
-          <Route path="services" element={<ServicesListScreen />} />
+          <Route
+            path="services"
+            element={
+              <ServiceSearchContextProvider>
+                <ServicesListScreen />
+              </ServiceSearchContextProvider>
+            }
+          />
           <Route
             path="services/:serviceId"
             element={<ServiceDetailsScreen />}

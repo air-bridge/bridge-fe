@@ -7,7 +7,6 @@ import { UserContextProvider } from "../../context/user";
 import { NotificationContextProvider } from "../../context/notification";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { OrderSearchContextProvider } from "../../context/orders-search";
 
 const fullScreenPaths = [
   "create-order",
@@ -39,20 +38,18 @@ const AppLayout = () => {
   return isAllowed ? (
     <NotificationContextProvider>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <OrderSearchContextProvider>
-          <UserContextProvider>
-            {isFullScreen ? (
-              <Outlet />
-            ) : (
-              <>
-                <Header />
-                <Box py={{ xs: 2, lg: 3 }} px={{ xs: 2, lg: 5 }}>
-                  <Outlet />
-                </Box>
-              </>
-            )}
-          </UserContextProvider>
-        </OrderSearchContextProvider>
+        <UserContextProvider>
+          {isFullScreen ? (
+            <Outlet />
+          ) : (
+            <>
+              <Header />
+              <Box py={{ xs: 2, lg: 3 }} px={{ xs: 2, lg: 5 }}>
+                <Outlet />
+              </Box>
+            </>
+          )}
+        </UserContextProvider>
       </LocalizationProvider>
     </NotificationContextProvider>
   ) : null;

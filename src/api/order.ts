@@ -1,5 +1,10 @@
 import { getAPI, postFormDataAPI, putAPI } from "./api.ts";
-import { Order, OrderFormValues, OrderSearchPayload } from "../types/order.ts";
+import {
+  Order,
+  OrderFormValues,
+  OrderSearchPayload,
+  OrderSearchResponse,
+} from "../types/order.ts";
 import { MatchService } from "../types/service.ts";
 import { trimPayload } from "../utils/form.ts";
 
@@ -109,12 +114,7 @@ export const getOrders = async (payload: OrderSearchPayload) => {
   }
 
   const response: {
-    data: {
-      data: Order[];
-      pagination: {
-        total_items: number;
-      };
-    };
+    data: OrderSearchResponse;
   } = await res.json();
 
   return response.data;
